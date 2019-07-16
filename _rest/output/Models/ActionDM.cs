@@ -22,7 +22,7 @@ public int userid { get; set; } = default;
 public int? leadid { get; set; } = default;
 
 [DColumn(Name = "affid", Nullable = true)]
-public int? affid { get; set; } = default;
+public string affid { get; set; } = default;
 
 [DColumn(Name = "pubid", Nullable = true)]
 public string pubid { get; set; } = default;

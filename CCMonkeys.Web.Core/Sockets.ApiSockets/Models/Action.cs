@@ -1,7 +1,7 @@
 ﻿using CCMonkeys.Direct;
-using CCMonkeys.Web.Code.ApiSockets.Data;
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using Direct.ccmonkeys.Models;
 using Direct.Core;
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CCMonkeys.Web.Code.ApiSockets.Models
+namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 {
   public class Action
   {

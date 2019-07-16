@@ -16,19 +16,18 @@ namespace CCMonkeys.Consoles.Test
     {
       var db = new CCSubmitDirect();
 
-      LeadDM lead = db.Query<LeadDM>().Load(15);
-      lead.TryUpdateEmail(db, "testststst@ggmail.com");
-      lead.TryUpdateMsisdn(db, "2454s64654");
-      lead.TryUpdateAddress(db, "2454646f54");
-      lead.UpdateLater();
-      db.TransactionalManager.RunAsync();
+      //LeadDM lead = db.Query<LeadDM>().Load(15);
+      //lead.TryUpdateEmail(db, "testststst@ggmail.com");
+      //lead.TryUpdateMsisdn(db, "2454s64654");
+      //lead.TryUpdateAddress(db, "2454646f54");
+      //lead.UpdateLater();
+      //db.TransactionalManager.RunAsync();
 
 
-      Console.ReadKey();
-      return;
+      //Console.ReadKey();
+      //return;
 
-      db.ModelsCreator.GenerateFile("tm_session", "Session", @"D:\github\CCMonkeys\_rest\output");
-      db.ModelsCreator.GenerateFile("tm_action", "Action", @"D:\github\CCMonkeys\_rest\output");
+      db.ModelsCreator.GenerateFile("tm_action_account", "ActionAccount", @"D:\github\CCMonkeys\_rest\output");
       Console.ReadKey();
       return;
 

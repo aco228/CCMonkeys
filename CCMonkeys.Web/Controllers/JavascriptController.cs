@@ -1,7 +1,8 @@
-﻿using CCMonkeys.Web.Code.ApiSockets;
-using CCMonkeys.Web.Code.Sockets;
+﻿using CCMonkeys.Web.Code.Sockets;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Controllers;
+using CCMonkeys.Web.Core.Sockets.ApiSockets;
+using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

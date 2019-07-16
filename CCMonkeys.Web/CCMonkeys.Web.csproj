@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Code.ApiSockets\**" />
+    <Content Remove="Code.ApiSockets\**" />
+    <EmbeddedResource Remove="Code.ApiSockets\**" />
+    <None Remove="Code.ApiSockets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.Internal" Version="2.2.0" />
@@ -20,6 +27,7 @@
     <ProjectReference Include="..\CCMonkeys.Direct.Models\CCMonkeys.Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Sockets\CCMonkeys.Sockets.csproj" />
     <ProjectReference Include="..\CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Web.Postbacks\CCMonkeys.Web.Postbacks.csproj" />
   </ItemGroup>
   
 </Project>

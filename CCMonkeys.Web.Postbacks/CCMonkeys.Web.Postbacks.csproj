@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Direct.V2\Direct.Core\Direct.Core.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Direct.Models\CCMonkeys.Direct.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Sockets\CCMonkeys.Sockets.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Http.Extensions" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+</Project>

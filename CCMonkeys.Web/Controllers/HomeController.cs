@@ -38,7 +38,7 @@ namespace CCMonkeys.Web.Controllers
       properties.Add("test2", "test1va");
       properties.Add("test3", "test1va");
       properties.Add("test4", "test1va");
-      int aadsasAleksandarKonatarasldkjalsdkjNasdasdovi = 0;
+      int aadsasAleksandarKonatarasldkdalkdhalsjalsdkjNasdasdovi = 0;
       //Logger.Instance.TrackEvent("evetnName", "username", properties);
 
       return this.Content("OK! ");

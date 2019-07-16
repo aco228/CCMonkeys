@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.1": {
+      "AspNetCore.Http.Extensions/1.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/AspNetCore.Http.Extensions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/AspNetCore.Http.Extensions.dll": {}
+        }
+      },
       "BouncyCastle.NetCore/1.8.3": {
         "type": "package",
         "dependencies": {
@@ -4928,6 +4940,25 @@
           "bin/placeholder/CCMonkeys.Web.Core.dll": {}
         }
       },
+      "CCMonkeys.Web.Postbacks/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.1",
+        "dependencies": {
+          "AspNetCore.Http.Extensions": "1.0.1",
+          "CCMonkeys.Direct": "1.0.0",
+          "CCMonkeys.Sockets": "1.0.0",
+          "CCMonkeys.Web.Core": "1.0.0",
+          "Direct.Core": "1.0.0",
+          "Microsoft.AspNetCore.App": "2.1.1",
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "compile": {
+          "bin/placeholder/CCMonkeys.Web.Postbacks.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CCMonkeys.Web.Postbacks.dll": {}
+        }
+      },
       "Direct.Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
@@ -4946,6 +4977,20 @@
     }
   },
   "libraries": {
+    "AspNetCore.Http.Extensions/1.0.1": {
+      "sha512": "FZyUSh3r9DpEFu+qognOZYgOtMK/PC5X1oqoShqK9KIaIJ9kbqgyFEs54zWAKHj52s+FignNpTc2K9pFxUADIw==",
+      "type": "package",
+      "path": "aspnetcore.http.extensions/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "aspnetcore.http.extensions.1.0.1.nupkg.sha512",
+        "aspnetcore.http.extensions.nuspec",
+        "lib/netstandard1.1/AspNetCore.Http.Extensions.dll",
+        "lib/netstandard1.5/AspNetCore.Http.Extensions.dll",
+        "lib/netstandard2.0/AspNetCore.Http.Extensions.dll"
+      ]
+    },
     "BouncyCastle.NetCore/1.8.3": {
       "sha512": "jAy3uHN1U9DpoT/TgLqDTEhlccn/4doOVxhSmmNsnoSsGfHT9Lwr634ac9D0YFujAhNw61nWF4UIpHyzv0aQww==",
       "type": "package",
@@ -13346,6 +13391,11 @@
       "path": "../CCMonkeys.Web.Core/CCMonkeys.Web.Core.csproj",
       "msbuildProject": "../CCMonkeys.Web.Core/CCMonkeys.Web.Core.csproj"
     },
+    "CCMonkeys.Web.Postbacks/1.0.0": {
+      "type": "project",
+      "path": "../CCMonkeys.Web.Postbacks/CCMonkeys.Web.Postbacks.csproj",
+      "msbuildProject": "../CCMonkeys.Web.Postbacks/CCMonkeys.Web.Postbacks.csproj"
+    },
     "Direct.Core/1.0.0": {
       "type": "project",
       "path": "../../Direct.V2/Direct.Core/Direct.Core.csproj",
@@ -13357,6 +13407,7 @@
       "CCMonkeys.Direct >= 1.0.0",
       "CCMonkeys.Sockets >= 1.0.0",
       "CCMonkeys.Web.Core >= 1.0.0",
+      "CCMonkeys.Web.Postbacks >= 1.0.0",
       "Direct.Core >= 1.0.0",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.7.1",
       "Microsoft.AspNetCore.App >= 2.1.1",
@@ -13407,6 +13458,9 @@
             },
             "D:\\github\\CCMonkeys\\CCMonkeys.Web.Core\\CCMonkeys.Web.Core.csproj": {
               "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Web.Core\\CCMonkeys.Web.Core.csproj"
+            },
+            "D:\\github\\CCMonkeys\\CCMonkeys.Web.Postbacks\\CCMonkeys.Web.Postbacks.csproj": {
+              "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Web.Postbacks\\CCMonkeys.Web.Postbacks.csproj"
             },
             "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj": {
               "projectPath": "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj"
