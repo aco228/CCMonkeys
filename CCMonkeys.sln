@@ -13,9 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Consoles.Test", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Web.Core", "CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj", "{04552180-BD13-499F-955E-91B740A7A4D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Web.AWS", "CCMonkeys.Web.Lambda\CCMonkeys.Web.AWS.csproj", "{DE488AD4-5069-4FD8-AD44-609411232119}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCMonkeys.Sockets", "CCMonkeys.Sockets\CCMonkeys.Sockets.csproj", "{0C344AB1-7688-42E1-8560-1C0CF0938514}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Sockets", "CCMonkeys.Sockets\CCMonkeys.Sockets.csproj", "{0C344AB1-7688-42E1-8560-1C0CF0938514}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +41,6 @@ Global
 		{04552180-BD13-499F-955E-91B740A7A4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04552180-BD13-499F-955E-91B740A7A4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04552180-BD13-499F-955E-91B740A7A4D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE488AD4-5069-4FD8-AD44-609411232119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE488AD4-5069-4FD8-AD44-609411232119}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE488AD4-5069-4FD8-AD44-609411232119}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE488AD4-5069-4FD8-AD44-609411232119}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C344AB1-7688-42E1-8560-1C0CF0938514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0C344AB1-7688-42E1-8560-1C0CF0938514}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C344AB1-7688-42E1-8560-1C0CF0938514}.Release|Any CPU.ActiveCfg = Release|Any CPU
