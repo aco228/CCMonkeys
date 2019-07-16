@@ -1,0 +1,258 @@
+body{
+    font-family: ColesHapticRegular;
+}
+.sold, .img-sold{
+    transition: all 3s;
+}
+.img-sold{
+    position: absolute;
+    z-index: 1; max-height: 100%;
+    max-width: 100%;
+}
+.sold-1{
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+.img-sold-1{
+    opacity: 1;
+}
+#popUp{
+    z-index: 100;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    min-height: 100%;
+    padding-top: 4%;
+    text-align: center;
+}
+
+#popUp .box{
+    position: relative;
+    color: #474744;
+    background-color: #fff;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 400px;
+    -moz-box-shadow: 0 0 10px rgba(153,153,153,.2);
+    -webkit-box-shadow: 0 0 10px rgba(153,153,153,.2);
+    box-shadow: 0 0 10px rgba(153,153,153,.2);
+    border-radius: 5px !important;
+    border: #e3edf1 solid 3px;
+}
+
+#popUp .congrats{
+    font-size: 20px;
+    font-weight: 700;
+    color: #4c4c4c;
+}
+
+#popUp .winner{
+    color: #339933;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+#popUp .otherwinner{
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.logo-popUp{
+    width: 60%;
+    display: block;
+    margin: 0 auto;
+}
+
+.header{
+    background-color: white;
+    text-align: center;
+}
+
+.header .logo{
+    width: 300px;
+}
+
+.header p{
+    padding: 5px;
+    color: red;
+    font-size: 21px;
+    font-family: ColesHapticBold;
+    margin-bottom: 0px;
+}
+
+.header img{
+    width: 40px;
+}
+
+.under-header{
+    background-color: black;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.under-header img{
+    width: 30px;
+}
+
+.under-header p{
+    margin-bottom: 0px;
+    color: #fff;
+    font-family: ColesHapticBold;
+}
+
+.main-section{
+    background-color: #ececec;
+    min-height: 620px;
+}
+
+.main-container{
+    max-width: 760px;
+    padding-bottom: 60px;
+}
+
+.info-box{
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.dear{
+    font-family: ColesHapticBold;
+    color: #4c4c4c;
+    font-size: 20px;
+}
+
+.info-text{
+    color: #4c4c4c;
+    font-size: 20px;
+}
+
+.info-text span{
+    font-family: ColesHapticBold;
+}
+.reference span{
+     color: green;
+    font-size: 21px;
+    letter-spacing: 5px;
+    margin-left: 20px;
+}
+
+.question-container{
+    padding-bottom: 10px;
+    min-height: 290px;
+    margin-top: 50px;
+    background-color: #fff;
+}
+
+.title-question{
+    background-color: black;
+    text-align: center;
+    color: #fff;
+    font-style: italic;
+    padding: 12px;
+}
+
+.title-question span{
+    font-size: 30px;
+    font-style: normal;
+    font-family: ColesHapticBold;
+}
+
+.btn-block {
+    display: block;
+    width: 50%;
+    margin: 16px auto;
+    margin-top: 45px;
+}
+
+.progress-section{
+    text-align: center;
+    padding: 50px;
+}
+
+.accept-answer{
+    font-size: 25px;
+    margin-bottom: 46px;
+}
+
+.last-section{
+    padding:5px;
+}
+
+.last-section p {
+    margin-bottom: 5px;
+}
+
+.adv-img{
+    width: 100%;
+    border: 1px solid silver;
+}
+
+.adv{
+    position: relative;
+    padding:5px;
+    border: 1px solid silver;
+        margin-bottom: 10px;
+}
+
+.title-adv{
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.title-under-adv{
+    font-size: 18px;
+    font-style: italic;
+}
+
+.normal-price{
+    font-size: 22px;
+font-weight: 700;
+}
+
+.today-price{
+    font-weight: 700;
+   font-size: 22px;
+}
+
+.last-section .btn{
+    float: right;
+    padding: .375rem 4rem;
+}
+
+footer{
+    max-width: 760px;
+    line-height: 1;
+    margin: 0 auto;
+    font-size: 14px;
+    text-align: center;
+}
+
+footer span{
+    font-family: ColesHapticBold;   
+}
+
+.img-security{
+    width: 118px;
+}
+
+@media(max-width: 767px){
+.info-text {
+    font-size: 16px;
+}
+
+.title-question span{
+    font-size: 22px;
+}
+
+.reference span {
+    margin-left: 0px;
+}
+.last-section .btn {
+    bottom: -3px;
+    right: 15px;
+    padding: .375rem 4rem;
+}
+}

@@ -1,0 +1,14 @@
+@font-face {
+    font-family: ColesHapticRegular;
+    src: url(../font/ColesHapticRegular.woff);
+}
+
+@font-face {
+    font-family: ColesHapticBold;
+    src: url(../font/ColesHapticBold.woff);
+}
+
+@font-face {
+    font-family: ColesHapticExtraBold;
+    src: url(../font/ColesHapticExtraBold.woff);
+}

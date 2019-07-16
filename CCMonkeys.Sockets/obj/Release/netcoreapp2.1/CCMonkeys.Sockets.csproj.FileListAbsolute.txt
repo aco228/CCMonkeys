@@ -1,0 +1,11 @@
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Sockets.deps.json
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Sockets.runtimeconfig.json
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Sockets.runtimeconfig.dev.json
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Sockets.dll
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Sockets.pdb
+D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.csprojAssemblyReference.cache
+D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.csproj.CoreCompileInputs.cache
+D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.AssemblyInfoInputs.cache
+D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.AssemblyInfo.cs
+D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.dll
+D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.pdb

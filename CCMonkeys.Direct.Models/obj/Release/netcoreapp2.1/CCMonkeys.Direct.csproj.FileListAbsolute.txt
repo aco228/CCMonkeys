@@ -1,0 +1,12 @@
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\bin\Release\netcoreapp2.1\CCMonkeys.Direct.deps.json
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\bin\Release\netcoreapp2.1\CCMonkeys.Direct.dll
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\bin\Release\netcoreapp2.1\CCMonkeys.Direct.pdb
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\bin\Release\netcoreapp2.1\Direct.Core.dll
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\bin\Release\netcoreapp2.1\Direct.Core.pdb
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\obj\Release\netcoreapp2.1\CCMonkeys.Direct.csprojAssemblyReference.cache
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\obj\Release\netcoreapp2.1\CCMonkeys.Direct.csproj.CoreCompileInputs.cache
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\obj\Release\netcoreapp2.1\CCMonkeys.Direct.AssemblyInfoInputs.cache
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\obj\Release\netcoreapp2.1\CCMonkeys.Direct.AssemblyInfo.cs
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\obj\Release\netcoreapp2.1\CCMonkeys.Direct.csproj.CopyComplete
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\obj\Release\netcoreapp2.1\CCMonkeys.Direct.dll
+D:\github\CCMonkeys\CCMonkeys.Direct.Models\obj\Release\netcoreapp2.1\CCMonkeys.Direct.pdb

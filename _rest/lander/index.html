@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="http://ccmonkeys.azurewebsites.net/js?type=lp&dbg=1&recompile=1"></script>
+
+<style type="text/css">
+  .initialSpan{color:blue;}
+</style>
+
+</head>
+<body>
+
+  <div>
+    <div>Message: <span class="initialSpan" id="regMessage"></span></div>
+    <div>Lead: <span class="initialSpan" id="regLead"></span></div>
+    <div>SessionData: <span class="initialSpan" id="regSessionData"></span></div>
+    <div>ActionID: <span class="initialSpan" id="regAction"></span></div>
+    <div>SessionID: <span class="initialSpan" id="regSession"></span></div>
+    <div>UserID: <span class="initialSpan" id="regUser"></span></div>
+    <div>leadHasSubscription: <span class="initialSpan" id="leadHasSubscription"></span></div>
+    <div>userVisitCount: <span class="initialSpan" id="userVisitCount"></span></div>
+  </div>
+
+  <div style="margin-top: 15px;" id="infoEmail">
+    <div>Insert email</div>
+    <div>
+      <input type="text" id="inputEmail"/>
+    </div>
+    <button id="insertEmail">Execute</button>
+  </div>
+
+
+  <div style="margin-top: 15px; display: none;" id="infoBlock">
+    <div>Informations</div>
+    <div>
+      <label>First name: </label> <input type="text" id="inputFirstName"/> <br>
+      <label>Last name: </label> <input type="text" id="inputLastName"/> <br>
+      <label>Address: </label> <input type="text" id="inputAddress"/> <br>
+      <label>City: </label> <input type="text" id="inputCity"/> <br>
+      <label>Postcode: </label> <input type="text" id="inputPostcode"/> <br>
+      <label>Msisdn: </label> <input type="text" id="inputMsisdn"/> <br>
+      <label>Country: </label> 
+      <select id="inputCountry" class="form-control" name="country-select" required="required"><option value="0" disabled="" selected="" translation="countryValue" hidden="">Select Country</option><option value="australia">Australia</option><option value="united kingdom">United Kingdom</option><option value="canada">Canada</option><option value="france">France</option><option value="germany">Germany</option><option value="norway">Norway</option><option value="italy">Italy</option><option value="belgium">Belgium</option><option value="new zealand">New Zealand</option></select>
+      <br>
+    </div>
+    <button id="insertinfo">Execute</button>
+  </div>
+
+
+  <div style="margin-top: 15px; display: none;" id="infoFinal">
+    <strong>SRBIJA!!!</strong>
+  </div>
+
+  <script type="text/javascript">
+    
+    document.addEventListener('DOMContentLoaded', function(){
+        if(typeof CC === 'undefined'){
+          alert('no CC wtf??');
+          return;
+        }
+
+        CC.api.init( {
+          success:function(e, msg){
+            console.log('init success', msg, e);
+            $('#regMessage').text(msg);
+            $('#regLead').text(JSON.stringify(e.lead));
+            $('#regSessionData').text(JSON.stringify(e.sessionData));
+            $('#regAction').text(e.actionID);
+            $('#regSession').text(e.sessionID);
+            $('#regUser').text(e.userID);
+            $('#leadHasSubscription').text(e.leadHasSubscription);
+            $('#userVisitCount').text(e.userVisitCount);
+          },
+          error: function(e){
+            // REDIRECTION LOCGIC OR SOMETHING (SERVER IS DOWN or connection is unstable)
+            alert('lost connection or something went wrong!');
+          }
+        }, 1);
+
+        ///
+        /// INSERT EMAIL
+        ///
+
+        // sve funkcije trebaju biti dostupne samo ako init prodje kako treba!!
+        $('#insertEmail').click(function(){
+          CC.lander.createUserModel.email = $('#inputEmail').val();
+          // check data!!!
+          CC.lander.createUser({
+            success:function(e){
+              $('#infoEmail').hide();
+              $('#infoBlock').show();
+            },
+            error: function(e){
+              if(e.emptyEmail) alert('Mail is empty');
+              if(e.refused) alert('Mail is refused!!');
+            }
+          });
+        });
+
+
+        ///
+        /// INSERT CONTACTS
+        ///
+
+        $('#insertinfo').click(function(){
+
+          CC.lander.subscribeUserModel.firstName = $('#inputFirstName').val();
+          CC.lander.subscribeUserModel.lastName = $('#inputLastName').val();
+          CC.lander.subscribeUserModel.address = $('#inputAddress').val();
+          CC.lander.subscribeUserModel.city = $('#inputCity').val();
+          CC.lander.subscribeUserModel.postcode = $('#inputPostcode').val();
+          CC.lander.subscribeUserModel.msisdn = $('#inputMsisdn').val();
+          CC.lander.subscribeUserModel.country = $('#inputCountry option:selected').val();
+
+          // check data !!!
+
+          CC.lander.subscribeUser({
+            success:function(e){
+              $('#infoBlock').hide();
+              finalStep();
+            },
+            error: function(e){
+              if(e.emptyEmail) alert('Mail is empty');
+              if(e.refused) alert('Mail is refused!!');
+            }
+          });
+
+        ///
+        /// FINAL STEP
+        ///
+
+          function finalStep(){
+            CC.lander.userRedirectedModel.url = 'https://google.com';
+            CC.lander.userRedirected({
+              success:function(e){ 
+                alert('yeas'); 
+                $('#infoFinal').show(); 
+              },
+              error: function(){}
+            });
+          }
+
+        });
+
+      }, false);
+  </script>
+</body>
+</html>

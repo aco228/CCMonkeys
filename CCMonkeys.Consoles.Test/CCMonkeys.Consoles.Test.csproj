@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Direct.V2\Direct.Core\Direct.Core.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Direct.Models\CCMonkeys.Direct.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj" />
+  </ItemGroup>
+
+</Project>

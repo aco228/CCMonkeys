@@ -1,0 +1,18 @@
+[Redirection]
+https://localhost:5001/api/redirection?landerid=1&affid=138&url=testurl&clickid=clicka
+{"status":true,"message":"","data":{"aid":7,"cid":29,"lid":null}}
+
+[Create user]
+https://localhost:5001/api/create_user?aid=7&cid=29&lxid=lxid&ga_cid=ga_cid&email=email&password=password&country=country&lxid=lxid&pp=pp&affid=183&pubid=pubid&landerName=landerName&prelander=prelander&type=type&referrer=referrer&host=host
+{"status":true,"message":"","data":{"lid":7}}
+
+
+[Create user]
+https://localhost:5001/api/subscribe?aid=7&cid=29&lid=7&pp=pp&firstname=firstname&lastname=lastname&msisdn=msisdn&country=country&zip=zip&cc_number=cc_number&cc_expiry_month=11&cc_expiry_year=2018&ccv=ccv&time=time&gacid=gacid&lxid=lxid&url=url&affid=183&pubid=pubid
+{"status":true,"message":"","data":null}
+
+
+
+[Create user]
+https://localhost:5001/api/end_flow?aid=7&cid=29&lid=7&provider_redirection=google.com
+{"status":true,"message":"","data":null}
