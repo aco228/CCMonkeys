@@ -23,11 +23,8 @@ namespace CCMonkeys.Desktop.WPF
   {
     public MainWindow()
     {
-      // ovdje definises onaj connection string koji je program da koristi dok god je u debug 
-      // connection string prepravljas u CCSubmitConnectionString klasi za taj id
-      // :*
 
-      CCSubmitConnectionString.Type = CCSubmitConnectionStringType.DebugDesktop;
+      CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
 
       InitializeComponent();
     }
