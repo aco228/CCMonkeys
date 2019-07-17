@@ -3479,13 +3479,16 @@
           "lib/netstandard1.4/System.IdentityModel.Tokens.Jwt.dll": {}
         }
       },
-      "System.Interactive.Async/3.2.0": {
+      "System.Interactive.Async/3.1.1": {
         "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        },
         "compile": {
-          "lib/netstandard2.0/System.Interactive.Async.dll": {}
+          "lib/netstandard1.3/System.Interactive.Async.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.0/System.Interactive.Async.dll": {}
+          "lib/netstandard1.3/System.Interactive.Async.dll": {}
         }
       },
       "System.IO/4.3.0": {
@@ -4847,9 +4850,9 @@
       },
       "CCMonkeys.Direct/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v2.1",
+        "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "Direct.Core": "1.0.0"
+          "Direct": "1.0.0"
         },
         "compile": {
           "bin/placeholder/CCMonkeys.Direct.dll": {}
@@ -4862,6 +4865,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
+          "CCMonkeys.Direct": "1.0.0",
           "Microsoft.AspNetCore.App": "2.1.1"
         },
         "compile": {
@@ -4877,7 +4881,7 @@
         "dependencies": {
           "CCMonkeys.Direct": "1.0.0",
           "CCMonkeys.Sockets": "1.0.0",
-          "Direct.Core": "1.0.0",
+          "Direct": "1.0.0",
           "Microsoft.ApplicationInsights.AspNetCore": "2.7.1",
           "Microsoft.AspNetCore.App": "2.1.1",
           "Newtonsoft.Json": "12.0.2",
@@ -4890,19 +4894,18 @@
           "bin/placeholder/CCMonkeys.Web.Core.dll": {}
         }
       },
-      "Direct.Core/1.0.0": {
+      "Direct/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v2.1",
+        "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
           "MySql.Data": "8.0.16",
-          "System.Data.SqlClient": "4.6.1",
-          "System.Interactive.Async": "3.2.0"
+          "System.Data.SqlClient": "4.6.1"
         },
         "compile": {
-          "bin/placeholder/Direct.Core.dll": {}
+          "bin/placeholder/Direct.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Direct.Core.dll": {}
+          "bin/placeholder/Direct.dll": {}
         }
       }
     }
@@ -9479,10 +9482,10 @@
         "system.identitymodel.tokens.jwt.nuspec"
       ]
     },
-    "System.Interactive.Async/3.2.0": {
-      "sha512": "C07p0dAA5lGqYUPiPCK3paR709gqS4aMDDsje0v0pvffwzLaxmsn5YQTfZbyNG5qrudPx+BCxTqISnncQ3wIoQ==",
+    "System.Interactive.Async/3.1.1": {
+      "sha512": "hZccYiIE5RS1/J9Tb/BNtosAGVggdlsJm4Ojdu+gDV0p4AIi+LUfUogMKkRacljQEJd2AG6vYzvcjhQFkqoZmw==",
       "type": "package",
-      "path": "system.interactive.async/3.2.0",
+      "path": "system.interactive.async/3.1.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -9494,9 +9497,7 @@
         "lib/netstandard1.0/System.Interactive.Async.xml",
         "lib/netstandard1.3/System.Interactive.Async.dll",
         "lib/netstandard1.3/System.Interactive.Async.xml",
-        "lib/netstandard2.0/System.Interactive.Async.dll",
-        "lib/netstandard2.0/System.Interactive.Async.xml",
-        "system.interactive.async.3.2.0.nupkg.sha512",
+        "system.interactive.async.3.1.1.nupkg.sha512",
         "system.interactive.async.nuspec"
       ]
     },
@@ -13241,8 +13242,8 @@
     },
     "CCMonkeys.Direct/1.0.0": {
       "type": "project",
-      "path": "../CCMonkeys.Direct.Models/CCMonkeys.Direct.csproj",
-      "msbuildProject": "../CCMonkeys.Direct.Models/CCMonkeys.Direct.csproj"
+      "path": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj",
+      "msbuildProject": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj"
     },
     "CCMonkeys.Sockets/1.0.0": {
       "type": "project",
@@ -13254,17 +13255,17 @@
       "path": "../CCMonkeys.Web.Core/CCMonkeys.Web.Core.csproj",
       "msbuildProject": "../CCMonkeys.Web.Core/CCMonkeys.Web.Core.csproj"
     },
-    "Direct.Core/1.0.0": {
+    "Direct/1.0.0": {
       "type": "project",
-      "path": "../../Direct.V2/Direct.Core/Direct.Core.csproj",
-      "msbuildProject": "../../Direct.V2/Direct.Core/Direct.Core.csproj"
+      "path": "../../Direct.V2/Direct/Direct.csproj",
+      "msbuildProject": "../../Direct.V2/Direct/Direct.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
       "CCMonkeys.Direct >= 1.0.0",
       "CCMonkeys.Web.Core >= 1.0.0",
-      "Direct.Core >= 1.0.0",
+      "Direct >= 1.0.0",
       "Microsoft.NETCore.App >= 2.1.0"
     ]
   },
@@ -13298,14 +13299,14 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\CCMonkeys.Direct.csproj": {
-              "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\CCMonkeys.Direct.csproj"
+            "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
+              "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj"
             },
             "D:\\github\\CCMonkeys\\CCMonkeys.Web.Core\\CCMonkeys.Web.Core.csproj": {
               "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Web.Core\\CCMonkeys.Web.Core.csproj"
             },
-            "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj": {
-              "projectPath": "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj"
+            "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
+              "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj"
             }
           }
         }

@@ -4,14 +4,14 @@
     "D:\\github\\CCMonkeys\\CCMonkeys.Web.Core\\CCMonkeys.Web.Core.csproj": {}
   },
   "projects": {
-    "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\CCMonkeys.Direct.csproj": {
+    "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\CCMonkeys.Direct.csproj",
+        "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj",
         "projectName": "CCMonkeys.Direct",
-        "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\CCMonkeys.Direct.csproj",
+        "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj",
         "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
-        "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\obj\\",
+        "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -21,17 +21,17 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp2.1"
+          "netstandard2.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp2.1": {
+          "netstandard2.0": {
             "projectReferences": {
-              "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj": {
-                "projectPath": "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj"
+              "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
+                "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj"
               }
             }
           }
@@ -43,12 +43,12 @@
         }
       },
       "frameworks": {
-        "netcoreapp2.1": {
+        "netstandard2.0": {
           "dependencies": {
-            "Microsoft.NETCore.App": {
+            "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[2.1.0, )",
+              "version": "[2.0.3, )",
               "autoReferenced": true
             }
           },
@@ -85,7 +85,11 @@
         },
         "frameworks": {
           "netcoreapp2.1": {
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
+                "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -142,14 +146,14 @@
         "frameworks": {
           "netcoreapp2.1": {
             "projectReferences": {
-              "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\CCMonkeys.Direct.csproj": {
-                "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct.Models\\CCMonkeys.Direct.csproj"
+              "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
+                "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj"
               },
               "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj": {
                 "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj"
               },
-              "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj": {
-                "projectPath": "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj"
+              "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
+                "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj"
               }
             }
           }
@@ -194,14 +198,14 @@
         }
       }
     },
-    "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj": {
+    "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj",
-        "projectName": "Direct.Core",
-        "projectPath": "D:\\github\\Direct.V2\\Direct.Core\\Direct.Core.csproj",
+        "projectUniqueName": "D:\\github\\Direct.V2\\Direct\\Direct.csproj",
+        "projectName": "Direct",
+        "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj",
         "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
-        "outputPath": "D:\\github\\Direct.V2\\Direct.Core\\obj\\",
+        "outputPath": "D:\\github\\Direct.V2\\Direct\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -211,14 +215,14 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp2.1"
+          "netstandard2.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp2.1": {
+          "netstandard2.0": {
             "projectReferences": {}
           }
         },
@@ -229,25 +233,21 @@
         }
       },
       "frameworks": {
-        "netcoreapp2.1": {
+        "netstandard2.0": {
           "dependencies": {
-            "Microsoft.NETCore.App": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[2.1.0, )",
-              "autoReferenced": true
-            },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.0.16, )"
             },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
             "System.Data.SqlClient": {
               "target": "Package",
               "version": "[4.6.1, )"
-            },
-            "System.Interactive.Async": {
-              "target": "Package",
-              "version": "[3.2.0, )"
             }
           },
           "imports": [

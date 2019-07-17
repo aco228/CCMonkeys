@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Direct.V2\Direct.Core\Direct.Core.csproj" />
-    <ProjectReference Include="..\CCMonkeys.Direct.Models\CCMonkeys.Direct.csproj" />
+    <ProjectReference Include="..\..\Direct.V2\Direct\Direct.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Sockets\CCMonkeys.Sockets.csproj" />
     <ProjectReference Include="..\CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj" />
     <ProjectReference Include="..\CCMonkeys.Web.Postbacks\CCMonkeys.Web.Postbacks.csproj" />

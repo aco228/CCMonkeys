@@ -1,8 +1,6 @@
-﻿using CCMonkeys.Web.Core;
-using Direct.Core.Mysql;
+﻿using Direct.Core.Mysql;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using static Direct.Core.DirectDatabaseBase;
 
 namespace CCMonkeys.Direct
 {
@@ -20,14 +18,12 @@ namespace CCMonkeys.Direct
     }
 
     public CCSubmitDirect()
-      //: base("livesports", "Server=46.166.160.58; database=livesports; UID=livesports; password=a48i72V\"B?8>79Z", openConnection)
-      : base("ccmonkeys", "Server=ccmonkeys.cerqlxjx1slg.eu-central-1.rds.amazonaws.com; database=ccmonkeys; UID=admin; password=adminpasssifra12345; Allow User Variables=True;")
+      : base("ccmonkeys", CCSubmitConnectionString.GetConnectionString())
     { }
 
 
     public override void OnException(DirectDatabaseExceptionType type, string query, Exception e)
     {
-      Logger.Instance.LogException(e);
       int a = 0;
     }
   }
