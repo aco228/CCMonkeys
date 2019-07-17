@@ -97,62 +97,57 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     public async Task<DistributionModel> OnRegistration(ReceivingRegistrationModel model)
     {
-      try
+      if (this.SessionType == SessionType.Lander && !model.providerID.HasValue)
+        return new SendingRegistrationModel() { }.Pack(false, "providerID missing");
+
+      if (model.url.StartsWith("file:"))
+        model.url = this.SessionType == SessionType.Lander ?
+          "https://reg.alivesports.co/smartphone-giveaway/?offer_id=2339&affiliate_id=183&country=montenegro&lxid=eWzK2z7bF2qQCGvx3OuWatePMSsWYjfPMYbtBQfsk0&utm_source=banana&utm_medium=183&utm_campaign=&utm_content=&utm_term=&ptype=cc2" :
+          "https://lander.giveaways-online.com/l7/?lp=l7&msisdn=000015251255&s=24385385";
+
+      string domain = model.url.Split('?')[0];
+      string query = string.Empty;
+      if (model.url.Contains('?'))
+        query = model.url.Split('?')[1];
+      var queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
+
+      if (this.SessionType == SessionType.Prelander)
       {
-        if (this.SessionType == SessionType.Lander && !model.providerID.HasValue)
-          return new SendingRegistrationModel() { }.Pack(false, "providerID missing");
+        await Session.PrelanderRegistrationLogic(domain, queryValues, model);
+        if (!await Action.OnPrelanderRegistration(domain, queryValues, model))
+          return new SendingRegistrationModel() { }.Pack(false, "Prelander not found");
 
-        if (model.url.StartsWith("file:"))
-          model.url = this.SessionType == SessionType.Lander ?
-            "https://reg.alivesports.co/smartphone-giveaway/?offer_id=2339&affiliate_id=183&country=montenegro&lxid=eWzK2z7bF2qQCGvx3OuWatePMSsWYjfPMYbtBQfsk0&utm_source=banana&utm_medium=183&utm_campaign=&utm_content=&utm_term=&ptype=cc2" :
-            "https://lander.giveaways-online.com/l7/?lp=l7&msisdn=000015251255&s=24385385";
-
-        string domain = model.url.Split('?')[0];
-        string query = string.Empty;
-        if (model.url.Contains('?'))
-          query = model.url.Split('?')[1];
-        var queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
-
-        if (this.SessionType == SessionType.Prelander)
-        {
-          await Session.PrelanderRegistrationLogic(domain, queryValues, model);
-          await Action.OnPrelanderRegistration(domain, queryValues, model);
-        }
-        else if (this.SessionType == SessionType.Lander)
-        {
-          Action.Data.providerid = model.providerID;
-          Action.Data.UpdateLater();
-
-          await Action.OnLanderRegistration(domain, queryValues, model);
-        }
-
-        Session.Request.rawurl = model.url;
-        Session.Request.UpdateLater();
-
-        var sendingModel = new SendingRegistrationModel()
-        {
-          lead = Lead,
-          sessionData = Session.SessionData,
-
-          actionID = Action.Data.ID,
-          sessionID = Session.Data.ID,
-          userID = User.Data.ID
-        };
-
-        if (SessionType == SessionType.Lander)
-        {
-          if(Lead != null)
-            sendingModel.leadHasSubscription = await this.Database.LoadBooleanAsync("SELECT COUNT(*) FROM [].tm_action WHERE leadid={0} AND providerid={1} AND (times_charged>0 OR has_subscription=1)", Lead.ID.Value, Action.Data.providerid);
-          sendingModel.userVisitCount = await this.Database.LoadIntAsync("SELECT COUNT(*) FROM [].tm_action WHERE userid={0} AND landerid={1} AND providerid={2}", User.Data.ID, Action.Data.landerid, Action.Data.providerid);
-        }
-
-        return sendingModel.Pack(true, "Welcome!!");
       }
-      catch(Exception e)
+      else if (this.SessionType == SessionType.Lander)
       {
-        Logger.Instance.LogException(e);
-        return new SendingRegistrationModel() { }.Pack(false, "fatal error " + e.ToString());
+        Action.Data.providerid = model.providerID;
+        Action.Data.UpdateLater();
+
+        if(!await Action.OnLanderRegistration(domain, queryValues, model))
+          return new SendingRegistrationModel() { }.Pack(false, "Lander not found");
       }
+
+      Session.Request.rawurl = model.url;
+      Session.Request.UpdateLater();
+
+      var sendingModel = new SendingRegistrationModel()
+      {
+        lead = Lead,
+        sessionData = Session.SessionData,
+
+        actionID = Action.Data.ID,
+        sessionID = Session.Data.ID,
+        userID = User.Data.ID
+      };
+
+      if (SessionType == SessionType.Lander)
+      {
+        if (Lead != null)
+          sendingModel.leadHasSubscription = await this.Database.LoadBooleanAsync("SELECT COUNT(*) FROM [].tm_action WHERE leadid={0} AND providerid={1} AND (times_charged>0 OR has_subscription=1)", Lead.ID.Value, Action.Data.providerid);
+        sendingModel.userVisitCount = await this.Database.LoadIntAsync("SELECT COUNT(*) FROM [].tm_action WHERE userid={0} AND landerid={1} AND providerid={2}", User.Data.ID, Action.Data.landerid, Action.Data.providerid);
+      }
+
+      return sendingModel.Pack(true, "Welcome!!");
     }
     public async Task<DistributionModel> OnCreateUser(ReceivingCreateUserModel model)
     {
