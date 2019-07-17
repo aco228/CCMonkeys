@@ -133,29 +133,29 @@ namespace CCMonkeys.Web.Postbacks
     {
       return;
 
-      if (string.IsNullOrEmpty(this.TrackingID))
-      {
-        this.Postback.Log("Transaction IS NULL so callback to banana will not be sent");
-        return;
-      }
+      //if (string.IsNullOrEmpty(this.TrackingID))
+      //{
+      //  this.Postback.Log("Transaction IS NULL so callback to banana will not be sent");
+      //  return;
+      //}
 
-      string postbackLink = "http://conversions.bananaclicks.com/?transaction_id=" + this.TrackingID;
-      this.Postback.Log("BANANA: " + postbackLink);
-      HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(postbackLink);
-      webRequest.AllowAutoRedirect = false;
-      HttpWebResponse response;
-      HttpStatusCode statusCode;
+      //string postbackLink = "http://conversions.bananaclicks.com/?transaction_id=" + this.TrackingID;
+      //this.Postback.Log("BANANA: " + postbackLink);
+      //HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(postbackLink);
+      //webRequest.AllowAutoRedirect = false;
+      //HttpWebResponse response;
+      //HttpStatusCode statusCode;
 
-      try
-      {
-        response = (HttpWebResponse)webRequest.GetResponse();
-      }
-      catch (WebException we)
-      {
-        // TODO: Add better logging
-        this.Postback.Log("Banana postback returned expection: " + we.Message);
-        return;
-      }
+      //try
+      //{
+      //  response = (HttpWebResponse)webRequest.GetResponse();
+      //}
+      //catch (WebException we)
+      //{
+      //  // TODO: Add better logging
+      //  this.Postback.Log("Banana postback returned expection: " + we.Message);
+      //  return;
+      //}
     }
 
     

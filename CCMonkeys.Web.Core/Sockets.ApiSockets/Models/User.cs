@@ -27,22 +27,22 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 
     public async void Init(MainContext context)
     {
-
-      if (string.IsNullOrEmpty(this.Key))
-      {
-        this.Data = await new UserDM(this.Database)
-        {
-          guid = Guid.NewGuid().ToString()
-        }
-        .InsertAsync<UserDM>();
-        this.Key = this.Data.guid;
-      }
-      else
-      {
+      if(!string.IsNullOrEmpty(this.Key))
         this.Data =
           (await this.Database.Query<UserDM>().Where("guid={0}", this.Key).LoadSingleAsync());
+
+      if (this.Data != null)
+      {
+        this.Key = this.Data.guid;
+        return;
       }
 
+      this.Data = await new UserDM(this.Database)
+      {
+        guid = Guid.NewGuid().ToString()
+      }
+      .InsertAsync<UserDM>();
+      this.Key = this.Data.guid;
       context.SetCookie(Constants.UserGuidCookie, this.Key);
     }
 

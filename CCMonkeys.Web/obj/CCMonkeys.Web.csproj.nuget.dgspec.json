@@ -340,7 +340,7 @@
             },
             "Microsoft.AspNetCore.Cryptography.Internal": {
               "target": "Package",
-              "version": "[2.2.0, )"
+              "version": "[2.1.1, )"
             },
             "Microsoft.AspNetCore.Razor.Design": {
               "suppressParent": "All",

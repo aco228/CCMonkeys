@@ -32,7 +32,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         this.Data = await this.Database.Query<ActionDM>().Where("guid={0}", actionGuid).LoadSingleAsync();
         this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
         this.Data.UpdateLater();
-        return;
+
+        if(this.Data != null)
+          return;
       }
 
       actionGuid = Guid.NewGuid().ToString();

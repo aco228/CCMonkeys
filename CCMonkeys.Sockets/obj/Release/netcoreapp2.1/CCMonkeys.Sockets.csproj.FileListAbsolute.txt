@@ -9,3 +9,8 @@ D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Socket
 D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.AssemblyInfo.cs
 D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.dll
 D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.pdb
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Direct.dll
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\Direct.dll
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Direct.pdb
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\Direct.pdb
+D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.csproj.CopyComplete
