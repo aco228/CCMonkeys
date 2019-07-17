@@ -30,3 +30,6 @@ ActionDM action = null;
       Console.WriteLine(string.Format("action.countryid: {0}", (action.countryid.HasValue ? action.countryid.ToString() : "NULL")));
       Console.WriteLine(string.Format("action.userid: {0}", (action.userid.ToString())));
       Console.WriteLine(string.Format("action.sessionid: {0}", (action.sessionid.ToString())));
+
+	  
+	  #aslkdalksd
