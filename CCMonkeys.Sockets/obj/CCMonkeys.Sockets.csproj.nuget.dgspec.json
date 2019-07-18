@@ -10,7 +10,7 @@
         "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj",
         "projectName": "CCMonkeys.Direct",
         "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj",
-        "packagesPath": "C:\\Users\\dvuk\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
         "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -18,7 +18,7 @@
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dvuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -68,7 +68,7 @@
         "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj",
         "projectName": "CCMonkeys.Sockets",
         "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj",
-        "packagesPath": "C:\\Users\\dvuk\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
         "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -76,7 +76,7 @@
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dvuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -130,7 +130,7 @@
         "projectUniqueName": "D:\\github\\Direct.V2\\Direct\\Direct.csproj",
         "projectName": "Direct",
         "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj",
-        "packagesPath": "C:\\Users\\dvuk\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
         "outputPath": "D:\\github\\Direct.V2\\Direct\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -138,7 +138,7 @@
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dvuk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
