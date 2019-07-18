@@ -57,27 +57,38 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       string json = data.Substring(data.IndexOf('#') + 1);
 
       DistributionModel response = null;
-      switch (key)
+      try
       {
-        case "register":
-          response = await Get(uid).OnRegistration(JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
-          break;
+        switch (key)
+        {
+          case "register":
+            response = await Get(uid).OnRegistration(JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+            break;
 
-        // lander
-        case "user-create":
-          response = await Get(uid).OnCreateUser(JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
-          break;
-        case "user-subscribe":
-          response = await Get(uid).OnSubscribeUser(JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
-          break;
-        case "user-redirected":
-          response = await Get(uid).OnUserRedirected(JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
-          break;
+          // lander
+          case "user-create":
+            response = await Get(uid).OnCreateUser(JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
+            break;
+          case "user-subscribe":
+            response = await Get(uid).OnSubscribeUser(JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
+            break;
+          case "user-redirected":
+            response = await Get(uid).OnUserRedirected(JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
+            break;
+        }
+      }
+      catch(Exception e)
+      {
+        Get(uid).Send(new FatalModel() { Exception = e.ToString() }.Pack(false, "error500"));
+        return;
+      }
+      finally
+      {
+        Get(uid).Database.Dispose();
       }
 
       response.Key = key;
       Get(uid).Send(response);
-      Get(uid).Database.Dispose();
     }
 
     ///

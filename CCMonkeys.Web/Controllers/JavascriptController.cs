@@ -77,6 +77,8 @@ namespace CCMonkeys.Web.Controllers
         this.Context.RemoveCookie(Constants.ActionIDCookie);
 
       ApiSocketServer.AddSession(socket);
+
+      Response.ContentType = "text/javascript";
       return this.ReturnContent(variables+ClientJS+js_extension);
     }
 

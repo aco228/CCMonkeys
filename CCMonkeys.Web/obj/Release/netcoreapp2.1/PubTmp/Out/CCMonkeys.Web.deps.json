@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "0b792c4287eb80bf52141306bdef38a8e8ba22e4"
+    "signature": "44dcbc2aa99651b0a30bb3c7c02253881be0bab8"
   },
   "compilationOptions": {
     "defines": [
@@ -27,10 +27,11 @@
           "CCMonkeys.Direct": "1.0.0",
           "CCMonkeys.Sockets": "1.0.0",
           "CCMonkeys.Web.Core": "1.0.0",
-          "Direct.Core": "1.0.0",
+          "CCMonkeys.Web.Postbacks": "1.0.0",
+          "Direct": "1.0.0",
           "Microsoft.ApplicationInsights.AspNetCore": "2.7.1",
           "Microsoft.AspNetCore.App": "2.1.1",
-          "Microsoft.AspNetCore.Cryptography.Internal": "2.2.0",
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.1.1",
           "Microsoft.AspNetCore.Session": "2.1.1",
           "Microsoft.Extensions.Caching.Memory": "2.1.1",
           "Microsoft.NETCore.App": "2.1.0",
@@ -42,6 +43,20 @@
         },
         "compile": {
           "CCMonkeys.Web.dll": {}
+        }
+      },
+      "AspNetCore.Http.Extensions/1.0.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AspNetCore.Http.Extensions.dll": {
+            "assemblyVersion": "1.0.1.0",
+            "fileVersion": "1.0.1.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/AspNetCore.Http.Extensions.dll": {}
         }
       },
       "BouncyCastle.NetCore/1.8.3": {
@@ -195,17 +210,6 @@
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.AI.ServerTelemetryChannel.dll": {}
-        }
-      },
-      "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {
-            "assemblyVersion": "2.2.0.0",
-            "fileVersion": "2.2.0.18316"
-          }
-        },
-        "compile": {
-          "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
       },
       "Microsoft.Extensions.Logging.ApplicationInsights/2.10.0": {
@@ -643,17 +647,6 @@
           }
         }
       },
-      "System.Interactive.Async/3.2.0": {
-        "runtime": {
-          "lib/netstandard2.0/System.Interactive.Async.dll": {
-            "assemblyVersion": "3.2.0.0",
-            "fileVersion": "3.2.0.702"
-          }
-        },
-        "compile": {
-          "lib/netstandard2.0/System.Interactive.Async.dll": {}
-        }
-      },
       "System.IO.FileSystem.AccessControl/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.1.0",
@@ -865,7 +858,7 @@
       },
       "CCMonkeys.Direct/1.0.0": {
         "dependencies": {
-          "Direct.Core": "1.0.0"
+          "Direct": "1.0.0"
         },
         "runtime": {
           "CCMonkeys.Direct.dll": {}
@@ -876,6 +869,7 @@
       },
       "CCMonkeys.Sockets/1.0.0": {
         "dependencies": {
+          "CCMonkeys.Direct": "1.0.0",
           "Microsoft.AspNetCore.App": "2.1.1"
         },
         "runtime": {
@@ -889,7 +883,7 @@
         "dependencies": {
           "CCMonkeys.Direct": "1.0.0",
           "CCMonkeys.Sockets": "1.0.0",
-          "Direct.Core": "1.0.0",
+          "Direct": "1.0.0",
           "Microsoft.ApplicationInsights.AspNetCore": "2.7.1",
           "Microsoft.AspNetCore.App": "2.1.1",
           "Newtonsoft.Json": "12.0.2",
@@ -902,17 +896,33 @@
           "CCMonkeys.Web.Core.dll": {}
         }
       },
-      "Direct.Core/1.0.0": {
+      "CCMonkeys.Web.Postbacks/1.0.0": {
         "dependencies": {
-          "MySql.Data": "8.0.16",
-          "System.Data.SqlClient": "4.6.1",
-          "System.Interactive.Async": "3.2.0"
+          "AspNetCore.Http.Extensions": "1.0.1",
+          "CCMonkeys.Direct": "1.0.0",
+          "CCMonkeys.Sockets": "1.0.0",
+          "CCMonkeys.Web.Core": "1.0.0",
+          "Direct": "1.0.0",
+          "Microsoft.AspNetCore.App": "2.1.1",
+          "Newtonsoft.Json": "12.0.2"
         },
         "runtime": {
-          "Direct.Core.dll": {}
+          "CCMonkeys.Web.Postbacks.dll": {}
         },
         "compile": {
-          "Direct.Core.dll": {}
+          "CCMonkeys.Web.Postbacks.dll": {}
+        }
+      },
+      "Direct/1.0.0": {
+        "dependencies": {
+          "MySql.Data": "8.0.16",
+          "System.Data.SqlClient": "4.6.1"
+        },
+        "runtime": {
+          "Direct.dll": {}
+        },
+        "compile": {
+          "Direct.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -984,7 +994,7 @@
           "Microsoft.AspNetCore.Connections.Abstractions": "2.1.1",
           "Microsoft.AspNetCore.CookiePolicy": "2.1.1",
           "Microsoft.AspNetCore.Cors": "2.1.1",
-          "Microsoft.AspNetCore.Cryptography.Internal": "2.2.0",
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.1.1",
           "Microsoft.AspNetCore.Cryptography.KeyDerivation": "2.1.1",
           "Microsoft.AspNetCore.DataProtection": "2.1.1",
           "Microsoft.AspNetCore.DataProtection.Abstractions": "2.1.1",
@@ -1287,9 +1297,15 @@
         },
         "compileOnly": true
       },
+      "Microsoft.AspNetCore.Cryptography.Internal/2.1.1": {
+        "compile": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
+        },
+        "compileOnly": true
+      },
       "Microsoft.AspNetCore.Cryptography.KeyDerivation/2.1.1": {
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "2.2.0"
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.1.1"
         },
         "compile": {
           "lib/netcoreapp2.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll": {}
@@ -1298,7 +1314,7 @@
       },
       "Microsoft.AspNetCore.DataProtection/2.1.1": {
         "dependencies": {
-          "Microsoft.AspNetCore.Cryptography.Internal": "2.2.0",
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.1.1",
           "Microsoft.AspNetCore.DataProtection.Abstractions": "2.1.1",
           "Microsoft.AspNetCore.Hosting.Abstractions": "2.1.1",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.1",
@@ -2211,7 +2227,7 @@
           "System.Collections.Immutable": "1.5.0",
           "System.ComponentModel.Annotations": "4.5.0",
           "System.Diagnostics.DiagnosticSource": "4.5.0",
-          "System.Interactive.Async": "3.2.0"
+          "System.Interactive.Async": "3.1.1"
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.EntityFrameworkCore.dll": {}
@@ -3087,6 +3103,15 @@
         },
         "compileOnly": true
       },
+      "System.Interactive.Async/3.1.1": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3"
+        },
+        "compile": {
+          "lib/netstandard1.3/System.Interactive.Async.dll": {}
+        },
+        "compileOnly": true
+      },
       "System.IO/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "2.1.0",
@@ -3804,6 +3829,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "AspNetCore.Http.Extensions/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FZyUSh3r9DpEFu+qognOZYgOtMK/PC5X1oqoShqK9KIaIJ9kbqgyFEs54zWAKHj52s+FignNpTc2K9pFxUADIw==",
+      "path": "aspnetcore.http.extensions/1.0.1",
+      "hashPath": "aspnetcore.http.extensions.1.0.1.nupkg.sha512"
+    },
     "BouncyCastle.NetCore/1.8.3": {
       "type": "package",
       "serviceable": true,
@@ -3859,13 +3891,6 @@
       "sha512": "sha512-ZvpYOpWc5VySLoOJEMaXd6C+ka6aYG9Qn8Mso58SiydZO6nJV3DTNU1I3W8dZtSHUq2oLECA+yarUVt030SxEw==",
       "path": "microsoft.applicationinsights.windowsserver.telemetrychannel/2.10.0",
       "hashPath": "microsoft.applicationinsights.windowsserver.telemetrychannel.2.10.0.nupkg.sha512"
-    },
-    "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-GXmMD8/vuTLPLvKzKEPz/4vapC5e0cwx1tUVd83ePRyWF9CCrn/pg4/1I+tGkQqFLPvi3nlI2QtPtC6MQN8Nww==",
-      "path": "microsoft.aspnetcore.cryptography.internal/2.2.0",
-      "hashPath": "microsoft.aspnetcore.cryptography.internal.2.2.0.nupkg.sha512"
     },
     "Microsoft.Extensions.Logging.ApplicationInsights/2.10.0": {
       "type": "package",
@@ -4035,13 +4060,6 @@
       "path": "system.diagnostics.process/4.3.0",
       "hashPath": "system.diagnostics.process.4.3.0.nupkg.sha512"
     },
-    "System.Interactive.Async/3.2.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-C07p0dAA5lGqYUPiPCK3paR709gqS4aMDDsje0v0pvffwzLaxmsn5YQTfZbyNG5qrudPx+BCxTqISnncQ3wIoQ==",
-      "path": "system.interactive.async/3.2.0",
-      "hashPath": "system.interactive.async.3.2.0.nupkg.sha512"
-    },
     "System.IO.FileSystem.AccessControl/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -4134,7 +4152,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Direct.Core/1.0.0": {
+    "CCMonkeys.Web.Postbacks/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Direct/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -4285,6 +4308,13 @@
       "sha512": "sha512-5b3xfO8ycP9fEm76HGdExptlxURKNbmGnlA2mN+FQMaWPEuFH1te6GReBcKCQp4oeSSWuLfV9xSo+8LpU24u1A==",
       "path": "microsoft.aspnetcore.cors/2.1.1",
       "hashPath": "microsoft.aspnetcore.cors.2.1.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Cryptography.Internal/2.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-guY3jMNkcUi2hrMJ4/vPnUUFwudxTVSJ809gCfpq+xR0UgV6P9ZHZLOI5q/07QHDZY+kKPXxipXGyJXQpq2k0g==",
+      "path": "microsoft.aspnetcore.cryptography.internal/2.1.1",
+      "hashPath": "microsoft.aspnetcore.cryptography.internal.2.1.1.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Cryptography.KeyDerivation/2.1.1": {
       "type": "package",
@@ -5510,6 +5540,13 @@
       "sha512": "sha512-E8tNMfMWPvlSF5fvmMIVZZHlGuIZzE5uktuR+GN2gFdngh0k6xoZquxfjKC02d0NqfsshNQVTCdSKXD5e9/lpA==",
       "path": "system.identitymodel.tokens.jwt/5.2.0",
       "hashPath": "system.identitymodel.tokens.jwt.5.2.0.nupkg.sha512"
+    },
+    "System.Interactive.Async/3.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hZccYiIE5RS1/J9Tb/BNtosAGVggdlsJm4Ojdu+gDV0p4AIi+LUfUogMKkRacljQEJd2AG6vYzvcjhQFkqoZmw==",
+      "path": "system.interactive.async/3.1.1",
+      "hashPath": "system.interactive.async.3.1.1.nupkg.sha512"
     },
     "System.IO/4.3.0": {
       "type": "package",

@@ -606,7 +606,7 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Cors.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
+      "Microsoft.AspNetCore.Cryptography.Internal/2.1.1": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {}
@@ -5432,16 +5432,16 @@
         "microsoft.aspnetcore.cors.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
-      "sha512": "GXmMD8/vuTLPLvKzKEPz/4vapC5e0cwx1tUVd83ePRyWF9CCrn/pg4/1I+tGkQqFLPvi3nlI2QtPtC6MQN8Nww==",
+    "Microsoft.AspNetCore.Cryptography.Internal/2.1.1": {
+      "sha512": "guY3jMNkcUi2hrMJ4/vPnUUFwudxTVSJ809gCfpq+xR0UgV6P9ZHZLOI5q/07QHDZY+kKPXxipXGyJXQpq2k0g==",
       "type": "package",
-      "path": "microsoft.aspnetcore.cryptography.internal/2.2.0",
+      "path": "microsoft.aspnetcore.cryptography.internal/2.1.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.Internal.xml",
-        "microsoft.aspnetcore.cryptography.internal.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.cryptography.internal.2.1.1.nupkg.sha512",
         "microsoft.aspnetcore.cryptography.internal.nuspec"
       ]
     },
@@ -13378,7 +13378,7 @@
       "Direct >= 1.0.0",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.7.1",
       "Microsoft.AspNetCore.App >= 2.1.1",
-      "Microsoft.AspNetCore.Cryptography.Internal >= 2.2.0",
+      "Microsoft.AspNetCore.Cryptography.Internal >= 2.1.1",
       "Microsoft.AspNetCore.Razor.Design >= 2.1.2",
       "Microsoft.AspNetCore.Session >= 2.1.1",
       "Microsoft.Extensions.Caching.Memory >= 2.1.1",
@@ -13459,7 +13459,7 @@
           },
           "Microsoft.AspNetCore.Cryptography.Internal": {
             "target": "Package",
-            "version": "[2.2.0, )"
+            "version": "[2.1.1, )"
           },
           "Microsoft.AspNetCore.Razor.Design": {
             "suppressParent": "All",
@@ -13495,17 +13495,5 @@
         "warn": true
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package version outside of dependency constraint: Microsoft.AspNetCore.App 2.1.1 requires Microsoft.AspNetCore.Cryptography.Internal (>= 2.1.1 && < 2.2.0) but version Microsoft.AspNetCore.Cryptography.Internal 2.2.0 was resolved.",
-      "libraryId": "Microsoft.AspNetCore.Cryptography.Internal",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.1"
-      ]
-    }
-  ]
+  }
 }

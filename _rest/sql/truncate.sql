@@ -1,0 +1,19 @@
+START TRANSACTION;
+SET FOREIGN_KEY_CHECKS = 0; 
+
+TRUNCATE TABLE tm_lead_history;
+TRUNCATE TABLE tm_lead;
+TRUNCATE TABLE tm_user;
+
+TRUNCATE TABLE tm_session;
+TRUNCATE TABLE tm_session_data;
+TRUNCATE TABLE tm_session_request;
+
+TRUNCATE TABLE cc_postback_log;
+TRUNCATE TABLE cc_postback;
+
+TRUNCATE TABLE tm_action_account;
+TRUNCATE TABLE tm_action;
+
+SET FOREIGN_KEY_CHECKS = 1;
+COMMIT;

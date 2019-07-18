@@ -32,7 +32,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         this.Data = await this.Database.Query<ActionDM>().Where("guid={0}", actionGuid).LoadSingleAsync();
         this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
         this.Data.UpdateLater();
-        return;
+
+        if(this.Data != null)
+          return;
       }
 
       actionGuid = Guid.NewGuid().ToString();
@@ -50,12 +52,13 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 
     #region # On registration of socket #
 
-    public async Task OnPrelanderRegistration(string domain, Dictionary<string, string> queryValues, ReceivingRegistrationModel model)
+    public async Task<bool> OnPrelanderRegistration(string domain, Dictionary<string, string> queryValues, ReceivingRegistrationModel model)
     {
       PrelanderDM prelander = (await this.Database.Query<PrelanderDM>().Select("prelandertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
       if (prelander == null)
       {
         // TODO: Some logging here
+        return false;
       }
       else
       {
@@ -64,14 +67,17 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       }
 
       this.Data.UpdateLater();
+      return true;
     }
 
-    public async Task OnLanderRegistration(string domain, Dictionary<string, string> queryValues, ReceivingRegistrationModel model)
+    public async Task<bool> OnLanderRegistration(string domain, Dictionary<string, string> queryValues, ReceivingRegistrationModel model)
     {
       LanderDM lander = (await this.Database.Query<LanderDM>().Select("landertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
       if (lander == null)
       {
         // TODO: Some logging here
+
+        return false;
       }
       else
       {
@@ -88,6 +94,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         this.Data.pubid = queryValues["utm_campaign"];
 
       this.Data.UpdateLater();
+      return true;
     }
 
     #endregion

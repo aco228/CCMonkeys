@@ -17,7 +17,11 @@ namespace CCMonkeys.Web
     {
       using (SentrySdk.Init("https://e2a9518558524ceeafd180cf83556583@sentry.io/1505328"))
       {
-        CreateWebHostBuilder(args).Build().Run();
+        CreateWebHostBuilder(args)
+          //.UseKestrel()
+          .UseIISIntegration() // Necessary for Azure.
+          .Build()
+          .Run();
       }
     }
 
