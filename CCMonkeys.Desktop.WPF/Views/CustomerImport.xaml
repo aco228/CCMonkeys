@@ -1,0 +1,180 @@
+﻿<Page x:Class="CCMonkeys.Wpf.Desktop.Views.CustomerImport"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CCMonkeys.Wpf.Desktop.Views"
+      mc:Ignorable="d" 
+      MinWidth="1100"
+      Title="Customer Import">
+
+  <Grid x:Name="mainGrid" Margin="1,1,1,1" Height="520" MinWidth="1100">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="9*" />
+      <RowDefinition Height="1*" />
+      <RowDefinition Height="1*" />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="2.5*" />
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="1*" />
+    </Grid.ColumnDefinitions>
+
+    <DockPanel x:Name="tableDockPanel"
+               LastChildFill="True"            
+               Grid.Row="0"
+               HorizontalAlignment="Stretch"
+               Grid.ColumnSpan="4">
+
+      <TextBlock x:Name="structureTitleLabel" 
+               Text="Csv file must have headers with exact names as below:"
+               Background="WhiteSmoke"
+               Foreground="Black"
+               Padding="15,5,5,5"
+               FontSize="15"
+               TextAlignment="left"
+               DockPanel.Dock="Top" />
+      <!-- Dropdown selectors  -->
+      <!--<UniformGrid x:Name="comboGrid"
+                 Width="{Binding ActualWidth, ElementName=tableDockPanel}"
+                 DockPanel.Dock="Top"           
+                 >
+      </UniformGrid>-->
+
+      <UniformGrid x:Name="columnNamesGrid"
+                 Width="{Binding ActualWidth, ElementName=tableDockPanel}"
+                 DockPanel.Dock="Top"           
+                 >
+      </UniformGrid>
+
+      <DataGrid x:Name="csvDataGrid"  
+                AutoGenerateColumns="True"
+                CanUserSortColumns="False"      
+                Height="Auto" 
+                MinHeight="425"
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Top"
+                Width="{Binding ActualWidth, ElementName=tableDockPanel}">
+      </DataGrid>
+
+    </DockPanel>
+
+    <Grid Margin="5,0,50,0" 
+              Grid.Row="1" 
+              Grid.Column="0" 
+              VerticalAlignment="Bottom" 
+              Height="30" 
+              HorizontalAlignment="Left" 
+              MinWidth="150">
+
+      <ProgressBar Background="#282626" 
+                         Margin="5" 
+                         Minimum="0" 
+                         Maximum="100" 
+                         Name="pbStatus" 
+                         HorizontalAlignment="Stretch" />
+
+      <TextBlock Foreground="White" 
+                       FontWeight="SemiBold" 
+                       Text="{Binding ElementName=pbStatus, Path=Value, StringFormat='Progress: {0:0}%'}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center" />
+    </Grid>
+
+    <Label x:Name="allRecordsCount" 
+               Background="White" 
+               Grid.Row="1" 
+               Grid.Column="0" 
+               Content="Total CSV-s found: 0" 
+               HorizontalAlignment="Right" 
+               VerticalAlignment="Bottom" 
+               Width="Auto" 
+               Height="30" 
+               Margin="0,0,100,0"/>
+
+    <Label x:Name="updatedDbRecordsCount" 
+               Background="White" 
+               Grid.Row="1" 
+               Grid.Column="1" 
+               Content="Updated: 0" 
+               HorizontalAlignment="Left" 
+               VerticalAlignment="Bottom" 
+               Width="130" 
+               Height="30" />
+
+    <Label x:Name="alreadyInDbRecordsCount" 
+               Background="White"
+               Grid.Row="1" 
+               Grid.Column="1" 
+               Content="Already in db: 0" 
+               HorizontalAlignment="Right" 
+               VerticalAlignment="Bottom" 
+               Width="130" 
+               Height="30"/>
+
+    <Label x:Name="insertedRecordsCount" 
+               Background="White" 
+               Grid.Row="1" 
+               Grid.Column="2" 
+               Content="Inserted: 0" 
+               HorizontalAlignment="Stretch" 
+               VerticalAlignment="Bottom" 
+               Width="Auto" 
+               Height="30"/>
+
+    <Label x:Name="failedRecordsCount" 
+               Background="White" 
+               Grid.Row="1" 
+               Grid.Column="3" 
+               Content="Failed: 0"
+               HorizontalAlignment="Stretch" 
+               VerticalAlignment="Bottom" 
+               Width="Auto" 
+               Height="30"/>
+
+    <TextBlock x:Name="filePathLabel"
+                   Margin="15,10,0,0"
+                   Background="White"
+                   Grid.Row="2"
+                   Grid.Column="0"
+                   Text="Csv file path will be here"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center"
+                   Width="Auto"
+                   Height="30"/>
+
+    <!--<CheckBox x:Name="csvModified" Margin="0,10,10,0" Grid.Row="2" Grid.Column="1" Content="Is csv modified?" HorizontalAlignment="Right" VerticalAlignment="Center" Width="Auto" Height="25"/>-->
+
+    <Button x:Name="btnCsvChoose"
+                FontWeight="SemiBold"
+                FontSize="15px"
+                Margin="5"
+                Grid.Row="2"
+                Grid.Column="2"
+                Content="Choose CSV file"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Width="Auto"
+                Height="25"
+                Click="BtnCsvChoose_Click"/>
+
+    <Button x:Name="btnCsvImport"
+                IsEnabled="False"
+                FontWeight="SemiBold"
+                FontSize="15px"
+                Margin="5"
+                Grid.Row="2"
+                Grid.Column="3"
+                Content="IMPORT"
+                Background="Green"
+                Foreground="White"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Width="Auto"
+                Height="25"
+                Click="BtnCsvImport_Click"/>
+
+  </Grid>
+</Page>

@@ -10,7 +10,8 @@ namespace CCMonkeys.Direct
     Live,
     Livesports,
     DebugApi,
-    DebugDesktop
+    DebugDesktop,
+    LocalDV
   }
 
   public static class CCSubmitConnectionString
@@ -30,7 +31,10 @@ namespace CCMonkeys.Direct
       "Server=ccmonkeys.cerqlxjx1slg.eu-central-1.rds.amazonaws.com; database=ccmonkeys; UID=admin; password=adminpasssifra12345; Allow User Variables=True;",
       
       // DebugDesktop
-      "Server=ccmonkeys.cerqlxjx1slg.eu-central-1.rds.amazonaws.com; database=ccmonkeys; UID=admin; password=adminpasssifra12345; Allow User Variables=True;"
+      "Server=ccmonkeys.cerqlxjx1slg.eu-central-1.rds.amazonaws.com; database=ccmonkeys; UID=admin; password=adminpasssifra12345; Allow User Variables=True;",
+      // LocalDV
+      "Server=127.0.0.1; UID=root; password=; database=test; Allow User Variables=True;"
+
     };
 
     internal static string GetConnectionString()

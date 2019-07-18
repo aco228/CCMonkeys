@@ -35,8 +35,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.3.2.0\lib\net45\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +64,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\CustomerCsvExportViewModel.cs" />
+    <Compile Include="ViewModels\CustomerViewModel.cs" />
+    <Compile Include="Views\CustomerExport.xaml.cs">
+      <DependentUpon>CustomerExport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomerImport.xaml.cs">
+      <DependentUpon>CustomerImport.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,12 +80,55 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\SaveCsvCommand.cs" />
+    <Compile Include="Commands\SearchCustomersCommand.cs" />
+    <Compile Include="Commands\UpdateCustomerCommand.cs" />
+    <Compile Include="Core\Csv\CsvSetupParams.cs" />
+    <Compile Include="Core\Csv\Mapper\DynamicCsvCClientMap.cs" />
+    <Compile Include="Core\Csv\Mapper\DynamicCsvMap.cs" />
+    <Compile Include="Core\Csv\Models\CsvNameByIndex.cs" />
+    <Compile Include="Core\Csv\Models\CsvTypeEnum.cs" />
+    <Compile Include="Core\Csv\Models\DynamicCsv.cs" />
+    <Compile Include="Core\Csv\Models\DynamicCsvHelper.cs" />
+    <Compile Include="Core\Csv\Models\DynamicCsvInfo.cs" />
+    <Compile Include="Core\Csv\Read\CsvReaderCustom.cs" />
+    <Compile Include="Core\Csv\Read\Mapper\DynamicCsvMap.cs" />
+    <Compile Include="Core\Csv\Read\Models\CsvNameByIndex.cs" />
+    <Compile Include="Core\Csv\Read\Models\CsvTypeEnum.cs" />
+    <Compile Include="Core\Csv\Read\Models\DynamicCsv.cs" />
+    <Compile Include="Core\Csv\Read\Models\DynamicCsvHelper.cs" />
+    <Compile Include="Core\Csv\Read\Models\DynamicCsvInfo.cs" />
+    <Compile Include="Core\Csv\Write\CsvWriterCustom.cs" />
+    <Compile Include="Core\Csv\Write\EnumBindingSourceExtension.cs" />
+    <Compile Include="Core\Direct\DirectReader.cs" />
+    <Compile Include="Core\Direct\DirectTransactionalManagerExtension.cs" />
+    <Compile Include="Core\Direct\DirectWriter.cs" />
+    <Compile Include="Core\Helpers\ListExtensions.cs" />
+    <Compile Include="Core\Helpers\ObjectHelper.cs" />
+    <Compile Include="Core\Managers\ClientManager.cs" />
+    <Compile Include="Core\Managers\DirectTransactionalManagerExtension.cs" />
+    <Compile Include="Core\Managers\LeadManager.cs" />
+    <Compile Include="Core\Table\TableDataDummy.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CustomerExport.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CustomerImport.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ComparisonConverter.cs" />
+    <Compile Include="Models\CustomerCsvExportModel.cs" />
+    <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\CustomerQueryEnum.cs" />
+    <Compile Include="Models\PaymentProviderEnum.cs" />
+    <Compile Include="Models\PaymentProviderModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -86,6 +146,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -103,6 +164,9 @@
       <Project>{1c040ca7-a4a1-42a2-a3e2-fac347024aff}</Project>
       <Name>CCMonkeys.Direct</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
