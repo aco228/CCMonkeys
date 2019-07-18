@@ -19,7 +19,7 @@ namespace CCMonkeys.Consoles.Migration
     }
 
     public LivesportsDatabase()
-      : base("ccmonkeys", "Server=46.166.160.58; database=livesports; UID=livesports; password=a48i72V\"B?8>79Z")
+      : base("livesports", "Server=46.166.160.58; database=livesports; UID=livesports; password=a48i72V\"B?8>79Z")
     { }
 
 

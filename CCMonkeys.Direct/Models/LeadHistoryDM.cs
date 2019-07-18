@@ -21,7 +21,7 @@ public string old_value { get; set; } = default;
 [DColumn(Name = "new_value", Nullable = true)]
 public string new_value { get; set; } = default;
 
-[DColumn(Name = "created", NotUpdatable = true)]
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
 }

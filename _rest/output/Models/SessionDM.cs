@@ -27,10 +27,10 @@ public int? sessiondataid { get; set; } = default;
 [DColumn(Name = "sessionrequestid", Nullable = true)]
 public int? sessionrequestid { get; set; } = default;
 
-[DColumn(Name = "duration")]
+[DColumn(Name = "duration", HasDefaultValue=true)]
 public double duration { get; set; } = default;
 
-[DColumn(Name = "created", NotUpdatable = true)]
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
 }

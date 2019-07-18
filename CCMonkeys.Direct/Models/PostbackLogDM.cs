@@ -15,7 +15,7 @@ public int postbackid { get; set; } = default;
 [DColumn(Name = "text")]
 public string text { get; set; } = default;
 
-[DColumn(Name = "created", NotUpdatable = true)]
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
 }

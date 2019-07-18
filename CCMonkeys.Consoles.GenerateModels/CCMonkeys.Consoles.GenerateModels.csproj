@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Direct.V2\Direct\Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj" />
-    <ProjectReference Include="..\CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj" />
   </ItemGroup>
 
 </Project>

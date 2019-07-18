@@ -18,10 +18,10 @@ public string name { get; set; } = default;
 [DColumn(Name = "url")]
 public string url { get; set; } = default;
 
-[DColumn(Name = "updated", NotUpdatable = true)]
+[DColumn(Name = "updated", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime updated { get; set; } = default;
 
-[DColumn(Name = "created", NotUpdatable = true)]
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
 }

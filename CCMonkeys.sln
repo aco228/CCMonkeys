@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Direct", "CCMonke
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCMonkeys.Desktop.WPF", "CCMonkeys.Desktop.WPF\CCMonkeys.Desktop.WPF.csproj", "{04F5C148-9FC0-4444-A9F3-AB2F0D0CC9CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCMonkeys.Consoles.Migration", "CCMonkeys.Consoles.Migration\CCMonkeys.Consoles.Migration.csproj", "{384A5378-01FD-45A9-8E7F-8DCBF4F2C815}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Consoles.Migration", "CCMonkeys.Consoles.Migration\CCMonkeys.Consoles.Migration.csproj", "{384A5378-01FD-45A9-8E7F-8DCBF4F2C815}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCMonkeys.Consoles.GenerateModels", "CCMonkeys.Consoles.GenerateModels\CCMonkeys.Consoles.GenerateModels.csproj", "{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{384A5378-01FD-45A9-8E7F-8DCBF4F2C815}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{384A5378-01FD-45A9-8E7F-8DCBF4F2C815}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{384A5378-01FD-45A9-8E7F-8DCBF4F2C815}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

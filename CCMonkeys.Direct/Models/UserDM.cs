@@ -18,7 +18,7 @@ public int? countryid { get; set; } = default;
 [DColumn(Name = "leadid", Nullable = true)]
 public int? leadid { get; set; } = default;
 
-[DColumn(Name = "created", NotUpdatable = true)]
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
 }

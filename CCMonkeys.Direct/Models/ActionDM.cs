@@ -45,40 +45,40 @@ public int? providerid { get; set; } = default;
 [DColumn(Name = "countryid", Nullable = true)]
 public int? countryid { get; set; } = default;
 
-[DColumn(Name = "input_redirect")]
+[DColumn(Name = "input_redirect", HasDefaultValue=true)]
 public bool input_redirect { get; set; } = false;
 
-[DColumn(Name = "input_email")]
+[DColumn(Name = "input_email", HasDefaultValue=true)]
 public bool input_email { get; set; } = false;
 
-[DColumn(Name = "input_contact")]
+[DColumn(Name = "input_contact", HasDefaultValue=true)]
 public bool input_contact { get; set; } = false;
 
-[DColumn(Name = "has_subscription")]
+[DColumn(Name = "has_subscription", HasDefaultValue=true)]
 public bool has_subscription { get; set; } = false;
 
-[DColumn(Name = "has_chargeback")]
+[DColumn(Name = "has_chargeback", HasDefaultValue=true)]
 public bool has_chargeback { get; set; } = false;
 
-[DColumn(Name = "has_refund")]
+[DColumn(Name = "has_refund", HasDefaultValue=true)]
 public bool has_refund { get; set; } = false;
 
-[DColumn(Name = "times_charged")]
+[DColumn(Name = "times_charged", HasDefaultValue=true)]
 public int times_charged { get; set; } = 0;
 
-[DColumn(Name = "times_upsell")]
+[DColumn(Name = "times_upsell", HasDefaultValue=true)]
 public int times_upsell { get; set; } = 0;
 
-[DColumn(Name = "has_redirectedToProvider")]
+[DColumn(Name = "has_redirectedToProvider", HasDefaultValue=true)]
 public bool has_redirectedToProvider { get; set; } = false;
 
-[DColumn(Name = "has_stolen")]
+[DColumn(Name = "has_stolen", HasDefaultValue=true)]
 public bool has_stolen { get; set; } = false;
 
-[DColumn(Name = "updated", NotUpdatable = true)]
+[DColumn(Name = "updated", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime updated { get; set; } = default;
 
-[DColumn(Name = "created", NotUpdatable = true)]
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
 }

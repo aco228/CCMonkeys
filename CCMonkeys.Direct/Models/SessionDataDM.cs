@@ -36,7 +36,7 @@ public string longitude { get; set; } = default;
 [DColumn(Name = "timezone", Nullable = true)]
 public string timezone { get; set; } = default;
 
-[DColumn(Name = "created", NotUpdatable = true)]
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
 }

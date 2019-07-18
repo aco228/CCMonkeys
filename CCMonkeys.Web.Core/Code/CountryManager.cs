@@ -58,7 +58,7 @@ namespace CCMonkeys.Web.Core.Code
       if (string.IsNullOrEmpty(code))
         return null;
 
-      if (_countryNameMap == null)
+      if (_countryCodeMap == null)
         await Configure(db);
 
       foreach (var entry in _countryCodeMap)

@@ -4,10 +4,10 @@ using System;
 
 namespace Direct.ccmonkeys.Models
 {
-public partial class SessionDM : DirectModel
+public partial class SesssionDM : DirectModel
 {
 
-public SessionDM(DirectDatabaseBase db) : base("tm_session", "sessionid", db){}
+public SesssionDM(DirectDatabaseBase db) : base("tm_session", "sessionid", db){}
 
 [DColumn(Name = "guid")]
 public string guid { get; set; } = default;
