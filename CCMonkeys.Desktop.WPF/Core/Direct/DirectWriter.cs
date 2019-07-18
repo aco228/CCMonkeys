@@ -2,18 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using TrafficManagement.Core;
-using TrafficManagement.Wpf.Importer.Core.Csv.Read.Models;
-using TrafficManagement.Wpf.Importer.Core.Direct;
+using CCMonkeys.Desktop.WPF.Core.Csv.Read.Models;
+using CCMonkeys.Desktop.WPF.Core.Direct;
+using CCMonkeys.Direct;
 
-namespace TrafficManagement.Wpf.Importer.Direct
+namespace CCMonkeys.Desktop.WPF.Direct
 {
     public static class DirectWriter
     {
         public static (bool isSuccess, int numOfRows) InsertCsvData(List<DynamicCsv> csvParamsList)
         {
             //CCSubmitDirect db = CCSubmitDirect.Instance;
-            ForTestDirect db = ForTestDirect.Instance;
+            CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
+            CCSubmitDirect db = CCSubmitDirect.Instance;
 
             string query = "";
 
@@ -22,7 +23,10 @@ namespace TrafficManagement.Wpf.Importer.Direct
 
             var numOfRows = db.Execute(query);
 
-            return (numOfRows > 0 ? true : false, numOfRows != null ? (int)numOfRows : 0);
+            return (false, 0);
+
+            // todo
+            //return  (numOfRows > 0 ? true : false, numOfRows != null ? (int)numOfRows : 0);
         }
 
         private static string ConstructParamsCustom(List<DynamicCsv> csvParamsList)
@@ -66,7 +70,8 @@ namespace TrafficManagement.Wpf.Importer.Direct
         {
             //CCSubmitDirect db = CCSubmitDirect.Instance;
 
-            ForTestDirect db = ForTestDirect.Instance;
+            CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
+            CCSubmitDirect db = CCSubmitDirect.Instance;
             var dtManager = new DirectTransactionalManagerExtension(db);
 
             foreach (var record in csvParamsList)

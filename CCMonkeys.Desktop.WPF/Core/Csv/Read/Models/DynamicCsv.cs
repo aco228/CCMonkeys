@@ -1,7 +1,7 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using System;
 
-namespace TrafficManagement.Wpf.Importer.Core.Csv.Read.Models
+namespace CCMonkeys.Desktop.WPF.Core.Csv.Read.Models
 {
     public class DynamicCsv
     {

@@ -7,7 +7,7 @@ using CCMonkeys.Wpf.Desktop.Core.Csv.Mapper;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 using CCMonkeys.Wpf.Desktop.Managers;
 
-namespace CCMonkeys.Wpf.Desktop.Csv.Write
+namespace CCMonkeys.Wpf.Desktop.Core.Csv.Write
 {
     public static class CsvWriterCustom
     {

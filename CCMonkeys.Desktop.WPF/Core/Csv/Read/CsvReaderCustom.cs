@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using CCMonkeys.Wpf.Desktop.Csv.Mapper;
+using CCMonkeys.Wpf.Desktop.Core.Csv.Mapper;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 
-namespace CCMonkeys.Wpf.Desktop.Csv.Readers
+namespace CCMonkeys.Wpf.Desktop.Core.Csv.Readers
 {
     public static class CsvReaderCustom
     {

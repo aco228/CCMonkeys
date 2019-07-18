@@ -1,8 +1,8 @@
 ﻿using Direct.Core;
 using System.Collections.Generic;
-using TrafficManagement.Core;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 using CCMonkeys.Wpf.Desktop.Models;
+using CCMonkeys.Direct;
 
 namespace CCMonkeys.Wpf.Desktop.Core.Managers
 {
@@ -17,6 +17,7 @@ namespace CCMonkeys.Wpf.Desktop.Core.Managers
 
             var tableName = "[].cc_client";
 
+            CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
             CCSubmitDirect db = CCSubmitDirect.Instance;
             //ForTestDirect db = ForTestDirect.Instance;
 

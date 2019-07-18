@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCMonkeys.Wpf.Desktop.Csv
+namespace CCMonkeys.Wpf.Desktop.Core.Csv
 {
     public class CsvSetupParams
     {

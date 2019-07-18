@@ -9,8 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 using CCMonkeys.Wpf.Desktop.Core.Helpers;
-using CCMonkeys.Wpf.Desktop.Csv.Readers;
-using CCMonkeys.Wpf.Desktop.Csv.Write;
+using CCMonkeys.Wpf.Desktop.Core.Csv.Readers;
+using CCMonkeys.Wpf.Desktop.Core.Csv.Write;
 
 namespace CCMonkeys.Wpf.Desktop.Views
 {

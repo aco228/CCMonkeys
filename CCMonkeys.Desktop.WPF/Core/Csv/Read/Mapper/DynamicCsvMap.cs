@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TrafficManagement.Wpf.Importer.Core.Csv.Read.Models;
+using CCMonkeys.Desktop.WPF.Core.Csv.Read.Models;
 
-namespace TrafficManagement.Wpf.Importer.Csv.Read.Mapper
+namespace CCMonkeys.Desktop.WPF.Core.Csv.Read.Mapper
 {
     public class DynamicCsvMap : ClassMap<DynamicCsv>
     {
