@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficManagement.Wpf.Importer.Core.Csv.Read.Models
+namespace CCMonkeys.Desktop.WPF.Core.Csv.Read.Models
 {
     public class DynamicCsvInfo<T>
     {

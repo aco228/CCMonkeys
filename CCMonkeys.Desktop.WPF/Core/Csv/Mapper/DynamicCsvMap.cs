@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 
-namespace CCMonkeys.Wpf.Desktop.Csv.Mapper
+namespace CCMonkeys.Wpf.Desktop.Core.Csv.Mapper
 {
     public class DynamicCsvMap : ClassMap<DynamicCsv>
     {

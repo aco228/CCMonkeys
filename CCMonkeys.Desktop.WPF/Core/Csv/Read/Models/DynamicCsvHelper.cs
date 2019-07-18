@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace TrafficManagement.Wpf.Importer.Core.Csv.Read.Models
+namespace CCMonkeys.Desktop.WPF.Core.Csv.Read.Models
 {
   public static class DynamicCsvHelper
   {

@@ -35,7 +35,7 @@ namespace CCMonkeys.Wpf.Desktop.Core.Manager
 
             var result = this._database.Execute(mainQuery);
             this._queries = new List<string>();
-            return result;
+            return (int?)result.LastID;
         }
     }
 }

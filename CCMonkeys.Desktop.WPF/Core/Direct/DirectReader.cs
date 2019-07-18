@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TrafficManagement.Core;
-using TrafficManagement.Wpf.Importer.Core.Csv.Read.Models;
+using CCMonkeys.Desktop.WPF.Core.Csv.Read.Models;
+using Direct.Core;
 
-namespace TrafficManagement.Wpf.Importer.Direct
+namespace CCMonkeys.Desktop.WPF.Direct
 {
     public class DirectReader
     {
@@ -25,7 +25,8 @@ namespace TrafficManagement.Wpf.Importer.Direct
             emailParams = result.emails;
 
             //CCSubmitDirect db = CCSubmitDirect.Instance;
-            ForTestDirect db = ForTestDirect.Instance;
+            CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
+            CCSubmitDirect db = CCSubmitDirect.Instance;
 
             var query = "SELECT * FROM " + tableTypeString + " ";
 

@@ -4,6 +4,8 @@ using System.Linq;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 using CCMonkeys.Wpf.Desktop.Core.Manager;
 using System.Reflection;
+using Direct.Core;
+using CCMonkeys.Direct;
 
 namespace CCMonkeys.Wpf.Desktop.Managers
 {
@@ -27,7 +29,8 @@ namespace CCMonkeys.Wpf.Desktop.Managers
             emailParams = result.emails;
 
             //CCSubmitDirect db = CCSubmitDirect.Instance;
-            ForTestDirect db = ForTestDirect.Instance;
+            CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
+            CCSubmitDirect db = CCSubmitDirect.Instance;
 
             var query = "SELECT * FROM " + tableName + " ";
 
@@ -86,14 +89,16 @@ namespace CCMonkeys.Wpf.Desktop.Managers
         public static (bool isSuccess, int numOfRows) InsertCsvData(List<DynamicCsv> csvParamsList)
         {
             //CCSubmitDirect db = CCSubmitDirect.Instance;
-            ForTestDirect db = ForTestDirect.Instance;
+            CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
+            CCSubmitDirect db = CCSubmitDirect.Instance;
 
             string query = "";
 
             query += "INSERT INTO [].tm_lead (msisdn, email, first_name, last_name, country, address, city, zip, device, operator, device_mf, device_os, updated) VALUES"
                   + ConstructParamsCustom(csvParamsList);
 
-            var numOfRows = db.Execute(query);
+            var result = db.Execute(query);
+            var numOfRows = result.NumberOfRowsAffected;
 
             return (numOfRows > 0 ? true : false, numOfRows != null ? (int)numOfRows : 0);
         }
@@ -139,7 +144,8 @@ namespace CCMonkeys.Wpf.Desktop.Managers
         {
             //CCSubmitDirect db = CCSubmitDirect.Instance;
 
-            ForTestDirect db = ForTestDirect.Instance;
+            CCSubmitConnectionString.Type = CCSubmitConnectionStringType.LocalDV;
+            CCSubmitDirect db = CCSubmitDirect.Instance;
             var dtManager = new DirectTransactionalManagerExtension(db);
 
             foreach (var record in csvParamsList)

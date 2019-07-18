@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficManagement.Wpf.Importer.Core.Csv.Read.Types
+namespace CCMonkeys.Desktop.WPF.Core.Csv.Read.Types
 {
     public enum CsvTypeEnum
     {

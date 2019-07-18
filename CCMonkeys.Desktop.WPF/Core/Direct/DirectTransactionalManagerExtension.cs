@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrafficManagement.Wpf.Importer.Core.Direct
+namespace CCMonkeys.Desktop.WPF.Core.Direct
 {
     public class DirectTransactionalManagerExtension
     {
@@ -35,7 +35,7 @@ namespace TrafficManagement.Wpf.Importer.Core.Direct
 
             var result = this._database.Execute(mainQuery);
             this._queries = new List<string>();
-            return result;
+            return (int?)result.LastID;
         }
     }
 }
