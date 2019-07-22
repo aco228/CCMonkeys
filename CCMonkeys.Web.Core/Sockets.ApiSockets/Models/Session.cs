@@ -18,59 +18,91 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
   public class Session
   {
     public int? ID { get => this.Data.ID; }
-    public SessionType Type { get => Socket.SessionType; }
-    public SessionRequestDM Request { get; set; } = null;
-    public SessionDM Data { get; protected set; } = null;
-    public SessionDataDM SessionData { get; protected set; } = null;
     public CCSubmitDirect Database { get => this.Socket.Database; }
-    public string CountryCode { get; protected set; }
     public SessionSocket Socket { get; }
+    public SessionType Type { get => Socket.SessionType; }
+    public SessionDM Data { get; protected set; } = null;
 
-    public string Key { get => Data.guid; }
+    public SessionRequestDM Request { get; set; } = null;
 
-    public Session(SessionSocket socket, MainContext context)
+    public int? CountryID { get; set; } = null;
+    public int? SessionDataID { get; set; } = null;
+    public string CountryCode { get; protected set; }
+    public SessionDataDM SessionData { get; protected set; } = null;
+
+    public string Key { get; set; }
+
+    public Session(SessionSocket socket)
     {
+      this.Key = Guid.NewGuid().ToString();
       this.Socket = socket;
-      this.Init(context); 
+      this.PrepareRequest();
+      this.PrepareSessionData();
     }
 
-    private async void Init(MainContext context)
+    public async void Init()
     {
-      string ip = context.HttpContext.Connection.RemoteIpAddress.ToString();
-      if (ip.Equals("::1")) ip = "62.4.55.231";
+      // insert request 
+      this.Request = await this.Request.InsertAsync<SessionRequestDM>();
 
-      this.Request = await new SessionRequestDM(this.Database)
+      // check if we have sessiondata from cookies
+      if (this.SessionData == null && this.SessionDataID.HasValue)
+        this.SessionData = await Database.Query<SessionDataDM>().LoadAsync(this.SessionDataID.Value);
+      else if (this.SessionData != null)
       {
-        rawurl = string.Empty,
-        ip = ip,
-        useragent = context.HttpContext.Request.Headers["User-Agent"]
+        this.SessionData.Insert();
+        this.Socket.User.UpdateSessionData(this.SessionData.ID);
       }
-      .InsertAsync<SessionRequestDM>();
-
-      int? sessionDataID = context.CookiesGetInt(Constants.SessionDataID);
-      if (sessionDataID.HasValue)
-        this.SessionData = await this.Database.Query<SessionDataDM>().LoadAsync(1);
-      else
-      {
-        this.SessionData = IPAPI.GetSessionData(context.Database, ip, this.Request.useragent);
-        await this.SessionData.InsertAsync<SessionDataDM>();
-        context.SetCookie(Constants.SessionDataID, this.SessionData.ID.ToString());
-      }
-
-      if (this.SessionData != null)
-        this.CountryCode = this.SessionData.countryCode;
 
       this.Data = await new SessionDM(this.Database)
       {
-        userid = Socket.User.Data.ID.Value,
+        userid = Socket.User.ID.Value,
         actionid = Socket.Action.Data.ID.Value,
         sessionrequestid = this.Request.ID.Value,
         sessiondataid = this.SessionData.ID.Value,
         sessiontype = (int)this.Socket.SessionType,
-        guid = Guid.NewGuid().ToString()
+        guid = this.Key
       }
       .InsertAsync<SessionDM>();
+      Socket.User.UpdateSessionData(this.SessionData.ID);
     }
+
+    private void PrepareRequest()
+    {
+      string ip = this.Socket.MainContext.HttpContext.Connection.RemoteIpAddress.ToString();
+      if (ip.Equals("::1")) ip = "62.4.55.231";
+      this.Request = new SessionRequestDM(this.Database)
+      {
+        rawurl = string.Empty,
+        ip = ip,
+        useragent = this.Socket.MainContext.HttpContext.Request.Headers["User-Agent"]
+      };
+    }
+
+    private async void PrepareSessionData()
+    {
+      this.CountryCode = Socket.MainContext.CookiesGet(Constants.CountryCode);
+      this.CountryID = Socket.MainContext.CookiesGetInt(Constants.CountryID);
+
+      if (string.IsNullOrEmpty(this.CountryCode) || !this.CountryID.HasValue)
+      {
+        this.SessionData = await IPAPI.GetSessionDataAsync(this.Database, this.Request.ip, this.Request.useragent);
+        if(this.SessionData == null)
+        {
+          // TODO: big problem!! very big
+          throw new Exception("We could not get session data.. probably due to IP lookup");
+        }
+        this.CountryCode = this.SessionData.countryCode;
+        this.CountryID = await CountryManager.GetCountryByCode(this.Database, this.CountryCode);
+
+        Socket.MainContext.SetCookie(Constants.CountryCode, this.CountryCode);
+        Socket.MainContext.SetCookie(Constants.CountryID, this.CountryID.Value.ToString());
+      }
+    }
+
+    ///
+    /// Socket event logic
+    ///
 
     public async Task PrelanderRegistrationLogic(string domain, Dictionary<string, string> queryValues, ReceivingRegistrationModel model)
     {
@@ -87,6 +119,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 
     public async void OnClose(DateTime created)
     {
+      if (this.Data == null) return;
       this.Data.duration = (DateTime.Now - created).TotalSeconds;
       await this.Data.UpdateAsync();
     }

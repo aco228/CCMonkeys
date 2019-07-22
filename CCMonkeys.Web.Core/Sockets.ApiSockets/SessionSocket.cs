@@ -13,80 +13,44 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
   public class SessionSocket
   {
-    private MainContext MainContext = null;
-
+    public MainContext MainContext = null;
     public WebSocket WebSocket { get; set; } = null;
     public CCSubmitDirect Database { get => this.MainContext.Database; }
+
+    public LeadDM Lead { get; set; } = null; // * we will try to load it on Init methods of User and Action
+    public User User { get; protected set; } = null;
     public Session Session { get; protected set; } = null;
     public SessionType SessionType { get; set; } = SessionType.Default;
-    public User User { get; protected set; } = null;
-    public LeadDM Lead { get; set; } = null;
     public Models.Action Action { get; protected set; } = null;
+
+    public int? CountryID { get => this.Session.CountryID; } 
     public string Key { get => this.Session.Key; }
     public DateTime Created { get; set; }
 
     public SessionSocket(MainContext context, SessionType sessionType)
     {
+      this.Created = DateTime.Now;
       this.MainContext = context;
       this.SessionType = sessionType;
       var db = this.Database;
-      this.Created = DateTime.Now;
-      this.User = new User(this, context);
-      this.Action = new Models.Action(this, context, (sessionType == SessionType.Prelander));
-      this.Session = new Session(this, context);
 
-      DateTime dt = DateTime.Now;
-      this.SyncCountry();
-      this.TryToIdentifyLead(string.Empty, string.Empty);
+      this.Session = new Session(this);
+      this.User = new User(this);
+      this.Action = new Models.Action(this);
+
     }
     
-    public async void SyncCountry()
-    {
-      if (string.IsNullOrEmpty(this.Session.CountryCode)) return;
-      int? countryID = await CountryManager.GetCountryByCode(this.Database, this.Session.CountryCode);
-      if (!countryID.HasValue)
-        return;
-
-      if (!this.User.Data.countryid.HasValue)
-      {
-        this.User.Data.countryid = countryID.Value;
-        this.User.Data.UpdateLater();
-      }
-
-      if(!this.Action.Data.countryid.HasValue)
-      {
-        this.Action.Data.countryid = countryID.Value;
-        this.Action.Data.UpdateLater();
-      }
-    }
 
     public async Task<LeadDM> TryToIdentifyLead(string msisdn, string email)
     {
-      if(string.IsNullOrEmpty(msisdn) && string.IsNullOrEmpty(email))
-      {
-        if (this.User.Data.leadid.HasValue)
-          this.Lead = await this.Database.Query<LeadDM>().LoadAsync(this.User.Data.leadid.Value);
-        else if (this.Action.Data.leadid.HasValue)
-          this.Lead = await this.Database.Query<LeadDM>().LoadAsync(this.Action.Data.leadid.Value);
-
-        this.Action.UpdateLead(this.Lead);
-        this.User.UpdateLead(this.Lead);
-        return this.Lead;
-      }
-
       this.Lead = await LeadDM.LoadByMsisdnOrEmailAsync(this.Database, msisdn, email);
       if (this.Lead == null)
         this.Lead = await new LeadDM(this.Database)
         {
-          countryid = Action.Data.countryid,
+          countryid = Session.CountryID,
           msisdn = msisdn,
           email = email
         }.InsertAsync<LeadDM>();
-
-      this.Lead.actions_count++;
-      this.Lead.UpdateLater();
-
-      this.Action.UpdateLead(this.Lead);
       this.User.UpdateLead(this.Lead);
       return this.Lead;
     }
@@ -95,10 +59,13 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     /// Communication
     /// 
 
-    public async Task<DistributionModel> OnRegistration(ReceivingRegistrationModel model)
+    public async void OnRegistration(string key, ReceivingRegistrationModel model)
     {
       if (this.SessionType == SessionType.Lander && !model.providerID.HasValue)
-        return new SendingRegistrationModel() { }.Pack(false, "providerID missing");
+      {
+        this.Send(key, new SendingRegistrationModel() { }.Pack(false, "providerID missing"));
+        return;
+      }
 
       if (model.url.StartsWith("file:"))
         model.url = this.SessionType == SessionType.Lander ?
@@ -111,52 +78,83 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         query = model.url.Split('?')[1];
       var queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
 
+      PrelanderDM prelander = null;
+      LanderDM lander = null;
+
       if (this.SessionType == SessionType.Prelander)
       {
+        prelander = (await this.Database.Query<PrelanderDM>().Select("prelandertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
+        if(prelander == null)
+        {
+          this.Send(key, new SendingRegistrationModel() { }.Pack(false, "Prelander not found"));
+          return;
+        }
         await Session.PrelanderRegistrationLogic(domain, queryValues, model);
-        if (!await Action.OnPrelanderRegistration(domain, queryValues, model))
-          return new SendingRegistrationModel() { }.Pack(false, "Prelander not found");
-
       }
       else if (this.SessionType == SessionType.Lander)
       {
-        Action.Data.providerid = model.providerID;
-        Action.Data.UpdateLater();
-
-        if(!await Action.OnLanderRegistration(domain, queryValues, model))
-          return new SendingRegistrationModel() { }.Pack(false, "Lander not found");
+        lander = (await this.Database.Query<LanderDM>().Select("landertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
+        if(lander == null)
+        {
+          this.Send(key, new SendingRegistrationModel() { }.Pack(false, "Lander not found"));
+          return;
+        }
       }
 
-      Session.Request.rawurl = model.url;
-      Session.Request.UpdateLater();
+      this.Action.PrepareActionBasedOnQueries(queryValues);
+
+      /// SENDING
+      /// 
 
       var sendingModel = new SendingRegistrationModel()
       {
         lead = Lead,
-        sessionData = Session.SessionData,
-
-        actionID = Action.Data.ID,
-        sessionID = Session.Data.ID,
-        userID = User.Data.ID
+        country = this.Session.CountryCode
       };
-
       if (SessionType == SessionType.Lander)
       {
         if (Lead != null)
-          sendingModel.leadHasSubscription = await this.Database.LoadBooleanAsync("SELECT COUNT(*) FROM [].tm_action WHERE leadid={0} AND providerid={1} AND (times_charged>0 OR has_subscription=1)", Lead.ID.Value, Action.Data.providerid);
-        sendingModel.userVisitCount = await this.Database.LoadIntAsync("SELECT COUNT(*) FROM [].tm_action WHERE userid={0} AND landerid={1} AND providerid={2}", User.Data.ID, Action.Data.landerid, Action.Data.providerid);
+          sendingModel.leadHasSubscription = await Lead.HasLeadSubscriptions(model.providerID.Value);
       }
+      this.Send(sendingModel.Pack(key, true, "Welcome!!"));
 
-      return sendingModel.Pack(true, "Welcome!!");
+      /// POST SENDING
+      /// 
+
+      if (this.SessionType == SessionType.Prelander)
+        this.Action.Init(model.providerID, prelander, null);
+      else if(this.SessionType == SessionType.Lander)
+        this.Action.Init(model.providerID, null, lander);
+
+      this.Session.Init();
+
+      Session.Request.rawurl = model.url;
+      Session.Request.UpdateLater();
+
+      this.Send("reg-post", new SendingRegistrationPost()
+      {
+        actionID = this.Action.Data.ID,
+        sessionID = this.Session.Data.ID,
+        userID = this.User.Data.ID
+      }.Pack());
+
+      await this.Database.TransactionalManager.RunAsync();
     }
-    public async Task<DistributionModel> OnCreateUser(ReceivingCreateUserModel model)
+    public async void OnCreateUser(string key, ReceivingCreateUserModel model)
     {
       if (string.IsNullOrEmpty(model.email))
-        return new SendingCreateUserModel() { emptyEmail = true }.Pack(false);
+      {
+        this.Send(key, new SendingCreateUserModel() { emptyEmail = true }.Pack(false));
+        return;
+      }
 
       bool blacklistMail = await this.Database.LoadBooleanAsync("SELECT COUNT(*) FROM [].tm_email_blacklist WHERE email={0};", model.email);
       if (blacklistMail)
-        return new SendingCreateUserModel() { refused = true }.Pack(false);
+      {
+        this.Send(key, new SendingCreateUserModel() { refused = true }.Pack(false));
+        return;
+      }
+      this.Send(key, new SendingCreateUserModel() { }.Pack(true));
 
       var lead = this.Lead;
       if(lead == null)
@@ -165,18 +163,22 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       lead.TryUpdateEmail(this.Database, model.email);
       lead.UpdateLater();
 
+      Action.UpdateLead(lead);
       Action.Data.input_email = true;
       Action.Data.UpdateLater();
 
-
-
-      return new SendingCreateUserModel() { }.Pack(true);
+      await this.Database.TransactionalManager.RunAsync();
     }
 
-    public async Task<DistributionModel> OnSubscribeUser(ReceivingSubscribeUser model)
+    public async void OnSubscribeUser(string key, ReceivingSubscribeUser model)
     {
       if (this.Lead == null)
-        return new SendingSubscribeUser() { internalError_leadDoesNotExists = true }.Pack(false);
+      {
+        this.Send(key, new SendingSubscribeUser() { internalError_leadDoesNotExists = true }.Pack(false));
+        return;
+      }
+      else
+        this.Send(key, new SendingCreateUserModel() { }.Pack(true));
 
       this.Action.Data.input_contact = true;
       this.Action.Data.UpdateLater();
@@ -197,14 +199,16 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       this.Lead.TryUpdateCity(this.Database, model.city);
       this.Lead.UpdateLater();
 
-      return new SendingCreateUserModel() { }.Pack(true);
+      await this.Database.TransactionalManager.RunAsync();
     }
-    public async Task<DistributionModel> OnUserRedirected(ReceivingUserRedirected model)
+    public async void OnUserRedirected(string key, ReceivingUserRedirected model)
     {
+      this.Send(key, new SendingUserRedirected() { }.Pack(true));
+
       this.Action.Data.has_redirectedToProvider = true;
       this.Action.Data.UpdateLater();
 
-      return new SendingUserRedirected() { }.Pack(true);
+      await this.Database.TransactionalManager.RunAsync();
     }
 
     /// 
@@ -217,6 +221,12 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     }
     public void Send(DistributionModel data)
       => ApiSocketServer.Send(this, data);
+
+    public void Send(string key, DistributionModel data)
+    {
+      data.Key = key;
+      ApiSocketServer.Send(this, data);
+    }
 
   }
 }

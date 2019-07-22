@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Web.Code.Sockets;
+using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Controllers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
@@ -62,7 +63,16 @@ namespace CCMonkeys.Web.Controllers
 
       #endregion
 
-      var socket = new SessionSocket(this.Context, sessionType);
+      SessionSocket socket = null;
+      try
+      {
+        socket = new SessionSocket(this.Context, sessionType);
+      }
+      catch(Exception e)
+      {
+        Logger.Instance.LogException(e);
+        return this.Content("console.error('ccsocket:: error 500');");
+      }
 
       var baseUrl = $"{(this.Request.Scheme.Equals("https") ? "wss" : "ws")}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
       string variables = "var CC=Object;";
@@ -71,10 +81,6 @@ namespace CCMonkeys.Web.Controllers
       variables += string.Format("CC.type='{0}';", type.ToLower());
       variables += string.Format("CC.sguid='{0}';", socket.Key);
       variables += string.Format("CC.uid='{0}';", socket.User.Key);
-
-        // reset cookies
-      if(sessionType == SessionType.Lander)
-        this.Context.RemoveCookie(Constants.ActionIDCookie);
 
       ApiSocketServer.AddSession(socket);
 

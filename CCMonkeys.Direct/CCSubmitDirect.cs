@@ -13,7 +13,10 @@ namespace CCMonkeys.Direct
     {
       get
       {
-        return new CCSubmitDirect();
+        if (_instance != null)
+          return _instance;
+        _instance = new CCSubmitDirect();
+        return _instance;
       }
     }
 

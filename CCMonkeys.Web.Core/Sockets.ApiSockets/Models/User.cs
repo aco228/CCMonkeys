@@ -12,44 +12,76 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 {
   public class User
   {
-    public int? ID { get => this.Data.ID; }
     public UserDM Data { get; protected set; } = null;
     public CCSubmitDirect Database { get => this.Socket.Database; }
     public SessionSocket Socket { get; }
+
+    public int? ID { get; set; } = null;
     public string Key { get; set; } = string.Empty;
 
-    public User(SessionSocket socket, MainContext context)
+    public User(SessionSocket socket)
     {
       this.Socket = socket;
-      this.Key = context.CookiesGet(Constants.UserGuidCookie);
-      this.Init(context);
+      this.ID = Socket.MainContext.CookiesGetInt(Constants.UserIdCookie);
+      this.Key = Socket.MainContext.CookiesGet(Constants.UserGuidCookie);
+      this.Init();
     }
 
-    public async void Init(MainContext context)
+    public async void Init()
     {
-      if(!string.IsNullOrEmpty(this.Key))
-        this.Data =
-          (await this.Database.Query<UserDM>().Where("guid={0}", this.Key).LoadSingleAsync());
-
-      if (this.Data != null)
+      if (this.ID.HasValue)
       {
-        this.Key = this.Data.guid;
-        return;
+        this.Data = await this.Database.Query<UserDM>().LoadAsync(this.ID.Value);
+        if (this.Data != null)
+        {
+
+          if (this.Data.leadid.HasValue && Socket.Lead == null)
+            this.Socket.Lead = await this.Database.Query<LeadDM>().LoadAsync(this.Data.leadid.Value);
+          if(this.Data.sessiondataid.HasValue)
+            this.Socket.Session.SessionDataID = this.Data.sessiondataid;
+
+          return;
+        }
       }
 
+      this.Key = Guid.NewGuid().ToString();
       this.Data = await new UserDM(this.Database)
       {
-        guid = Guid.NewGuid().ToString()
-      }
-      .InsertAsync<UserDM>();
-      this.Key = this.Data.guid;
-      context.SetCookie(Constants.UserGuidCookie, this.Key);
+        countryid = Socket.CountryID,
+        countryCode = Socket.Session.CountryCode,
+        leadid = (Socket.Lead != null ? Socket.Lead.ID : null),
+        guid = this.Key
+      }.InsertAsync<UserDM>();
+
+      this.ID = this.Data.ID;
+
+      Socket.MainContext.SetCookie(Constants.UserIdCookie, this.ID.ToString());
+      Socket.MainContext.SetCookie(Constants.UserGuidCookie, this.Key);
     }
 
     public void UpdateLead(LeadDM lead)
     {
       this.Data.leadid = lead.ID.Value;
       this.Data.UpdateLater();
+    }
+
+    public void UpdateSessionData(int? id)
+    {
+      this.Data.sessiondataid = id;
+      this.Data.UpdateLater();
+    }
+
+    public void UpdateAction(int? id)
+    {
+      this.Data.actionid = id;
+      this.Data.UpdateLater();
+    }
+
+    public void SetCountry(int? cid, string countryCode)
+    {
+      this.Data.countryCode = countryCode;
+      this.Data.countryid = cid;
+      this.Data.Update();
     }
 
   }

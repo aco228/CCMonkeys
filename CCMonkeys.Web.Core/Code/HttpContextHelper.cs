@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Web.Core;
+using CCMonkeys.Web.Core.Code;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace CCMonkeys.Web
     public static string CookiesGet(this MainContext context, string key)
     {
       if (context.Request.Cookies.ContainsKey(key))
-        return context.Request.Cookies[key].ToString();
+        return Crypter.Decrypt(context.Request.Cookies[key].ToString());
       return string.Empty;
     }
 
@@ -25,15 +26,17 @@ namespace CCMonkeys.Web
       return null;
     }
 
-    public static void SetCookie(this MainContext context, string key, string value)
+    public static void SetCookie(this MainContext context, string key, string value, int? days = null)
     {
-      context.Response.Cookies.Append(key, value,
+      context.Response.Cookies.Append(
+        key, 
+        Crypter.Encrypt(value),
          new Microsoft.AspNetCore.Http.CookieOptions
          {
            SameSite = SameSiteMode.None,
            Secure = false,
            HttpOnly = false,
-           Expires = DateTimeOffset.Now.AddDays(1).AddYears(5)
+           Expires = (days == null ? DateTimeOffset.Now.AddDays(1).AddYears(5) : DateTimeOffset.Now.AddDays(days.Value))
          });
     }
 
@@ -44,6 +47,7 @@ namespace CCMonkeys.Web
         Expires = DateTime.Now.AddDays(-1)
       });
     }
+
 
   }
 }

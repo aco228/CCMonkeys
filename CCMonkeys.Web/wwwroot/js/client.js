@@ -5,6 +5,7 @@
   onclose: null,
   onmessage: null,
   onerror: null,
+  created: null,
 
   init: function(registration_callback, providerID){
 
@@ -14,6 +15,7 @@
     }
 
     var self = this;
+    self.created = new Date();
     var registered = false;
     this.socket = new WebSocket(CC.host + '/ws_api?sguid=' + CC.sguid);
     
@@ -35,8 +37,10 @@
     this.socket.onmessage = function (e) {
       if(typeof self.onmessage === 'function') self.onmessage(e);
       var response = JSON.parse(e.data);
+      var milisecondsPassed = 0;
+
       for(var i = 0; i < self.callbacks.length; i++)
-        if(self.callbacks[i].Key == response.key)
+        if(self.callbacks[i].Key === response.key)
         {
           if(response.Status) {
             self.callbacks[i].success(response.Data, response.Message);
@@ -44,12 +48,16 @@
           else {
             self.callbacks[i].error(response.Data, response.Message);
           }
-
+          milisecondsPassed = ((new Date()).getTime() - self.callbacks[i].created.getTime());
           self.callbacks.splice(i, 1);
           break;
         }
-      self.console('onmessage', e);
-      self.console('onmessageResponse', response)
+
+      if(response.Key === 'reg-post'){
+        milisecondsPassed = ((new Date()).getTime() - self.created.getTime());
+      }
+
+      self.console(`We got response in ${milisecondsPassed} miliseconds for #${response.Key}!`, response);
     };
 
     this.socket.onerror = function (e) {
@@ -66,6 +74,7 @@
       return;
     }
 
+    callback.created = new Date();
     callback.key = key;
     this.callbacks.push(callback);
 

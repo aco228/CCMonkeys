@@ -15,32 +15,11 @@ namespace CCMonkeys.Consoles.Test
   {
     static void Main(string[] args)
     {
-      var db = new CCSubmitDirect();
-
-      var bulkManager = new BulkManager(db, "");
-      var bulkInstance = new BulkInstance();
-
-      var leadDM = new LeadDM(db)
-      {
-        first_name = "",
-        last_name = ""
-      }
-      .ToBulkModel()
-      .ChainTo(bulkInstance);
-
-      var userbulk = new UserDM(db)
-      {
-        guid = Guid.NewGuid().ToString(),
-        created = DateTime.Now
-      }
-      .ToBulkModel()
-      .Link(leadDM)
-      .ChainTo(bulkInstance);
-
-      bulkManager.Add(bulkInstance);
-      string query = bulkManager.ModelNodes[0][0].ConstructSql();
-
+      string encrypt = Crypter.Encrypt(8.ToString());
       int a = 0;
+      string decrypt = Crypter.Decrypt(encrypt + "asdkhas");
+      int akdjas = 0;
+
 
       //LeadDM lead = db.Query<LeadDM>().Load(15);
       //lead.TryUpdateEmail(db, "testststst@ggmail.com");
@@ -53,7 +32,7 @@ namespace CCMonkeys.Consoles.Test
       //Console.ReadKey();
       //return;
 
-      db.ModelsCreator.GenerateFile("tm_action_account", "ActionAccount", @"D:\github\CCMonkeys\_rest\output");
+      //db.ModelsCreator.GenerateFile("tm_action_account", "ActionAccount", @"D:\github\CCMonkeys\_rest\output");
       Console.ReadKey();
       return;
 

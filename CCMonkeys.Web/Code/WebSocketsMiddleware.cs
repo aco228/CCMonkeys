@@ -21,18 +21,17 @@ namespace CCMonkeys.Web.Code.Sockets
 
     public async Task Invoke(HttpContext context)
     {
-      if (!context.WebSockets.IsWebSocketRequest)
-      {
-        await _next.Invoke(context);
-        return;
-      }
-
       try
       {
+        if (!context.WebSockets.IsWebSocketRequest)
+        {
+          await _next.Invoke(context);
+          return;
+        }
         if (context.Request.Path.StartsWithSegments("/ws_api"))
           await ApiSocketServer.CallInvoke(context);
       }
-      catch(Exception e)
+      catch (Exception e)
       {
         Logger.Instance.LogException(e);
         int a = 0;

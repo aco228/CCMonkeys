@@ -3,7 +3,7 @@
 <head>
   <title></title>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script type="text/javascript" src="http://ccmonkeys.azurewebsites.net/js?type=lp&dbg=1&recompile=1"></script>
+  <script type="text/javascript" src="https://localhost:5001/js?type=lp&dbg=1&recompile=1"></script>
 
 <style type="text/css">
   .initialSpan{color:blue;}
@@ -15,12 +15,8 @@
   <div>
     <div>Message: <span class="initialSpan" id="regMessage"></span></div>
     <div>Lead: <span class="initialSpan" id="regLead"></span></div>
-    <div>SessionData: <span class="initialSpan" id="regSessionData"></span></div>
-    <div>ActionID: <span class="initialSpan" id="regAction"></span></div>
-    <div>SessionID: <span class="initialSpan" id="regSession"></span></div>
-    <div>UserID: <span class="initialSpan" id="regUser"></span></div>
+    <div>Country: <span class="initialSpan" id="regSessionData"></span></div>
     <div>leadHasSubscription: <span class="initialSpan" id="leadHasSubscription"></span></div>
-    <div>userVisitCount: <span class="initialSpan" id="userVisitCount"></span></div>
   </div>
 
   <div style="margin-top: 15px;" id="infoEmail">
@@ -66,12 +62,8 @@
             console.log('init success', msg, e);
             $('#regMessage').text(msg);
             $('#regLead').text(JSON.stringify(e.lead));
-            $('#regSessionData').text(JSON.stringify(e.sessionData));
-            $('#regAction').text(e.actionID);
-            $('#regSession').text(e.sessionID);
-            $('#regUser').text(e.userID);
+            $('#regSessionData').text(JSON.stringify(e.country));
             $('#leadHasSubscription').text(e.leadHasSubscription);
-            $('#userVisitCount').text(e.userVisitCount);
           },
           error: function(e){
             // REDIRECTION LOCGIC OR SOMETHING (SERVER IS DOWN or connection is unstable)

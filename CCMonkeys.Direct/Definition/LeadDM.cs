@@ -9,6 +9,17 @@ namespace Direct.ccmonkeys.Models
   public partial class LeadDM : DirectModel
   {
 
+    public Task<bool> HasLeadSubscriptions(int providerID)
+      => this.GetDatabase().LoadBooleanAsync(
+        "SELECT COUNT(*) FROM [].tm_action WHERE leadid={0} AND providerid={1} AND (times_charged>0 OR has_subscription=1)", 
+        this.ID.Value, providerID);
+
+    public void OnAction()
+    {
+      this.actions_count++;
+      this.UpdateLater();
+    }
+
     public static async Task<LeadDM> LoadByMsisdnOrEmailAsync(DirectDatabaseBase db, string msisdn, string email)
     {
       if (string.IsNullOrEmpty(msisdn) && string.IsNullOrEmpty(email))

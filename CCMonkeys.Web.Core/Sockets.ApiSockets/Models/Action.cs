@@ -13,91 +13,102 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 {
   public class Action
   {
-    public string Key { get => this.Data.guid; }
+    public int? ID { get; protected set; } = null;
+    public string Key { get; private set; } = string.Empty;
     public ActionDM Data { get; set; }
     public CCSubmitDirect Database { get => this.Socket.Database; }
     public SessionSocket Socket { get; }
 
-    public Action(SessionSocket socket, MainContext context, bool createNew = false)
+    private string TrackingID { get; set; } = string.Empty;
+    private string AffID { get; set; } = string.Empty;
+    private string PubID { get; set; } = string.Empty;
+
+
+    public Action(SessionSocket socket)
     {
       this.Socket = socket;
-      this.Init(context, createNew);
+      this.ID = this.Socket.User.Data.actionid;
     }
 
-    private async void Init(MainContext context, bool createNew)
+    public async void Init(int? providerID, PrelanderDM prelander, LanderDM lander)
     {
-      string actionGuid = context.CookiesGet(Constants.ActionIDCookie);
-      if (!string.IsNullOrEmpty(actionGuid) && !createNew)
+      // if we had this ID stored in cookies or this user is now on lander
+      if (this.ID.HasValue && Socket.SessionType == SessionType.Lander)
       {
-        this.Data = await this.Database.Query<ActionDM>().Where("guid={0}", actionGuid).LoadSingleAsync();
-        this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
-        this.Data.UpdateLater();
-
+        this.Data = await this.Database.Query<ActionDM>().LoadAsync(this.ID.Value);
         if(this.Data != null)
+        {
+          if(this.Data.leadid.HasValue && Socket.Lead == null)
+            this.Socket.Lead = await this.Database.Query<LeadDM>().LoadAsync(this.Data.leadid.Value);
+
+          if(prelander != null)
+          {
+            this.Data.prelanderid = prelander.ID;
+            this.Data.prelandertypeid = prelander.prelandertypeid;
+          }
+          if(lander != null)
+          {
+            this.Data.landerid = lander.ID;
+            this.Data.landertypeid = lander.landertypeid;
+          }
+
+          if(Socket.Lead != null)
+          {
+            Socket.Lead.OnAction();
+            this.Data.leadid = Socket.Lead.ID;
+          }
+
+          this.Key = this.Data.guid;
+          this.Data.affid = this.AffID;
+          this.Data.trackingid = this.TrackingID;
+          this.Data.pubid = this.PubID;
+          this.Data.providerid = providerID;
+          this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
+          this.Data.UpdateLater();
           return;
+        }
       }
 
-      actionGuid = Guid.NewGuid().ToString();
-      this.Data = await new ActionDM(this.Database)
+      // in this case we will create new Action
+
+      this.Key = Guid.NewGuid().ToString();
+      this.Data = new ActionDM(this.Database)
       {
         leadid = (Socket.Lead != null ? Socket.Lead.ID : null),
         userid = Socket.User.ID.Value,
-        guid = actionGuid,
-        input_redirect = (Socket.SessionType == SessionType.Lander)
+        prelanderid = (prelander != null ? prelander.ID : null),
+        prelandertypeid = (prelander != null ? (int?)prelander.prelandertypeid : null),
+        landerid = (lander != null ? lander.ID : null),
+        landertypeid = (lander != null ? (int?)lander.landertypeid : null),
+        guid = this.Key,
+        providerid = providerID,
+        input_redirect = (Socket.SessionType == SessionType.Lander),
+        countryid = this.Socket.CountryID,
+        affid = this.AffID,
+        trackingid = this.TrackingID,
+        pubid = this.PubID
+      };
+      if(Socket.Lead != null)
+      {
+        Socket.Lead.OnAction();
+        this.Data.leadid = Socket.Lead.ID;
       }
-      .InsertAsync<ActionDM>();
 
-      context.SetCookie(Constants.ActionIDCookie, actionGuid);
+      this.Data.Insert();
+
+      this.ID = this.Data.ID.Value;
+      this.Socket.User.UpdateAction(this.Data.ID);
     }
 
-    #region # On registration of socket #
-
-    public async Task<bool> OnPrelanderRegistration(string domain, Dictionary<string, string> queryValues, ReceivingRegistrationModel model)
+    public void PrepareActionBasedOnQueries(Dictionary<string, string> queryValues)
     {
-      PrelanderDM prelander = (await this.Database.Query<PrelanderDM>().Select("prelandertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
-      if (prelander == null)
-      {
-        // TODO: Some logging here
-        return false;
-      }
-      else
-      {
-        this.Data.prelanderid = prelander.ID.Value;
-        this.Data.prelandertypeid = prelander.prelandertypeid;
-      }
-
-      this.Data.UpdateLater();
-      return true;
-    }
-
-    public async Task<bool> OnLanderRegistration(string domain, Dictionary<string, string> queryValues, ReceivingRegistrationModel model)
-    {
-      LanderDM lander = (await this.Database.Query<LanderDM>().Select("landertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
-      if (lander == null)
-      {
-        // TODO: Some logging here
-
-        return false;
-      }
-      else
-      {
-        this.Data.landerid = lander.ID.Value;
-        this.Data.landertypeid = lander.landertypeid;
-      }
-
-      //?offer_id=2454&affiliate_id=183&country=montenegro&lxid=EA4mYMyZYgHimr5UncQAR9U6dJz7KXbtPMYbtBQfsk0&utm_source=banana&utm_medium=183&utm_campaign=&utm_content=&utm_term=&ptype=cc2
       if (queryValues.ContainsKey("lxid"))
-        this.Data.trackingid = queryValues["lxid"];
+        this.TrackingID = queryValues["lxid"];
       if (queryValues.ContainsKey("affiliate_id"))
-        this.Data.affid = queryValues["affiliate_id"];
+        this.AffID = queryValues["affiliate_id"];
       if (queryValues.ContainsKey("utm_campaign"))
-        this.Data.pubid = queryValues["utm_campaign"];
-
-      this.Data.UpdateLater();
-      return true;
+        this.PubID = queryValues["utm_campaign"];
     }
-
-    #endregion
 
     public void UpdateLead(LeadDM lead)
     {

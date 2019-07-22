@@ -1,10 +1,12 @@
-﻿using System;
+﻿using CCMonkeys.Web.Core.Code;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CCMonkeys.Consoles.Migration
 {
-  class ClientDM
+  public class ClientDM
   {
     public int clientid { get; set; }
     public string clickid { get; set; }
@@ -27,6 +29,30 @@ namespace CCMonkeys.Consoles.Migration
     public int times_upsell { get; set; }
     public bool is_stolen { get; set; }
     public DateTime created { get; set; }
+
+    private int? countryID = null;
+
+    public int? GetCountry()
+    {
+      if (countryID.HasValue)
+        return countryID;
+      //côte d'ivoire
+
+
+      if(country.Length == 2)
+        countryID = CountryManager.GetCountryByCode(Program.Database, country).Result;
+      else
+      {
+        if (country.Equals("côte d'ivoire"))
+          countryID = 53;
+        else if (country.Equals("réunion"))
+          countryID = 178;
+        else
+          countryID = CountryManager.GetCountryByName(Program.Database, country).Result;
+      }
+
+      return countryID;
+    }
 
   }
 }

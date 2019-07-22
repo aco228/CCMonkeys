@@ -31,7 +31,7 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
 
     public static async Task<IPAPIResult> GetAsync(string ipAddress, string userAgent)
     {
-      string URL = "https://api.ip2id.com/api/lookup + " + ipAddress;
+      string URL = "http://ip-api.com/json/" + ipAddress;
       var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
       httpWebRequest.ContentType = "application/json";
       httpWebRequest.Method = "GET";
@@ -71,6 +71,24 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
     public static SessionDataDM GetSessionData(CCSubmitDirect database, string ip, string useragent)
     {
       var result = Get(ip, useragent);
+      return new SessionDataDM(database)
+      {
+        countryCode = result.countryCode,
+        countryName = result.country,
+        region = result.region,
+        city = result.city,
+        ISP = result.AS,
+        latitude = result.lat,
+        longitude = result.lon,
+        timezone = result.timezone,
+        zipCode = result.zip
+      };
+    }
+
+
+    public async static Task<SessionDataDM> GetSessionDataAsync(CCSubmitDirect database, string ip, string useragent)
+    {
+      var result = await GetAsync(ip, useragent);
       return new SessionDataDM(database)
       {
         countryCode = result.countryCode,

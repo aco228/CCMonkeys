@@ -27,10 +27,7 @@ namespace CCMonkeys.Web.Core.Controllers
     {
       get
       {
-        if (this._database != null)
-          return this._database;
-        this._database = new CCSubmitDirect();
-        return this._database;
+        return CCSubmitDirect.Instance;
       }
     }
     public MainContext Context

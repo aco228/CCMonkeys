@@ -56,24 +56,23 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       string key = data.Substring(0, data.IndexOf('#'));
       string json = data.Substring(data.IndexOf('#') + 1);
 
-      DistributionModel response = null;
       try
       {
         switch (key)
         {
           case "register":
-            response = await Get(uid).OnRegistration(JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+            Get(uid).OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
             break;
 
           // lander
           case "user-create":
-            response = await Get(uid).OnCreateUser(JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
+            Get(uid).OnCreateUser(key, JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
             break;
           case "user-subscribe":
-            response = await Get(uid).OnSubscribeUser(JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
+            Get(uid).OnSubscribeUser(key, JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
             break;
           case "user-redirected":
-            response = await Get(uid).OnUserRedirected(JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
+            Get(uid).OnUserRedirected(key, JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
             break;
         }
       }
@@ -84,11 +83,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       }
       finally
       {
-        Get(uid).Database.Dispose();
       }
-
-      response.Key = key;
-      Get(uid).Send(response);
     }
 
     ///
