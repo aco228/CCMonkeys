@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Net.WebSockets;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
+using System.Collections.Generic;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
@@ -76,7 +77,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       string query = string.Empty;
       if (model.url.Contains('?'))
         query = model.url.Split('?')[1];
-      var queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
+      var querySplit = query.Split('&');
+      Dictionary<string, string> queryValues = new Dictionary<string, string>();
+      if(querySplit.Length > 1)
+        queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
 
       PrelanderDM prelander = null;
       LanderDM lander = null;

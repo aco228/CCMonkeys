@@ -38,8 +38,8 @@ namespace CCMonkeys.Consoles.Migration
         Landers.Add(lander.name, lander);
 
       int lastIndex = 0;
-      string txtFromFile = File.ReadAllText(@"D:\github\CCMonkeys\CCMonkeys.Consoles.Migration\bin\Debug\netcoreapp2.1\lastIndex.txt");
-      int.TryParse(txtFromFile, out lastIndex);
+      //string txtFromFile = File.ReadAllText(@"D:\github\CCMonkeys\CCMonkeys.Consoles.Migration\bin\Debug\netcoreapp2.1\lastIndex.txt");
+      //int.TryParse(txtFromFile, out lastIndex);
       int? totalNumber = await livesportsDb.LoadIntAsync("SELECT COUNT(*) FROM [].cc_client;");
       Console.WriteLine("Starting..");
 
@@ -86,6 +86,9 @@ namespace CCMonkeys.Consoles.Migration
         Console.WriteLine($" - {lastIndex} / {totalNumber.Value} - ({GetMiddleValue(numberOfInsertsPer10Seconds)} inserts in ten seconds)");
         File.WriteAllText(@"D:\github\CCMonkeys\CCMonkeys.Consoles.Migration\bin\Debug\netcoreapp2.1\lastIndex.txt", lastIndex.ToString());
       }
+
+
+      Bulker.RunAndWait();
 
       Console.WriteLine("");
       Console.WriteLine("");

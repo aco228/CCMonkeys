@@ -1,5 +1,6 @@
 ﻿using CCMonkeys.Web.Core.Code;
 using Direct.ccmonkeys.Models;
+using Direct.Core.Bulk;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +22,7 @@ namespace CCMonkeys.Consoles.Migration
 
     public async void Run(ClientDM client)
     {
-      string email = client.email.ToLower();
+      string email = client.email.ToLower().Replace("à", "a");
       if (string.IsNullOrEmpty(email))
         return;
       
@@ -55,7 +56,8 @@ namespace CCMonkeys.Consoles.Migration
           updated = client.created,
           created = client.created
         };
-        Program.Bulker.Add(leadDM);
+        leadDM.LongID = CurrentIndex;
+        Program.Bulker.Add(new BulkModel(leadDM, 1));
 
         var userDM = new UserDM(Program.Database)
         {
@@ -64,10 +66,10 @@ namespace CCMonkeys.Consoles.Migration
           countryid = client.GetCountry(),
           created = client.created
         };
-        Program.Bulker.Add(userDM);
+        userDM.LongID = CurrentIndex;
+        Program.Bulker.Add(new BulkModel(userDM, 2));
 
         EmailCache.Add(email, new LeadUser() { ID = CurrentIndex });
-
         if(!string.IsNullOrEmpty(client.msisdn))
           MsisdnCache.Add(client.msisdn, new LeadUser() { ID = CurrentIndex });
 
@@ -109,7 +111,7 @@ namespace CCMonkeys.Consoles.Migration
         updated = client.created,
         created = client.created
       };
-      Program.Bulker.Add(actionDM);
+      Program.Bulker.Add(new BulkModel(actionDM, 3));
 
 
     }
