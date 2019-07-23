@@ -26,7 +26,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     public SessionRequestDM Request { get; set; } = null;
 
     public int? CountryID { get; set; } = null;
-    public int? SessionDataID { get; set; } = null;
+    public string SessionDataGuid { get; set; } = null;
     public string CountryCode { get; protected set; }
     public SessionDataDM SessionData { get; protected set; } = null;
 
@@ -46,13 +46,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       this.Request = await this.Request.InsertAsync<SessionRequestDM>();
 
       // check if we have sessiondata from cookies
-      if (this.SessionData == null && this.SessionDataID.HasValue)
-        this.SessionData = await Database.Query<SessionDataDM>().LoadAsync(this.SessionDataID.Value);
+      if (this.SessionData == null && Socket.User.Data.sessiondataid.HasValue)
+        this.SessionData = await Database.Query<SessionDataDM>().LoadAsync(Socket.User.Data.sessiondataid.Value);
       else if (this.SessionData != null)
-      {
         this.SessionData.Insert();
-        this.Socket.User.UpdateSessionData(this.SessionData.ID);
-      }
 
       this.Data = await new SessionDM(this.Database)
       {
@@ -64,7 +61,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         guid = this.Key
       }
       .InsertAsync<SessionDM>();
+
       Socket.User.UpdateSessionData(this.SessionData.ID);
+      Socket.User.SetCountry(this.CountryID, this.CountryCode);
     }
 
     private void PrepareRequest()
@@ -84,7 +83,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       this.CountryCode = Socket.MainContext.CookiesGet(Constants.CountryCode);
       this.CountryID = Socket.MainContext.CookiesGetInt(Constants.CountryID);
 
-      if (string.IsNullOrEmpty(this.CountryCode) || !this.CountryID.HasValue)
+      if (!string.IsNullOrEmpty(this.SessionDataGuid) || string.IsNullOrEmpty(this.CountryCode) || !this.CountryID.HasValue)
       {
         this.SessionData = await IPAPI.GetSessionDataAsync(this.Database, this.Request.ip, this.Request.useragent);
         if(this.SessionData == null)
@@ -92,6 +91,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
           // TODO: big problem!! very big
           throw new Exception("We could not get session data.. probably due to IP lookup");
         }
+
         this.CountryCode = this.SessionData.countryCode;
         this.CountryID = await CountryManager.GetCountryByCode(this.Database, this.CountryCode);
 

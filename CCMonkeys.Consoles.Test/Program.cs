@@ -17,6 +17,9 @@ namespace CCMonkeys.Consoles.Test
 
     static void Main(string[] args)
     {
+      Test();
+      
+
       string testasdasd = @"DAXKMA\".EscapeString();
 
       SortedDictionary<int, string> test = new SortedDictionary<int, string>();
@@ -50,16 +53,14 @@ namespace CCMonkeys.Consoles.Test
 
     }
 
-    public static void Test(ReceivingRegistrationModel model)
+    public static async void Test()
     {
-      string domain = model.url.Split('?')[0];
-      string query = string.Empty;
-      if (model.url.Contains('?'))
-        query = model.url.Split('?')[1];
-      var queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
-
-
-      int a = 0;
+      var lead = await new LeadDM(new CCSubmitDirect())
+      {
+        countryid = 149,
+        msisdn = "alskdjalksd",
+        email = "654646546"
+      }.InsertAsync<LeadDM>();
     }
 
 

@@ -37,8 +37,6 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 
           if (this.Data.leadid.HasValue && Socket.Lead == null)
             this.Socket.Lead = await this.Database.Query<LeadDM>().LoadAsync(this.Data.leadid.Value);
-          if(this.Data.sessiondataid.HasValue)
-            this.Socket.Session.SessionDataID = this.Data.sessiondataid;
 
           return;
         }
@@ -81,7 +79,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     {
       this.Data.countryCode = countryCode;
       this.Data.countryid = cid;
-      this.Data.Update();
+      this.Data.UpdateLater();
     }
 
   }

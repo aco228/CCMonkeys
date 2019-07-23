@@ -113,6 +113,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     public void UpdateLead(LeadDM lead)
     {
       this.Data.leadid = lead.ID.Value;
+      lead.OnAction();
       this.Data.UpdateLater();
     }
   }

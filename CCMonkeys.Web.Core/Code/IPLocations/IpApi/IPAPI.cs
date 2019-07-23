@@ -73,6 +73,7 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
       var result = Get(ip, useragent);
       return new SessionDataDM(database)
       {
+        guid = Guid.NewGuid().ToString(),
         countryCode = result.countryCode,
         countryName = result.country,
         region = result.region,
@@ -91,6 +92,7 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
       var result = await GetAsync(ip, useragent);
       return new SessionDataDM(database)
       {
+        guid = Guid.NewGuid().ToString(),
         countryCode = result.countryCode,
         countryName = result.country,
         region = result.region,

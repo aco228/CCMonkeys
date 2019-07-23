@@ -56,25 +56,27 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       string key = data.Substring(0, data.IndexOf('#'));
       string json = data.Substring(data.IndexOf('#') + 1);
 
+      switch (key)
+      {
+        case "register":
+          Get(uid).OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+          break;
+
+        // lander
+        case "user-create":
+          Get(uid).OnCreateUser(key, JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
+          break;
+        case "user-subscribe":
+          Get(uid).OnSubscribeUser(key, JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
+          break;
+        case "user-redirected":
+          Get(uid).OnUserRedirected(key, JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
+          break;
+      }
+
       try
       {
-        switch (key)
-        {
-          case "register":
-            Get(uid).OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
-            break;
-
-          // lander
-          case "user-create":
-            Get(uid).OnCreateUser(key, JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
-            break;
-          case "user-subscribe":
-            Get(uid).OnSubscribeUser(key, JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
-            break;
-          case "user-redirected":
-            Get(uid).OnUserRedirected(key, JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
-            break;
-        }
+        
       }
       catch(Exception e)
       {

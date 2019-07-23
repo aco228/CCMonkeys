@@ -20,6 +20,8 @@ namespace Direct.ccmonkeys.Models
       this.UpdateLater();
     }
 
+   
+
     public static async Task<LeadDM> LoadByMsisdnOrEmailAsync(DirectDatabaseBase db, string msisdn, string email)
     {
       if (string.IsNullOrEmpty(msisdn) && string.IsNullOrEmpty(email))
@@ -33,6 +35,12 @@ namespace Direct.ccmonkeys.Models
       else if (!string.IsNullOrEmpty(email))
         result = (await db.Query<LeadDM>().Select("email, msisdn").Where("email={0}", email).LoadAsync()).FirstOrDefault();
 
+      return result;
+    }
+
+    public static async Task<LeadDM> LoadAndInsertByMsisdnOrEmailAsync(DirectDatabaseBase db, string msisdn, string email)
+    {
+      var result = await LoadByMsisdnOrEmailAsync(db, msisdn, email);
       if (result != null)
         return result;
 
@@ -41,7 +49,6 @@ namespace Direct.ccmonkeys.Models
         msisdn = msisdn,
         email = email
       };
-
       await result.InsertAsync();
 
       return result;

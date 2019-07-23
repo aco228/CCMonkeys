@@ -8,7 +8,7 @@ namespace CCMonkeys.Consoles.GenerateModels
     static void Main(string[] args)
     {
       var db = new CCSubmitDirect();
-      db.ModelsCreator.GenerateFile("tm_user", "User", @"D:\github\CCMonkeys\_rest\output");
+      db.ModelsCreator.GenerateFile("tm_session_data", "SessionData", @"D:\github\CCMonkeys\_rest\output");
       //db.ModelsCreator.GenerateFile("cc_postback_log", "PostbackLog", @"D:\github\CCMonkeys\_rest\output");
       //db.ModelsCreator.GenerateFile("cc_undercover", "Undercover", @"D:\github\CCMonkeys\_rest\output");
       //db.ModelsCreator.GenerateFile("tm_action", "Action", @"D:\github\CCMonkeys\_rest\output");

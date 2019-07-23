@@ -9,6 +9,9 @@ public partial class SessionDataDM : DirectModel
 
 public SessionDataDM(DirectDatabaseBase db) : base("tm_session_data", "sessiondataid", db){}
 
+[DColumn(Name = "guid")]
+public string guid { get; set; } = default;
+
 [DColumn(Name = "countryCode", Nullable = true)]
 public string countryCode { get; set; } = default;
 
