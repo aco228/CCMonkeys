@@ -1,6 +1,7 @@
 ﻿using CCMonkeys.Direct;
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Code.IP2ID;
 using CCMonkeys.Web.Core.Code.IPLocations.IpApi;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
@@ -93,7 +94,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         }
 
         this.CountryCode = this.SessionData.countryCode;
-        this.CountryID = await CountryManager.GetCountryByCode(this.Database, this.CountryCode);
+        this.CountryID = await CountryCache.Instance.Get(this.Database, this.CountryCode);
 
         Socket.MainContext.SetCookie(Constants.CountryCode, this.CountryCode);
         Socket.MainContext.SetCookie(Constants.CountryID, this.CountryID.Value.ToString());

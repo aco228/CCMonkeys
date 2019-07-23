@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Code.CacheManagers;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,7 +26,7 @@ namespace CCMonkeys.Web.Postbacks.Controllers.CCCash
     // Landing pages are on CCCash side
     private async Task<ActionDM> ConstructAction(CCCashModel model)
     {
-      var countryid = await CountryManager.GetCountryByCode(this.Database, model.country);
+      var countryid = await CountryCache.Instance.Get(this.Database, model.country);
 
       var lead = await LeadDM.LoadByMsisdnOrEmailAsync(this.Database, model.msisdn, model.email);
       if(lead == null)

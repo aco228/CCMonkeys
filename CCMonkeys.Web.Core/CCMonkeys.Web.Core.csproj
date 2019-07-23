@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Code\CountryManager.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Direct.V2\Direct\Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Sockets\CCMonkeys.Sockets.csproj" />

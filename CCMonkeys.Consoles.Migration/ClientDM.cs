@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Code.CacheManagers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -40,7 +41,7 @@ namespace CCMonkeys.Consoles.Migration
 
 
       if(country.Length == 2)
-        countryID = CountryManager.GetCountryByCode(Program.Database, country).Result;
+        countryID = CountryCache.Instance.Get(Program.Database, country).Result;
       else
       {
         if (country.Equals("côte d'ivoire"))
@@ -48,7 +49,7 @@ namespace CCMonkeys.Consoles.Migration
         else if (country.Equals("réunion"))
           countryID = 178;
         else
-          countryID = CountryManager.GetCountryByName(Program.Database, country).Result;
+          countryID = CountryCache.Instance.Get(Program.Database, country).Result;
       }
 
       return countryID;
