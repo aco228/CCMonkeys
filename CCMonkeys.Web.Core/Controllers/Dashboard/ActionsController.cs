@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using CCMonkeys.Web.Core.Code.CacheManagers;
+using CCMonkeys.Web.Core.Code.Filters;
 using CCMonkeys.Web.Core.Models.Dashboard;
 using Direct.ccmonkeys.Models;
 using Direct.Core;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
 
-
+  [AllowCrossSiteAttribute]
   [Route("api/actions")]
   public class ActionsController : MainController
   {

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using CCMonkeys.Web.Core.Code.CacheManagers;
+using CCMonkeys.Web.Core.Code.Filters;
 using CCMonkeys.Web.Core.Models.Dashboard;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
+  [AllowCrossSiteAttribute]
   [Route("api/init")]
   public class InitializationController : MainController
   {
