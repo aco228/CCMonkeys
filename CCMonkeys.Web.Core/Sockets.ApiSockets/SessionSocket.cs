@@ -9,6 +9,9 @@ using System.Net.WebSockets;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
 using System.Collections.Generic;
+using CCMonkeys.Sockets;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
+using CCMonkeys.Web.Core.Logging;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
@@ -16,7 +19,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
   {
     public MainContext MainContext = null;
     public WebSocket WebSocket { get; set; } = null;
-    public CCSubmitDirect Database { get => this.MainContext.Database; }
+    public CCSubmitDirect Database { get; protected set; } = null;
 
     public LeadDM Lead { get; set; } = null; // * we will try to load it on Init methods of User and Action
     public User User { get; protected set; } = null;
@@ -30,6 +33,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     public SessionSocket(MainContext context, SessionType sessionType)
     {
+      this.Database = new CCSubmitDirect();
       this.Created = DateTime.Now;
       this.MainContext = context;
       this.SessionType = sessionType;
@@ -64,11 +68,14 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     {
       try
       {
+        MSLogger logger = new MSLogger();
         if (this.SessionType == SessionType.Lander && !model.providerID.HasValue)
         {
           this.Send(key, new SendingRegistrationModel() { }.Pack(false, "providerID missing"));
           return;
         }
+
+        logger.Track("sessions");
 
         if (model.url.StartsWith("file:"))
           model.url = this.SessionType == SessionType.Lander ?
@@ -86,6 +93,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
         PrelanderDM prelander = null;
         LanderDM lander = null;
+
+        logger.Track("domains manipulation"); 
 
         if (this.SessionType == SessionType.Prelander)
         {
@@ -106,8 +115,11 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
             return;
           }
         }
+        logger.Track("prelander or lander");
 
         this.Action.PrepareActionBasedOnQueries(queryValues);
+
+        logger.Track("this.Action.PrepareActionBasedOnQueries(queryValues);");
 
         /// SENDING
         /// 
@@ -124,15 +136,21 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         }
         this.Send(sendingModel.Pack(key, true, "Welcome!!"));
 
+        logger.Track("sending model");
+
         /// POST SENDING
         /// 
-        
+
         if (this.SessionType == SessionType.Prelander)
           this.Action.Init(model.providerID, prelander, null);
         else if (this.SessionType == SessionType.Lander)
           this.Action.Init(model.providerID, null, lander);
 
+        logger.Track("action.Init");
+
         this.Session.Init();
+
+        logger.Track("session Init");
 
         Session.Request.rawurl = model.url;
         Session.Request.UpdateLater();
@@ -141,7 +159,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         {
           actionID = this.Action.Data.ID,
           sessionID = this.Session.Data.ID,
-          userID = this.User.Data.ID
+          userID = this.User.Data.ID,
+          Loggers = logger.Tracks
         }.Pack());
 
         await this.Database.TransactionalManager.RunAsync();
@@ -249,6 +268,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     public void OnClose()
     {
+      if(this.Action.Data != null)
+        DashboardSocket.OnActionOffline(this.Action.Data);
       this.Session.OnClose(this.Created);
     }
     public void Send(DistributionModel data)

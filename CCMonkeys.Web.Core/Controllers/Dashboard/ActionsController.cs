@@ -13,9 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
 
-  [AllowCrossSiteAttribute]
   [Route("api/actions")]
-  public class ActionsController : MainController
+  public class ActionsController : DashboardController
   {
     public ActionsController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
 
@@ -101,14 +100,7 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
 
       List<ActionModelSend> result = new List<ActionModelSend>();
       foreach (var action in await queryManager.LoadAsync())
-        result.Add(new ActionModelSend()
-        {
-          Data = action,
-          Lander = action.landerid == null ? null : LandersCache.Instance.Get(action.landerid.Value),
-          Prelander = action.prelanderid == null ? null : PrelandersCache.Instance.Get(action.prelanderid.Value),
-          Provider = action.providerid == null ? null : ProvidersCache.Instance.Get(action.providerid.Value),
-          Country = action.countryid == null ? null : CountryCache.Instance.Get(action.countryid.Value)
-        });
+        result.Add(action.Pack());
       return result;
     }
 

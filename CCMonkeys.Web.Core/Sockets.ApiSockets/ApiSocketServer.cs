@@ -3,10 +3,12 @@ using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
+using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -104,6 +106,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       => await SendStringAsync(socket.WebSocket, JsonConvert.SerializeObject(data));
     public static async void Send(string uid, DistributionModel data)
       => await SendStringAsync(ApiSocketServer.Get(uid).WebSocket, JsonConvert.SerializeObject(data));
+
+    public static bool IsActionOnline(ActionDM action)
+      => (from s in Sessions where s.Value.Action.Data != null && s.Value.Action.Data.ID.HasValue && s.Value.Action.Data.ID == action.ID select s.Value).FirstOrDefault() != null;
 
   }
 }

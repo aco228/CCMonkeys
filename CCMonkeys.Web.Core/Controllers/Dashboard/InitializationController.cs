@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
-  [AllowCrossSiteAttribute]
+
   [Route("api/init")]
-  public class InitializationController : MainController
+  public class InitializationController : DashboardController
   {
     public InitializationController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
 

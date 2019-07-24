@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>dashboard demo</title>
+</head>
+<body>
+
+  <script type="text/javascript" src="https://localhost:5001/js/dashboard?recompile=1"></script>
+  <script type="text/javascript">
+    window.Socket.subscribe(window.Socket.events.ADMIN_DISCONNECTED, onClientDisconnected);
+    window.Socket.subscribe(window.Socket.events.ADMIN_CONNECTED, onClientConnected);
+    window.Socket.subscribe(window.Socket.events.ACTION_INSERT, onActionInsert);
+    window.Socket.subscribe(window.Socket.events.ACTION_UPDATE, onActionUpdate);
+
+    function onClientDisconnected(e){
+      console.warn('Inside the my method onClientDisconnected', e);
+    }
+    function onClientConnected(e){
+      console.warn('Inside the my method onClientConnected', e);
+    }
+
+    function onActionInsert(e){
+      console.warn('on action insert', e);
+    }
+    function onActionUpdate(e){
+      console.warn('on action update', e);
+    }
+    
+  </script>
+
+</body>
+</html>

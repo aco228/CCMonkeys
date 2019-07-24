@@ -52,6 +52,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       else if (this.SessionData != null)
         this.SessionData.Insert();
 
+      if (this.SessionData == null)
+        this.SessionData = await PrepareSessionData_WithoutContext();
+
       this.Data = await new SessionDM(this.Database)
       {
         userid = Socket.User.ID.Value,
@@ -70,7 +73,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     private void PrepareRequest()
     {
       string ip = this.Socket.MainContext.HttpContext.Connection.RemoteIpAddress.ToString();
-      if (ip.Equals("::1")) ip = "62.4.55.231";
+      if (ip.Equals("::1")) ip = "79.140.149.187";
       this.Request = new SessionRequestDM(this.Database)
       {
         rawurl = string.Empty,
@@ -99,6 +102,20 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         Socket.MainContext.SetCookie(Constants.CountryCode, this.CountryCode);
         Socket.MainContext.SetCookie(Constants.CountryID, this.CountryID.Value.ToString());
       }
+    }
+
+    private async Task<SessionDataDM> PrepareSessionData_WithoutContext()
+    {
+      this.SessionData = IPAPI.GetSessionData(this.Database, this.Request.ip, this.Request.useragent);
+      if (this.SessionData == null)
+      {
+        // TODO: big problem!! very big
+        throw new Exception("We could not get session data.. probably due to IP lookup");
+      }
+      await this.SessionData.InsertAsync();
+
+      this.Socket.User.UpdateSessionData(this.SessionData.ID);
+      return this.SessionData;
     }
 
     ///

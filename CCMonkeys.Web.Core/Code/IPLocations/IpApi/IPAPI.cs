@@ -13,36 +13,52 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
   {
     public static IPAPIResult Get(string ipAddress, string userAgent)
     {
-      string URL = "http://ip-api.com/json/" + ipAddress;
-      var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
-      httpWebRequest.ContentType = "application/json";
-      httpWebRequest.Method = "GET";
+      try
+      {
+        string URL = "http://ip-api.com/json/" + ipAddress;
+        var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
+        httpWebRequest.ContentType = "application/json";
+        httpWebRequest.Method = "GET";
 
 
-      var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-      string result = "";
-      using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-        result = streamReader.ReadToEnd();
+        var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+        string result = "";
+        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+          result = streamReader.ReadToEnd();
 
 
-      return Desereliaze(result);
+        return Desereliaze(result);
+      }
+      catch(Exception e)
+      {
+        int a = 0;
+        return null;
+      }
     }
 
 
     public static async Task<IPAPIResult> GetAsync(string ipAddress, string userAgent)
     {
-      string URL = "http://ip-api.com/json/" + ipAddress;
-      var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
-      httpWebRequest.ContentType = "application/json";
-      httpWebRequest.Method = "GET";
+      try
+      {
+        string URL = "http://ip-api.com/json/" + ipAddress;
+        var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
+        httpWebRequest.ContentType = "application/json";
+        httpWebRequest.Method = "GET";
 
 
-      var httpResponse = (HttpWebResponse)(await httpWebRequest.GetResponseAsync());
-      string result = "";
-      using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-        result = streamReader.ReadToEnd();
+        var httpResponse = (HttpWebResponse)(await httpWebRequest.GetResponseAsync());
+        string result = "";
+        using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+          result = streamReader.ReadToEnd();
 
-      return Desereliaze(result);
+        return Desereliaze(result);
+      }
+      catch(Exception e)
+      {
+        int a = 0;
+        return null;
+      }
     }
 
     public static IPAPIResult Desereliaze(string input)

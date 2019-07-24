@@ -1,26 +1,36 @@
 
+----------------------------------------------------------------------------------------------------------
+-------------------[ Login
 
+
+  https://localhost:5001/api/login/ako/akopass0
+
+----------------------------------------------------------------------------------------------------------
 -------------------[ Init phaze
 
+
   Get all
-    http://ccmonkeys.azurewebsites.net/api/init/getAll
+    https://ccmonkeys.azurewebsites.net/api/init/getAll
   
   Get countries
-    http://ccmonkeys.azurewebsites.net/api/init/getCountries
+    https://ccmonkeys.azurewebsites.net/api/init/getCountries
 
   Get landers
-    http://ccmonkeys.azurewebsites.net/api/init/getLanders
-    http://ccmonkeys.azurewebsites.net/api/init/getLanderTypes
+    https://ccmonkeys.azurewebsites.net/api/init/getLanders
+    https://ccmonkeys.azurewebsites.net/api/init/getLanderTypes
 
   Get prelanders
-    http://ccmonkeys.azurewebsites.net/api/init/getPrelanders
-    http://ccmonkeys.azurewebsites.net/api/init/getPrelanderTypes
+    https://ccmonkeys.azurewebsites.net/api/init/getPrelanders
+    https://ccmonkeys.azurewebsites.net/api/init/getPrelanderTypes
 
   Get providers
-    http://ccmonkeys.azurewebsites.net/api/init/getProviders
+    https://ccmonkeys.azurewebsites.net/api/init/getProviders
 
 
+----------------------------------------------------------------------------------------------------------
 -------------------[ Actions
+
+
     int Limit
     DateTime? From
     DateTime? To
@@ -47,4 +57,4 @@
     bool? HasChargeback
     bool? HasRefund
 
-    http://ccmonkeys.azurewebsites.net/api/actions?Limit=200&Countries=13&Countries=2&CountriesExclude=3&CountriesExclude=4&HadCharged=true&From=2019-07-20 00:00:00&To=2020-07-20 00:00:00
+    https://ccmonkeys.azurewebsites.net/api/actions?Limit=200&Countries=13&Countries=2&CountriesExclude=3&CountriesExclude=4&HadCharged=true&From=2019-07-20 00:00:00&To=2020-07-20 00:00:00

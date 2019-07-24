@@ -14,5 +14,9 @@ namespace CCMonkeys.Web.Core.Code
     public static readonly string SessionDataID = "sdtid";
     public static readonly string CountryCode = "stctdv";
     public static readonly string CountryID = "stctdida";
+
+
+    // admin
+    public static readonly string AdminCookie = "adstdck";
   }
 }

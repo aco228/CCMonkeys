@@ -2,6 +2,7 @@
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Direct.ccmonkeys.Models;
 using Direct.Core;
 using System;
@@ -64,6 +65,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
           this.Data.pubid = this.PubID;
           this.Data.providerid = providerID;
           this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
+
+          this.Data.SetOnAfterInsert(this.OnInsert);
+          this.Data.SetOnAfterUpdate(this.OnUpdate);
           this.Data.UpdateLater();
           return;
         }
@@ -94,11 +98,19 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         this.Data.leadid = Socket.Lead.ID;
       }
 
+
+      this.Data.SetOnAfterInsert(this.OnInsert);
+      this.Data.SetOnAfterUpdate(this.OnUpdate);
       this.Data.Insert();
 
       this.ID = this.Data.ID.Value;
       this.Socket.User.UpdateAction(this.Data.ID);
     }
+
+    public void OnInsert()
+      => DashboardSocket.OnActionInsert(this.Data);
+    public void OnUpdate()
+      => DashboardSocket.OnActionUpdate(this.Data);
 
     public void PrepareActionBasedOnQueries(Dictionary<string, string> queryValues)
     {

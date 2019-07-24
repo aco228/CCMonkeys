@@ -106,6 +106,9 @@ namespace CCMonkeys.Sockets
     // Original
     protected static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))
     {
+      if (socket == null || socket.State != WebSocketState.Open)
+        return Task.FromResult(0);
+
       var buffer = Encoding.UTF8.GetBytes(data);
       var segment = new ArraySegment<byte>(buffer);
       return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);

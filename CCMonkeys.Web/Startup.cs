@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace CCMonkeys.Web
 {
@@ -19,6 +20,12 @@ namespace CCMonkeys.Web
   {
     public Startup(IConfiguration configuration)
     {
+      //JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+      //{
+      //  Formatting = Newtonsoft.Json.Formatting.Indented,
+      //  ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+      //};
+
       Configuration = configuration;
     }
 

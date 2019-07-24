@@ -8,6 +8,15 @@ namespace CCMonkeys.Web.Core.Models.Dashboard
   {
     public bool Status { get; set; } = true;
     public string Message { get; set; } = string.Empty;
+
+
+    public static ModelBaseResponse GenerateError(string message)
+      => new ModelBaseResponse()
+      {
+        Status = false,
+        Message = message
+      };
+
   }
 
   public class ModelBaseRequest

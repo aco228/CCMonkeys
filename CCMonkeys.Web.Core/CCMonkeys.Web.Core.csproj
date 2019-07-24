@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Code\CountryManager.cs" />
+    <Compile Remove="Sockets.ApiSockets\Data\SendingObj.cs" />
+    <Compile Remove="Sockets.ApiSockets\DistributionModel.cs" />
+    <Compile Remove="Sockets.ApiSockets\DistributionModelHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>

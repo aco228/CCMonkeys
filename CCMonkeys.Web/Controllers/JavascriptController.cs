@@ -4,6 +4,7 @@ using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Controllers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,11 +21,13 @@ namespace CCMonkeys.Web.Controllers
     private static string ClientJS = string.Empty;
     private static string PrelanderJS = string.Empty;
     private static string LanderJS = string.Empty;
+    private static string DashboardJS = string.Empty;
 
     public JavascriptController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
 
     public IActionResult Index(string type, string dbg, string recompile = "0")
     {
+      Response.ContentType = "text/javascript";
       if (string.IsNullOrEmpty(type))
         return this.Content("console.error('ccsocket:: type missing');");
 
@@ -84,8 +87,33 @@ namespace CCMonkeys.Web.Controllers
 
       ApiSocketServer.AddSession(socket);
 
-      Response.ContentType = "text/javascript";
       return this.ReturnContent(variables+ClientJS+js_extension);
+    }
+
+    [HttpGet("dashboard")]
+    public IActionResult GetDashboardJavascript(string recompile = "0")
+    {
+      Response.ContentType = "text/javascript";
+
+      if (this.Context.TryGetAdminID().HasValue == false)
+        return this.Content("console.error('ccsocket:: auth error');");
+
+      string js_extension = string.Empty;
+      if (string.IsNullOrEmpty(DashboardJS) || recompile.Equals("1"))
+      {
+
+        string path = this.HostingEnvironment.WebRootPath + @"/js/dashboard.js";
+        var baseUrl = $"{(this.Request.Scheme.Equals("https") ? "wss" : "ws")}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
+        DashboardJS = (new JSMinify.Minify(path)).getModifiedData()
+          .Replace("[HOST]", baseUrl)
+          .Replace("[EVENTS]", DashboardSocket.PrintEvents());
+      }
+
+      DashboardSessionSocket socket = new DashboardSessionSocket(this.Context);
+      DashboardSocketsServer.AddSession(socket);
+      js_extension = DashboardJS.Replace("[SGUID]", socket.Key);
+
+      return this.ReturnContent(js_extension);
     }
 
   }

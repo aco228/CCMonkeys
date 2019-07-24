@@ -1,4 +1,6 @@
-﻿using Direct.ccmonkeys.Models;
+﻿using CCMonkeys.Sockets;
+using CCMonkeys.Web.Core.Logging;
+using Direct.ccmonkeys.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
     public int? sessionID = null;
     public int? actionID = null;
     public int? userID = null;
+    public List<MSLoggerTrack> Loggers = null;
   }
 
 }

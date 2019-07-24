@@ -1,5 +1,6 @@
 ﻿using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace CCMonkeys.Web.Code.Sockets
   {
     private readonly RequestDelegate _next;
     public static ApiSocketServer ApiSocketServer = new ApiSocketServer();
+    public static DashboardSocketsServer DashboardServer = new DashboardSocketsServer();
 
 
     public WebSocketsMiddleware(RequestDelegate next)
@@ -30,6 +32,9 @@ namespace CCMonkeys.Web.Code.Sockets
         }
         if (context.Request.Path.StartsWithSegments("/ws_api"))
           await ApiSocketServer.CallInvoke(context);
+        else if (context.Request.Path.StartsWithSegments("/ws_dashboard"))
+          await DashboardServer.CallInvoke(context);
+
       }
       catch (Exception e)
       {
