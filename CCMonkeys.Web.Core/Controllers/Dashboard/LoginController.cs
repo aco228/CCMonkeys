@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Code.Filters;
 using CCMonkeys.Web.Core.Models.Dashboard;
 using Direct.ccmonkeys.Models;
 using Direct.Core;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
   [Route("api/login")]
+  [AllowCrossSiteAttribute]
   public class LoginController : MainController
   {
     public LoginController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
