@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace CCMonkeys.Web.Postbacks.Controllers.Dogbain
 {
   [Route("postback/dogbain")]
-  class DogbainPostbackController : PostbackControllerBase<DogbainModel>
+  public class DogbainPostbackController : PostbackControllerBase<DogbainModel>
   {
-    public DogbainPostbackController(int providerID, bool requireAction) : base(providerID:2, requireAction:true)
+    public DogbainPostbackController() : base(providerID:2, requireAction:true)
     { }
 
     protected override async Task<ActionDM> Call(DogbainModel model)

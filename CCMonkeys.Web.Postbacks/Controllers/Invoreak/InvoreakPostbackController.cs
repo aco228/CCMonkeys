@@ -10,7 +10,7 @@ namespace CCMonkeys.Web.Postbacks.Controllers.Invoreak
   [Route("postback/invoreak")]
   public class InvoreakPostbackController : PostbackControllerBase<InvoreakModel>
   {
-    public InvoreakPostbackController(int providerID, bool requireAction) : base(providerID:3, requireAction:false)
+    public InvoreakPostbackController() : base(providerID:3, requireAction:false)
     { }
 
     protected override async Task<ActionDM> Call(InvoreakModel model)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Code.Filters;
 using CCMonkeys.Web.Core.Models.Dashboard;
 using Direct.ccmonkeys.Models;
 using Direct;
@@ -14,9 +15,19 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
   [AllowCrossSiteAttribute]
   [Route("api/login")]
+  [AllowCrossSiteAttribute]
   public class LoginController : MainController
   {
     public LoginController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
+
+    public ModelBaseResponse Index()
+    {
+      int? adminID = this.Context.TryGetAdminID();
+      if (adminID.HasValue)
+        return new ModelBaseResponse() { Status = true, Message = this.Context.Admin.username };
+      else
+        return new ModelBaseResponse() { Status = false };
+    }
 
     [HttpGet("{username}/{password}")]
     public async Task<ModelBaseResponse> Index(string username, string password)

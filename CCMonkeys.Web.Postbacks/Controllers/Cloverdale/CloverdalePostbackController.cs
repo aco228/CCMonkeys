@@ -12,7 +12,7 @@ namespace CCMonkeys.Web.Postbacks.Controllers.Cloverdale
   [Route("postback/cloverdale")]
   public class CloverdalePostbackController : PostbackControllerBase<CloverdaleModel>
   {
-    public CloverdalePostbackController(int providerID, bool requireAction) : base(providerID:5, requireAction:false){ }
+    public CloverdalePostbackController() : base(providerID:5, requireAction:false){ }
 
     protected override async Task<ActionDM> Call(CloverdaleModel model)
     {
