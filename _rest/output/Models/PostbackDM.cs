@@ -1,5 +1,4 @@
-using Direct.Core;
-using Direct.Core.Models;
+using Direct.Models;
 using System;
 
 namespace Direct.ccmonkeys.Models
@@ -7,7 +6,11 @@ namespace Direct.ccmonkeys.Models
 public partial class PostbackDM : DirectModel
 {
 
+public PostbackDM() : base("cc_postback", "postbackid", null){}
 public PostbackDM(DirectDatabaseBase db) : base("cc_postback", "postbackid", db){}
+
+[DColumn(Name = "postbackid", IsPrimary=true)]
+public int postbackid { get; set; } = default;
 
 [DColumn(Name = "providerid")]
 public int providerid { get; set; } = default;
@@ -16,7 +19,7 @@ public int providerid { get; set; } = default;
 public string trackingid { get; set; } = default;
 
 [DColumn(Name = "actionid", Nullable = true)]
-public int? actionid { get; set; } = default;
+public string actionid { get; set; } = default;
 
 [DColumn(Name = "url")]
 public string url { get; set; } = default;

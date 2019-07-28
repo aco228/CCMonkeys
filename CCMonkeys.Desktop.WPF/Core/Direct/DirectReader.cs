@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CCMonkeys.Desktop.WPF.Core.Csv.Read.Models;
-using Direct.Core;
+using Direct;
 
 namespace CCMonkeys.Desktop.WPF.Direct
 {

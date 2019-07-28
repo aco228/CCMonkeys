@@ -156,8 +156,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Direct.V2\Direct\Direct.csproj">
-      <Project>{935b9af8-9c9b-4f06-89d2-cb540e970d03}</Project>
+    <ProjectReference Include="..\..\Direct.V3\Direct.V3\Direct.csproj">
+      <Project>{89ef5881-d27a-4aa5-93ea-674ce15ea6ff}</Project>
       <Name>Direct</Name>
     </ProjectReference>
     <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj">

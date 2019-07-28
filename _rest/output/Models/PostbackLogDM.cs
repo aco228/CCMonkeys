@@ -1,5 +1,4 @@
-using Direct.Core;
-using Direct.Core.Models;
+using Direct.Models;
 using System;
 
 namespace Direct.ccmonkeys.Models
@@ -7,7 +6,11 @@ namespace Direct.ccmonkeys.Models
 public partial class PostbackLogDM : DirectModel
 {
 
+public PostbackLogDM() : base("cc_postback_log", "postbacklog", null){}
 public PostbackLogDM(DirectDatabaseBase db) : base("cc_postback_log", "postbacklog", db){}
+
+[DColumn(Name = "postbacklog", IsPrimary=true)]
+public int postbacklog { get; set; } = default;
 
 [DColumn(Name = "postbackid")]
 public int postbackid { get; set; } = default;

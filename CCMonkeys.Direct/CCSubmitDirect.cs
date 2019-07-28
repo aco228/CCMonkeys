@@ -1,6 +1,6 @@
-﻿using Direct.Core.Mysql;
+﻿using Direct;
+using Direct.Types.Mysql;
 using System;
-using static Direct.Core.DirectDatabaseBase;
 
 namespace CCMonkeys.Direct
 {

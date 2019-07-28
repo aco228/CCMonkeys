@@ -1,5 +1,4 @@
-using Direct.Core;
-using Direct.Core.Models;
+using Direct.Models;
 using System;
 
 namespace Direct.ccmonkeys.Models
@@ -7,16 +6,17 @@ namespace Direct.ccmonkeys.Models
 public partial class ActionDM : DirectModel
 {
 
+public ActionDM() : base("tm_action", "actionid", null){}
 public ActionDM(DirectDatabaseBase db) : base("tm_action", "actionid", db){}
 
-[DColumn(Name = "guid")]
-public string guid { get; set; } = default;
+[DColumn(Name = "actionid", IsPrimary=true)]
+public string actionid { get; set; } = default;
 
 [DColumn(Name = "trackingid", Nullable = true)]
 public string trackingid { get; set; } = default;
 
 [DColumn(Name = "userid")]
-public int userid { get; set; } = default;
+public string userid { get; set; } = default;
 
 [DColumn(Name = "leadid", Nullable = true)]
 public int? leadid { get; set; } = default;

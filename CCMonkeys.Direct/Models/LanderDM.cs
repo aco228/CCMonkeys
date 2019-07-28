@@ -1,5 +1,4 @@
-using Direct.Core;
-using Direct.Core.Models;
+using Direct.Models;
 using System;
 
 namespace Direct.ccmonkeys.Models
@@ -7,7 +6,11 @@ namespace Direct.ccmonkeys.Models
 public partial class LanderDM : DirectModel
 {
 
+public LanderDM() : base("tm_lander", "landerid", null){}
 public LanderDM(DirectDatabaseBase db) : base("tm_lander", "landerid", db){}
+
+[DColumn(Name = "landerid", IsPrimary=true)]
+public int landerid { get; set; } = default;
 
 [DColumn(Name = "landertypeid")]
 public int landertypeid { get; set; } = default;

@@ -4,107 +4,111 @@ using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CCMonkeys.Web.Core.Logging;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 {
   public class Action
   {
-    public int? ID { get; protected set; } = null;
     public string Key { get; private set; } = string.Empty;
     public ActionDM Data { get; set; }
     public CCSubmitDirect Database { get => this.Socket.Database; }
     public SessionSocket Socket { get; }
+    public bool WeHadKey = true;
 
     private string TrackingID { get; set; } = string.Empty;
     private string AffID { get; set; } = string.Empty;
     private string PubID { get; set; } = string.Empty;
+    public int? LanderID { get; set; } = null;
+    public int? LanderTypeID { get; set; } = null;
+    public int? PreLanderID { get; set; } = null;
+    public int? PreLanderTypeID { get; set; } = null;
 
 
     public Action(SessionSocket socket)
     {
       this.Socket = socket;
-      this.ID = this.Socket.User.Data.actionid;
+      this.Key = this.Socket.MainContext.CookiesGet(Constants.ActionID);
+
+      // if we dont have key stored then we will create blank new one
+      if(string.IsNullOrEmpty(this.Key))
+      {
+        this.WeHadKey = false;
+        this.Data = new ActionDM(this.Database);
+        this.Key = this.Data.GetStringID();
+        this.Socket.MainContext.SetCookie(Constants.ActionID, this.Key);
+      }
     }
 
-    public async void Init(int? providerID, PrelanderDM prelander, LanderDM lander)
+    public async void Init(int? providerID)
     {
+      var logger = new MSLogger();
       // if we had this ID stored in cookies or this user is now on lander
-      if (this.ID.HasValue && Socket.SessionType == SessionType.Lander)
+      if (this.WeHadKey && !string.IsNullOrEmpty(this.Key) && Socket.SessionType == SessionType.Lander)
       {
-        this.Data = await this.Database.Query<ActionDM>().LoadAsync(this.ID.Value);
+        this.Data = await this.Database.Query<ActionDM>().LoadByGuidAsync(this.Key);
+        logger.Track("after load");
         if(this.Data != null)
         {
           if(this.Data.leadid.HasValue && Socket.Lead == null)
             this.Socket.Lead = await this.Database.Query<LeadDM>().LoadAsync(this.Data.leadid.Value);
 
-          if(prelander != null)
-          {
-            this.Data.prelanderid = prelander.ID;
-            this.Data.prelandertypeid = prelander.prelandertypeid;
-          }
-          if(lander != null)
-          {
-            this.Data.landerid = lander.ID;
-            this.Data.landertypeid = lander.landertypeid;
-          }
+          logger.Track("after lead");
 
-          if(Socket.Lead != null)
+          if (Socket.Lead != null)
           {
             Socket.Lead.OnAction();
             this.Data.leadid = Socket.Lead.ID;
           }
-
-          this.Key = this.Data.guid;
-          this.Data.affid = this.AffID;
-          this.Data.trackingid = this.TrackingID;
-          this.Data.pubid = this.PubID;
-          this.Data.providerid = providerID;
-          this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
-
-          this.Data.SetOnAfterInsert(this.OnInsert);
-          this.Data.SetOnAfterUpdate(this.OnUpdate);
-          this.Data.UpdateLater();
-          return;
         }
       }
 
-      // in this case we will create new Action
-
-      this.Key = Guid.NewGuid().ToString();
-      this.Data = new ActionDM(this.Database)
+      if (this.Data == null)
       {
-        leadid = (Socket.Lead != null ? Socket.Lead.ID : null),
-        userid = Socket.User.ID.Value,
-        prelanderid = (prelander != null ? prelander.ID : null),
-        prelandertypeid = (prelander != null ? (int?)prelander.prelandertypeid : null),
-        landerid = (lander != null ? lander.ID : null),
-        landertypeid = (lander != null ? (int?)lander.landertypeid : null),
-        guid = this.Key,
-        providerid = providerID,
-        input_redirect = (Socket.SessionType == SessionType.Lander),
-        countryid = this.Socket.CountryID,
-        affid = this.AffID,
-        trackingid = this.TrackingID,
-        pubid = this.PubID
-      };
-      if(Socket.Lead != null)
+        this.Data = new ActionDM(this.Database);
+        this.Data.actionid = this.Key;
+        this.WeHadKey = false;
+      }
+
+      this.Data.leadid = (Socket.Lead != null ? Socket.Lead.ID : null);
+      this.Data.userid = Socket.User.Key;
+      this.Data.prelanderid = this.PreLanderID;
+      this.Data.prelandertypeid = this.PreLanderTypeID;
+      this.Data.landerid = this.LanderID;
+      this.Data.landertypeid = this.LanderTypeID;
+      this.Data.providerid = providerID;
+      this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
+      this.Data.countryid = this.Socket.CountryID;
+      this.Data.affid = this.AffID;
+      this.Data.trackingid = this.TrackingID;
+      this.Data.pubid = this.PubID;
+
+      logger.Track("after create");
+      if (Socket.Lead != null)
       {
         Socket.Lead.OnAction();
         this.Data.leadid = Socket.Lead.ID;
       }
 
 
+      logger.Track("after set cookie");
+
       this.Data.SetOnAfterInsert(this.OnInsert);
       this.Data.SetOnAfterUpdate(this.OnUpdate);
-      this.Data.Insert();
+      logger.Track("after actions to database");
 
-      this.ID = this.Data.ID.Value;
-      this.Socket.User.UpdateAction(this.Data.ID);
+      if (this.WeHadKey)
+        this.Data.UpdateLater();
+      else
+        this.Data.InsertLater();
+
+      logger.Track("after insert later");
+      int a = 0;
     }
 
     public void OnInsert()

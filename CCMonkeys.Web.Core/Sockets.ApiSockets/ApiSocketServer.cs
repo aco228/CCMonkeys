@@ -30,7 +30,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       if (string.IsNullOrEmpty(sguid) || !Sessions.ContainsKey(sguid))
         return string.Empty;
 
-      Get(sguid).Created = DateTime.Now;
+      Get(sguid).OnCreate();
       return sguid;
     }
 

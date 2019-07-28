@@ -1,4 +1,5 @@
-﻿using Direct.Core.Mysql;
+﻿using Direct;
+using Direct.Types.Mysql;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,4 +1,4 @@
-﻿using Direct.Core;
+﻿using Direct;
 using System.Collections.Generic;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 using CCMonkeys.Wpf.Desktop.Models;

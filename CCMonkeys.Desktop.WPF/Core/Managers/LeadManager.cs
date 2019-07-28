@@ -4,7 +4,7 @@ using System.Linq;
 using CCMonkeys.Wpf.Desktop.Core.Csv.Models;
 using CCMonkeys.Wpf.Desktop.Core.Manager;
 using System.Reflection;
-using Direct.Core;
+using Direct;
 using CCMonkeys.Direct;
 
 namespace CCMonkeys.Wpf.Desktop.Managers

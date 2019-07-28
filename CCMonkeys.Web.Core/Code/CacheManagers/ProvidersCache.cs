@@ -1,6 +1,6 @@
 ﻿using CCMonkeys.Web.Core.Code.CacheManagers.Core;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using System;
 using System.Collections.Generic;
 using System.Linq;

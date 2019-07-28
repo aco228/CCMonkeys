@@ -2,11 +2,12 @@
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CCMonkeys.Web.Core.Logging;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 {
@@ -16,62 +17,56 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     public CCSubmitDirect Database { get => this.Socket.Database; }
     public SessionSocket Socket { get; }
 
-    public int? ID { get; set; } = null;
     public string Key { get; set; } = string.Empty;
 
     public User(SessionSocket socket)
     {
       this.Socket = socket;
-      this.ID = Socket.MainContext.CookiesGetInt(Constants.UserIdCookie);
       this.Key = Socket.MainContext.CookiesGet(Constants.UserGuidCookie);
       this.Init();
     }
 
     public async void Init()
     {
-      if (this.ID.HasValue)
+      MSLogger mslogger = new MSLogger();
+      if (!string.IsNullOrEmpty(this.Key))
       {
-        this.Data = await this.Database.Query<UserDM>().LoadAsync(this.ID.Value);
+        mslogger.Track("before load");
+        this.Data = await this.Database.Query<UserDM>().LoadByGuidAsync(this.Key);
+        mslogger.Track("after load");
         if (this.Data != null)
         {
 
           if (this.Data.leadid.HasValue && Socket.Lead == null)
             this.Socket.Lead = await this.Database.Query<LeadDM>().LoadAsync(this.Data.leadid.Value);
 
+          mslogger.Track("after lead load");
           return;
         }
       }
 
-      this.Key = Guid.NewGuid().ToString();
-      this.Data = await new UserDM(this.Database)
+      this.Data = new UserDM(this.Database)
       {
         countryid = Socket.CountryID,
         countryCode = Socket.Session.CountryCode,
-        leadid = (Socket.Lead != null ? Socket.Lead.ID : null),
-        guid = this.Key
-      }.InsertAsync<UserDM>();
+        leadid = (Socket.Lead != null ? Socket.Lead.ID : null)
+      };
 
-      this.ID = this.Data.ID;
+      mslogger.Track("after create");
+      this.Data.InsertLater();
+      this.Key = this.Data.GetStringID();
 
-      Socket.MainContext.SetCookie(Constants.UserIdCookie, this.ID.ToString());
+      mslogger.Track("after insert");
+
       Socket.MainContext.SetCookie(Constants.UserGuidCookie, this.Key);
+
+      mslogger.Track("after set cookie");
+      int a = 0;
     }
 
     public void UpdateLead(LeadDM lead)
     {
       this.Data.leadid = lead.ID.Value;
-      this.Data.UpdateLater();
-    }
-
-    public void UpdateSessionData(int? id)
-    {
-      this.Data.sessiondataid = id;
-      this.Data.UpdateLater();
-    }
-
-    public void UpdateAction(int? id)
-    {
-      this.Data.actionid = id;
       this.Data.UpdateLater();
     }
 

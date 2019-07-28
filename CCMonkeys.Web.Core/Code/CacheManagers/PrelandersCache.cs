@@ -1,6 +1,6 @@
 ﻿using CCMonkeys.Web.Core.Code.CacheManagers.Core;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +20,7 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
     public int ID;
     public PreLanderTypeCacheModel Type;
     public string Name;
+    public string Url;
   }
 
   public class PrelandersCache : CacheManagerBase
@@ -44,7 +45,8 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
         {
           ID = l.ID.Value,
           Name = l.name,
-          Type = Types[l.prelandertypeid]
+          Type = Types[l.prelandertypeid],
+          Url = l.url
         });
     }
 
@@ -54,6 +56,7 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
     public PreLanderTypeCacheModel GetType(int id) => Types.ContainsKey(id) ? Types[id] : null;
     public List<PreLanderCacheModel> GetPrelandersModel() => (from l in Landers select l.Value).ToList();
     public List<PreLanderTypeCacheModel> GetPrelanderTypesModel() => (from l in Types select l.Value).ToList();
+    public PreLanderCacheModel GetByUrl(string url) => (from l in Landers where l.Value.Url.Equals(url) select l.Value).FirstOrDefault();
 
   }
 }

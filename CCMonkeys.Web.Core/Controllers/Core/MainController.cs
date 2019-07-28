@@ -1,6 +1,6 @@
 ﻿using CCMonkeys.Direct;
 using CCMonkeys.Web.Core.Code;
-using Direct.Core;
+using Direct;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

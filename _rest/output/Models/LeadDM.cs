@@ -1,5 +1,4 @@
-using Direct.Core;
-using Direct.Core.Models;
+using Direct.Models;
 using System;
 
 namespace Direct.ccmonkeys.Models
@@ -7,7 +6,11 @@ namespace Direct.ccmonkeys.Models
 public partial class LeadDM : DirectModel
 {
 
+public LeadDM() : base("tm_lead", "leadid", null){}
 public LeadDM(DirectDatabaseBase db) : base("tm_lead", "leadid", db){}
+
+[DColumn(Name = "leadid", IsPrimary=true)]
+public int leadid { get; set; } = default;
 
 [DColumn(Name = "msisdn", Nullable = true)]
 public string msisdn { get; set; } = default;

@@ -46,15 +46,13 @@ namespace CCMonkeys.Web.Postbacks.Controllers.CCCash
       var user = await new UserDM(this.Database)
       {
         countryid = countryid,
-        guid = Guid.NewGuid().ToString(),
         leadid = lead.ID.Value
       }.InsertAsync<UserDM>();
 
       var action = await new ActionDM(this.Database)
       {
         trackingid = model.TrackingID,
-        guid = Guid.NewGuid().ToString(),
-        userid = user.ID.Value,
+        userid = user.GetStringID(),
         leadid = lead.ID.Value,
         affid = model.affid,
         pubid = model.pubid,

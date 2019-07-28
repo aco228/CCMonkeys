@@ -9,7 +9,7 @@ namespace CCMonkeys.Web.Core.Code
 {
   public class Crypter
   {
-    private static string EncryptionKey = "akjdhskjahsdkjahsdkjad87as89dasd";
+    private static string EncryptionKey = "ovojenajjacikljucnasvijet.v1";
 
     public static string Encrypt(string clearText)
     {

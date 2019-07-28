@@ -3,7 +3,7 @@ using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Controllers;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Http;
-using Direct.Core;
+using Direct;
 
 namespace CCMonkeys.Web.Core
 {
@@ -35,6 +35,8 @@ namespace CCMonkeys.Web.Core
     public int? TryGetAdminID()
     {
       string cookieValue = this.CookiesGet(Constants.AdminCookie);
+      if (string.IsNullOrEmpty(cookieValue))
+        cookieValue = (this.HttpContext.Request.Headers.ContainsKey("authentication") ? this.HttpContext.Request.Headers["authentication"].ToString() : string.Empty);
       if (string.IsNullOrEmpty(cookieValue))
         return null;
       string[] split = cookieValue.Split('|');

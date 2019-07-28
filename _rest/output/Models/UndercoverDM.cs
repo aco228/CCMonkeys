@@ -1,5 +1,4 @@
-using Direct.Core;
-using Direct.Core.Models;
+using Direct.Models;
 using System;
 
 namespace Direct.ccmonkeys.Models
@@ -7,7 +6,11 @@ namespace Direct.ccmonkeys.Models
 public partial class UndercoverDM : DirectModel
 {
 
+public UndercoverDM() : base("cc_undercover", "id", null){}
 public UndercoverDM(DirectDatabaseBase db) : base("cc_undercover", "id", db){}
+
+[DColumn(Name = "id", IsPrimary=true)]
+public int id { get; set; } = default;
 
 [DColumn(Name = "affid")]
 public string affid { get; set; } = default;

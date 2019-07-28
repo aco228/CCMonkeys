@@ -25,9 +25,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
 
   public class SendingRegistrationPost : SendingObj
   {
-    public int? sessionID = null;
-    public int? actionID = null;
-    public int? userID = null;
+    public string sessionID = null;
+    public string actionID = null;
+    public string userID = null;
     public List<MSLoggerTrack> Loggers = null;
   }
 

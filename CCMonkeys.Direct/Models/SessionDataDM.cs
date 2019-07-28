@@ -1,5 +1,4 @@
-using Direct.Core;
-using Direct.Core.Models;
+using Direct.Models;
 using System;
 
 namespace Direct.ccmonkeys.Models
@@ -7,7 +6,11 @@ namespace Direct.ccmonkeys.Models
 public partial class SessionDataDM : DirectModel
 {
 
+public SessionDataDM() : base("tm_session_data", "sessiondataid", null){}
 public SessionDataDM(DirectDatabaseBase db) : base("tm_session_data", "sessiondataid", db){}
+
+[DColumn(Name = "sessiondataid", IsPrimary=true)]
+public string sessiondataid { get; set; } = default;
 
 [DColumn(Name = "guid")]
 public string guid { get; set; } = default;

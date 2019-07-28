@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Direct.V2\Direct\Direct.csproj" />
+    <ProjectReference Include="..\..\Direct.V3\Direct.V3\Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Sockets\CCMonkeys.Sockets.csproj" />
     <ProjectReference Include="..\CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj" />

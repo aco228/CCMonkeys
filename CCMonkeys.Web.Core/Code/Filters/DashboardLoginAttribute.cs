@@ -8,12 +8,18 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Code.Filters
 {
+  [AllowCrossSiteAttribute]
   public class DashboardLoginAttribute : ActionFilterAttribute
   {
 
     public override void OnActionExecuting(ActionExecutingContext context)
     {
       if (!context.HttpContext.Request.Cookies.ContainsKey(Constants.AdminCookie))
+      {
+        context.Result = new JsonResult(ModelBaseResponse.GenerateError("Credentials error!"));
+        return;
+      }
+      else if(!context.HttpContext.Request.Headers.ContainsKey("authentication"))
       {
         context.Result = new JsonResult(ModelBaseResponse.GenerateError("Credentials error!"));
         return;

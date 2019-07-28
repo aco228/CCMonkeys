@@ -6,13 +6,13 @@ using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Code.Filters;
 using CCMonkeys.Web.Core.Models.Dashboard;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
-{
-
+{ 
+  [AllowCrossSiteAttribute]
   [Route("api/actions")]
   public class ActionsController : DashboardController
   {
@@ -99,7 +99,10 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
       queryManager.Additional("ORDER BY actionid DESC LIMIT " + input.Limit);
 
       List<ActionModelSend> result = new List<ActionModelSend>();
-      foreach (var action in await queryManager.LoadAsync())
+      foreach (var action in 
+        await queryManager.Select(
+          @"actionid, trackingid, affid, pubid, input_redirect, input_email, input_contact, has_subscription, has_chargeback,
+            has_refund, times_charged, times_upsell, has_redirectedToProvider, has_stolen, updated, created").LoadAsync())
         result.Add(action.Pack());
       return result;
     }

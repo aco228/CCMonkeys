@@ -1,7 +1,7 @@
 ﻿using CCMonkeys.Direct;
 using CCMonkeys.Web.Postbacks.Undercover;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -101,7 +101,7 @@ namespace CCMonkeys.Web.Postbacks
       {
         providerid = this.ProviderID,
         trackingid = this.TrackingID,
-        actionid = (this.Action != null ? this.Action.ID : null),
+        actionid = (this.Action != null ? this.Action.GetStringID() : null),
         url = Request.GetEncodedUrl()
       }.InsertAsync<PostbackDM>();
       return this.Postback;

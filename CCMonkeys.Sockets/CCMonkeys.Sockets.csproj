@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Direct.V3\Direct.V3\Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj" />
   </ItemGroup>
 

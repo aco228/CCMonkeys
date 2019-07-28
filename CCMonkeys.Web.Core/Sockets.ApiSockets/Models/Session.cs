@@ -6,7 +6,7 @@ using CCMonkeys.Web.Core.Code.IP2ID;
 using CCMonkeys.Web.Core.Code.IPLocations.IpApi;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,32 +41,19 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       this.PrepareSessionData();
     }
 
-    public async void Init()
+    public void Init()
     {
-      // insert request 
-      this.Request = await this.Request.InsertAsync<SessionRequestDM>();
-
-      // check if we have sessiondata from cookies
-      if (this.SessionData == null && Socket.User.Data.sessiondataid.HasValue)
-        this.SessionData = await Database.Query<SessionDataDM>().LoadAsync(Socket.User.Data.sessiondataid.Value);
-      else if (this.SessionData != null)
-        this.SessionData.Insert();
-
-      if (this.SessionData == null)
-        this.SessionData = await PrepareSessionData_WithoutContext();
-
-      this.Data = await new SessionDM(this.Database)
+      this.Data = new SessionDM(this.Database)
       {
-        userid = Socket.User.ID.Value,
-        actionid = Socket.Action.Data.ID.Value,
-        sessionrequestid = this.Request.ID.Value,
-        sessiondataid = this.SessionData.ID.Value,
-        sessiontype = (int)this.Socket.SessionType,
-        guid = this.Key
-      }
-      .InsertAsync<SessionDM>();
-
-      Socket.User.UpdateSessionData(this.SessionData.ID);
+        userid = Socket.User.Key,
+        actionid = Socket.Action.Data.GetStringID(),
+        is_live = true,
+        sessionrequestid = this.Request.GetStringID(),
+        sessiondataid = this.SessionDataGuid,
+        sessiontype = (int)this.Socket.SessionType
+      };
+      this.Data.InsertLater();
+      
       Socket.User.SetCountry(this.CountryID, this.CountryCode);
     }
 
@@ -80,12 +67,14 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         ip = ip,
         useragent = this.Socket.MainContext.HttpContext.Request.Headers["User-Agent"]
       };
+      this.Request.InsertLater();
     }
 
     private async void PrepareSessionData()
     {
       this.CountryCode = Socket.MainContext.CookiesGet(Constants.CountryCode);
       this.CountryID = Socket.MainContext.CookiesGetInt(Constants.CountryID);
+      this.SessionDataGuid = Socket.MainContext.CookiesGet(Constants.SessionDataID);
 
       if (!string.IsNullOrEmpty(this.SessionDataGuid) || string.IsNullOrEmpty(this.CountryCode) || !this.CountryID.HasValue)
       {
@@ -95,27 +84,16 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
           // TODO: big problem!! very big
           throw new Exception("We could not get session data.. probably due to IP lookup");
         }
+        this.SessionData.InsertLater();
 
+        this.SessionDataGuid = this.SessionData.GetStringID();
         this.CountryCode = this.SessionData.countryCode;
         this.CountryID = await CountryCache.Instance.Get(this.Database, this.CountryCode);
 
+        Socket.MainContext.SetCookie(Constants.SessionDataID, this.SessionDataGuid);
         Socket.MainContext.SetCookie(Constants.CountryCode, this.CountryCode);
         Socket.MainContext.SetCookie(Constants.CountryID, this.CountryID.Value.ToString());
       }
-    }
-
-    private async Task<SessionDataDM> PrepareSessionData_WithoutContext()
-    {
-      this.SessionData = IPAPI.GetSessionData(this.Database, this.Request.ip, this.Request.useragent);
-      if (this.SessionData == null)
-      {
-        // TODO: big problem!! very big
-        throw new Exception("We could not get session data.. probably due to IP lookup");
-      }
-      await this.SessionData.InsertAsync();
-
-      this.Socket.User.UpdateSessionData(this.SessionData.ID);
-      return this.SessionData;
     }
 
     ///
@@ -134,11 +112,18 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         await this.Socket.TryToIdentifyLead(msisdn, email);
     }
 
+    public async void OnCreate()
+    {
+      //this.Data.initiated = true;
+      //this.Data.is_live = true;
+      //await this.Data.UpdateAsync();
+    }
 
     public async void OnClose(DateTime created)
     {
       if (this.Data == null) return;
       this.Data.duration = (DateTime.Now - created).TotalSeconds;
+      this.Data.is_live = false;
       await this.Data.UpdateAsync();
     }
 

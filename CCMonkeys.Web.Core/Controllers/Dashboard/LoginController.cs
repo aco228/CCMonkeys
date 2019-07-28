@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Models.Dashboard;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using CCMonkeys.Web.Core.Code.Filters;
 
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
+  [AllowCrossSiteAttribute]
   [Route("api/login")]
   public class LoginController : MainController
   {

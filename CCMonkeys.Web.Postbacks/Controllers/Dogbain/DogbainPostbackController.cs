@@ -19,7 +19,7 @@ namespace CCMonkeys.Web.Postbacks.Controllers.Dogbain
       if (!string.IsNullOrEmpty(model.username) && !string.IsNullOrEmpty(model.password))
         await new ActionAccountDM(this.Database)
         {
-          actionid = this.Action.ID.Value,
+          actionid = this.Action.GetStringID(),
           username = model.username,
           password = model.password
         }.InsertAsync<ActionAccountDM>();

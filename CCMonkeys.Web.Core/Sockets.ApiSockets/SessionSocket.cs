@@ -1,7 +1,7 @@
 ﻿using CCMonkeys.Direct;
 using CCMonkeys.Web.Core.Code;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
+using Direct;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core.Sockets.Dashboard;
 using CCMonkeys.Web.Core.Logging;
+using CCMonkeys.Web.Core.Code.CacheManagers;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
@@ -34,15 +35,23 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     public SessionSocket(MainContext context, SessionType sessionType)
     {
       this.Database = new CCSubmitDirect();
+      MSLogger mslogger = new MSLogger();
+
       this.Created = DateTime.Now;
       this.MainContext = context;
       this.SessionType = sessionType;
-      var db = this.Database;
 
-      this.Session = new Session(this);
+      mslogger.Track("before session");
+      this.Session = new Session(this); // first we prepare all parts, and get country
+      mslogger.Track("after session, before user");
       this.User = new User(this);
+      mslogger.Track("after user, before action");
       this.Action = new Models.Action(this);
+      mslogger.Track("after action, before session init");
 
+      this.Database.TransactionalManager.RunAsync();
+      mslogger.Track("after tm");
+      int a = 0;
     }
 
 
@@ -75,12 +84,16 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
           return;
         }
 
-        logger.Track("sessions");
+        logger.Track("sessions, after action");
 
-        if (model.url.StartsWith("file:"))
-          model.url = this.SessionType == SessionType.Lander ?
-            "https://reg.alivesports.co/smartphone-giveaway/?offer_id=2339&affiliate_id=183&country=montenegro&lxid=eWzK2z7bF2qQCGvx3OuWatePMSsWYjfPMYbtBQfsk0&utm_source=banana&utm_medium=183&utm_campaign=&utm_content=&utm_term=&ptype=cc2" :
-            "https://lander.giveaways-online.com/l7/?lp=l7&msisdn=000015251255&s=24385385";
+        #if DEBUG
+
+          if (model.url.StartsWith("file:"))
+            model.url = this.SessionType == SessionType.Lander ?
+              "https://reg.alivesports.co/smartphone-giveaway/?offer_id=2339&affiliate_id=183&country=montenegro&lxid=eWzK2z7bF2qQCGvx3OuWatePMSsWYjfPMYbtBQfsk0&utm_source=banana&utm_medium=183&utm_campaign=&utm_content=&utm_term=&ptype=cc2" :
+              "https://lander.giveaways-online.com/l7/?lp=l7&msisdn=000015251255&s=24385385";
+
+        #endif
 
         string domain = model.url.Split('?')[0];
         string query = string.Empty;
@@ -91,30 +104,37 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         if (querySplit.Length > 1)
           queryValues = query.Split('&').Select(q => q.Split('=')).ToDictionary(k => k[0], v => v[1]);
 
-        PrelanderDM prelander = null;
-        LanderDM lander = null;
 
         logger.Track("domains manipulation"); 
 
         if (this.SessionType == SessionType.Prelander)
         {
-          prelander = (await this.Database.Query<PrelanderDM>().Select("prelandertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
+          var prelander = PrelandersCache.Instance.GetByUrl(domain);
           if (prelander == null)
           {
             this.Send(key, new SendingRegistrationModel() { }.Pack(false, "Prelander not found"));
             return;
           }
+
+          this.Action.PreLanderID = prelander.ID;
+          this.Action.PreLanderTypeID = prelander.Type.ID;
+
           await Session.PrelanderRegistrationLogic(domain, queryValues, model);
         }
         else if (this.SessionType == SessionType.Lander)
         {
-          lander = (await this.Database.Query<LanderDM>().Select("landertypeid").Where("url={0}", domain).LoadAsync()).FirstOrDefault();
+          var lander = LandersCache.Instance.GetByUrl(domain);
           if (lander == null)
           {
             this.Send(key, new SendingRegistrationModel() { }.Pack(false, "Lander not found"));
             return;
           }
+
+          this.Action.LanderID = lander.ID;
+          this.Action.LanderTypeID = lander.Type.ID;
         }
+
+
         logger.Track("prelander or lander");
 
         this.Action.PrepareActionBasedOnQueries(queryValues);
@@ -138,28 +158,21 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
         logger.Track("sending model");
 
-        /// POST SENDING
+        /// Inserting action and session
         /// 
 
-        if (this.SessionType == SessionType.Prelander)
-          this.Action.Init(model.providerID, prelander, null);
-        else if (this.SessionType == SessionType.Lander)
-          this.Action.Init(model.providerID, null, lander);
-
-        logger.Track("action.Init");
-
+        this.Action.Init(model.providerID);
         this.Session.Init();
-
-        logger.Track("session Init");
 
         Session.Request.rawurl = model.url;
         Session.Request.UpdateLater();
+        logger.Track("sessionRequest update");
         
         this.Send("reg-post", new SendingRegistrationPost()
         {
-          actionID = this.Action.Data.ID,
-          sessionID = this.Session.Data.ID,
-          userID = this.User.Data.ID,
+          actionID = this.Action.Data.GetStringID(),
+          sessionID = this.Session.Data.GetStringID(),
+          userID = this.User.Key,
           Loggers = logger.Tracks
         }.Pack());
 
@@ -265,6 +278,12 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     /// 
     /// Base implementation of the sockets
     /// 
+
+    public void OnCreate()
+    {
+      this.Created = DateTime.Now;
+      this.Session.OnCreate();
+    }
 
     public void OnClose()
     {

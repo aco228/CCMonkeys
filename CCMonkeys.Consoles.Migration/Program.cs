@@ -1,8 +1,8 @@
 ﻿using CCMonkeys.Direct;
 using CCMonkeys.Web.Core.Code;
 using Direct.ccmonkeys.Models;
-using Direct.Core;
-using Direct.Core.Bulk;
+using Direct;
+using Direct.Bulk;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +25,6 @@ namespace CCMonkeys.Consoles.Migration
 
     static void Main(string[] args)
     {
-      Database.PreventDispose = true;
       CacheFile = "cache_" + Guid.NewGuid().ToString() + ".txt";
 
       Start();
@@ -52,8 +51,7 @@ namespace CCMonkeys.Consoles.Migration
       for (; ; )
       {
         string queries = "";
-        List<ClientDM> clients = (await livesportsDb.LoadContainerAsync(
-          @"SELECT 
+        List<ClientDM> clients = (await livesportsDb.LoadAsync<ClientDM>(@"SELECT 
               clientid,
 	            clickid , affid, payment_provider, pubid, 
                 email, msisdn, firstname, lastname, country, referrer, address,
@@ -62,7 +60,7 @@ namespace CCMonkeys.Consoles.Migration
                 created
             FROM cc_client 
             WHERE clientid>{0} 
-            LIMIT 800;", lastIndex)).ConvertList<ClientDM>();
+            LIMIT 800;", lastIndex)).ToList();
 
         if (clients.Count == 0)
           break;

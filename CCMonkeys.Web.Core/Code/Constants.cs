@@ -15,6 +15,8 @@ namespace CCMonkeys.Web.Core.Code
     public static readonly string CountryCode = "stctdv";
     public static readonly string CountryID = "stctdida";
 
+    public static readonly string ActionID = "actidg";
+
 
     // admin
     public static readonly string AdminCookie = "adstdck";

@@ -13,15 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Sockets", "CCMonk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Web.Postbacks", "CCMonkeys.Web.Postbacks\CCMonkeys.Web.Postbacks.csproj", "{6B45B0EB-EA15-4945-9318-A0708E9FFB5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Direct", "..\Direct.V2\Direct\Direct.csproj", "{935B9AF8-9C9B-4F06-89D2-CB540E970D03}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Direct", "CCMonkeys.Direct\CCMonkeys.Direct.csproj", "{1C040CA7-A4A1-42A2-A3E2-FAC347024AFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCMonkeys.Desktop.WPF", "CCMonkeys.Desktop.WPF\CCMonkeys.Desktop.WPF.csproj", "{04F5C148-9FC0-4444-A9F3-AB2F0D0CC9CF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Consoles.Migration", "CCMonkeys.Consoles.Migration\CCMonkeys.Consoles.Migration.csproj", "{384A5378-01FD-45A9-8E7F-8DCBF4F2C815}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCMonkeys.Consoles.GenerateModels", "CCMonkeys.Consoles.GenerateModels\CCMonkeys.Consoles.GenerateModels.csproj", "{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCMonkeys.Consoles.GenerateModels", "CCMonkeys.Consoles.GenerateModels\CCMonkeys.Consoles.GenerateModels.csproj", "{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Direct", "..\Direct.V3\Direct.V3\Direct.csproj", "{89EF5881-D27A-4AA5-93EA-674CE15EA6FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +49,6 @@ Global
 		{6B45B0EB-EA15-4945-9318-A0708E9FFB5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B45B0EB-EA15-4945-9318-A0708E9FFB5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B45B0EB-EA15-4945-9318-A0708E9FFB5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{935B9AF8-9C9B-4F06-89D2-CB540E970D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{935B9AF8-9C9B-4F06-89D2-CB540E970D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{935B9AF8-9C9B-4F06-89D2-CB540E970D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{935B9AF8-9C9B-4F06-89D2-CB540E970D03}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C040CA7-A4A1-42A2-A3E2-FAC347024AFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C040CA7-A4A1-42A2-A3E2-FAC347024AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C040CA7-A4A1-42A2-A3E2-FAC347024AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +65,10 @@ Global
 		{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF2379EE-90CC-4EE1-8C53-B20E7A637C3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89EF5881-D27A-4AA5-93EA-674CE15EA6FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89EF5881-D27A-4AA5-93EA-674CE15EA6FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89EF5881-D27A-4AA5-93EA-674CE15EA6FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89EF5881-D27A-4AA5-93EA-674CE15EA6FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

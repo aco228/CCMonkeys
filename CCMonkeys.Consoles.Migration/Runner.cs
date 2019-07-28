@@ -1,6 +1,6 @@
 ﻿using CCMonkeys.Web.Core.Code;
 using Direct.ccmonkeys.Models;
-using Direct.Core.Bulk;
+using Direct.Bulk;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -56,17 +56,16 @@ namespace CCMonkeys.Consoles.Migration
           updated = client.created,
           created = client.created
         };
-        leadDM.LongID = CurrentIndex;
+        leadDM.ID = CurrentIndex;
         Program.Bulker.Add(new BulkModel(leadDM, 1));
 
         var userDM = new UserDM(Program.Database)
         {
           leadid = CurrentIndex,
-          guid = Guid.NewGuid().ToString(),
           countryid = client.GetCountry(),
           created = client.created
         };
-        userDM.LongID = CurrentIndex;
+        userDM.ID = CurrentIndex;
         Program.Bulker.Add(new BulkModel(userDM, 2));
 
         EmailCache.Add(email, new LeadUser() { ID = CurrentIndex });
@@ -89,8 +88,7 @@ namespace CCMonkeys.Consoles.Migration
       var actionDM = new ActionDM(Program.Database)
       {
         leadid = leadID,
-        userid = leadID,
-        guid = Guid.NewGuid().ToString(),
+        userid = "", // TODO: get correct userID
         trackingid = client.clickid,
         affid = client.affid,
         pubid = client.pubid,

@@ -36,8 +36,8 @@
               "D:\\github\\CCMonkeys\\CCMonkeys.Web.Core\\CCMonkeys.Web.Core.csproj": {
                 "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Web.Core\\CCMonkeys.Web.Core.csproj"
               },
-              "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
-                "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj"
+              "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj": {
+                "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj"
               }
             }
           }
@@ -91,8 +91,8 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
-                "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj"
+              "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj": {
+                "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj"
               }
             }
           }
@@ -149,6 +149,9 @@
             "projectReferences": {
               "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
                 "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj"
+              },
+              "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj": {
+                "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj"
               }
             }
           }
@@ -213,8 +216,8 @@
               "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj": {
                 "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj"
               },
-              "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
-                "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj"
+              "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj": {
+                "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj"
               }
             }
           }
@@ -259,14 +262,14 @@
         }
       }
     },
-    "D:\\github\\Direct.V2\\Direct\\Direct.csproj": {
+    "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\github\\Direct.V2\\Direct\\Direct.csproj",
+        "projectUniqueName": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj",
         "projectName": "Direct",
-        "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj",
+        "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj",
         "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
-        "outputPath": "D:\\github\\Direct.V2\\Direct\\obj\\",
+        "outputPath": "D:\\github\\Direct.V3\\Direct.V3\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -296,19 +299,23 @@
       "frameworks": {
         "netstandard2.0": {
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[1.60.6, )"
+            },
+            "Dapper.Contrib": {
+              "target": "Package",
+              "version": "[1.60.1, )"
+            },
             "MySql.Data": {
               "target": "Package",
-              "version": "[8.0.16, )"
+              "version": "[8.0.17, )"
             },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
               "version": "[2.0.3, )",
               "autoReferenced": true
-            },
-            "System.Data.SqlClient": {
-              "target": "Package",
-              "version": "[4.6.1, )"
             }
           },
           "imports": [
