@@ -4,7 +4,7 @@ using CCMonkeys.Web.Core.Sockets.ApiSockets;
 using Direct.ccmonkeys.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Direct;
 
 namespace CCMonkeys.Web.Core.Models.Dashboard
 {
@@ -51,10 +51,38 @@ namespace CCMonkeys.Web.Core.Models.Dashboard
   {
     public bool IsOnline { get; set; } = false;
     public ActionDM Data { get; set; }
-    public LanderCacheModel Lander { get; set; }
-    public PreLanderCacheModel Prelander { get; set; }
+    public string Lander { get; set; }
+    public string Prelander { get; set; }
     public ProviderCacheModel Provider { get; set; }
     public CountryCacheModel Country { get; set; }
+    public List<ActionModelPrelanderData> PrelanderData { get; set; }
+
+    public string actionid { get; set; }
+    public string trackingid { get; set; }
+    public string affid { get; set; }
+    public string pubid { get; set; }
+    public bool input_redirect { get; set; }
+    public bool input_email { get; set; }
+    public bool input_contact { get; set; }
+    public bool has_subscription { get; set; }
+    public bool has_chargeback { get; set; }
+    public bool has_refund { get; set; }
+    public int times_charged { get; set; }
+    public int times_upsell { get; set; }
+    public bool has_redirectedToProvider { get; set; }
+    public bool has_stolen { get; set; }
+    public DateTime updated { get; set; }
+    public DateTime created { get; set; }
+
+  }
+
+  public class ActionModelPrelanderData
+  {
+    public bool IsQuestion { get; set; }
+    public bool HasValue { get; set; }
+    public string Name { get; set; }
+    public string Question { get; set; }
+    public string Answer { get; set; }
   }
 
   public static class ActionModelSendHelper
@@ -63,12 +91,31 @@ namespace CCMonkeys.Web.Core.Models.Dashboard
       => new ActionModelSend()
       {
         IsOnline = (isOnline != null ? isOnline.Value : ApiSocketServer.IsActionOnline(action)),
-        Data = action,
-        Lander = action.landerid == null ? null : LandersCache.Instance.Get(action.landerid.Value),
-        Prelander = action.prelanderid == null ? null : PrelandersCache.Instance.Get(action.prelanderid.Value),
+        Lander = action.landerid == null ? null : LandersCache.Instance.Get(action.landerid.Value).Name,
+        Prelander = action.prelanderid == null ? null : PrelandersCache.Instance.Get(action.prelanderid.Value).Name,
         Provider = action.providerid == null ? null : ProvidersCache.Instance.Get(action.providerid.Value),
-        Country = action.countryid == null ? null : CountryCache.Instance.Get(action.countryid.Value)
+        Country = action.countryid == null ? null : CountryCache.Instance.Get(action.countryid.Value),
+        PrelanderData = (!string.IsNullOrEmpty(action.prelander_data) && action.prelanderid.HasValue) ? PrelandersCache.Instance.ConstructTagsForAction(action.prelanderid.Value, action.prelander_data) : null,
+
+        actionid = action.actionid,
+        trackingid = action.trackingid,
+        affid = action.affid,
+        pubid = action.pubid,
+        input_redirect = action.input_redirect,
+        input_email = action.input_email,
+        input_contact = action.input_contact,
+        has_subscription = action.has_subscription,
+        has_chargeback = action.has_chargeback,
+        has_refund = action.has_refund,
+        times_charged = action.times_charged,
+        times_upsell = action.times_upsell,
+        has_redirectedToProvider = action.has_redirectedToProvider,
+        has_stolen = action.has_stolen,
+        updated = action.updated,
+        created = action.created
       };
+
+
   }
 
 }

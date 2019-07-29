@@ -3,7 +3,7 @@ using System;
 
 namespace Direct.ccmonkeys.Models
 {
-public partial class TestDM : DirectModel
+public partial class PrelanderTagActionInteractionDM : DirectModel
 {
 
 }

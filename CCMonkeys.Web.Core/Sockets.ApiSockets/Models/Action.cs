@@ -29,14 +29,14 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     public int? PreLanderID { get; set; } = null;
     public int? PreLanderTypeID { get; set; } = null;
 
-
     public Action(SessionSocket socket)
     {
       this.Socket = socket;
       this.Key = this.Socket.MainContext.CookiesGet(Constants.ActionID);
 
       // if we dont have key stored then we will create blank new one
-      if(string.IsNullOrEmpty(this.Key))
+      // or if we are in prelander, we must create new action
+      if(string.IsNullOrEmpty(this.Key) || this.Socket.SessionType == SessionType.Prelander)
       {
         this.WeHadKey = false;
         this.Data = new ActionDM(this.Database);
@@ -110,6 +110,21 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       logger.Track("after insert later");
       int a = 0;
     }
+
+    ///
+    /// Prelander data
+    ///
+
+    public async void UpdatePrelanderData(string input)
+    {
+      this.Data.prelander_data = input;
+      await this.Data.UpdateAsync();
+      DashboardSocket.OnActionUpdate(this.Data);
+    }
+
+    ///
+    /// 
+    ///
 
     public void OnInsert()
       => DashboardSocket.OnActionInsert(this.Data);

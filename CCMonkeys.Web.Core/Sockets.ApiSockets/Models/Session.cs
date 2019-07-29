@@ -70,7 +70,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       this.Request.InsertLater();
     }
 
-    private async void PrepareSessionData()
+    private void PrepareSessionData()
     {
       this.CountryCode = Socket.MainContext.CookiesGet(Constants.CountryCode);
       this.CountryID = Socket.MainContext.CookiesGetInt(Constants.CountryID);
@@ -78,7 +78,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 
       if (!string.IsNullOrEmpty(this.SessionDataGuid) || string.IsNullOrEmpty(this.CountryCode) || !this.CountryID.HasValue)
       {
-        this.SessionData = await IPAPI.GetSessionDataAsync(this.Database, this.Request.ip, this.Request.useragent);
+        this.SessionData = IPAPI.GetSessionData(this.Database, this.Request.ip, this.Request.useragent);
         if(this.SessionData == null)
         {
           // TODO: big problem!! very big
@@ -88,7 +88,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 
         this.SessionDataGuid = this.SessionData.GetStringID();
         this.CountryCode = this.SessionData.countryCode;
-        this.CountryID = await CountryCache.Instance.Get(this.Database, this.CountryCode);
+        this.CountryID = CountryCache.Instance.Get(this.Database, this.CountryCode).Result;
 
         Socket.MainContext.SetCookie(Constants.SessionDataID, this.SessionDataGuid);
         Socket.MainContext.SetCookie(Constants.CountryCode, this.CountryCode);

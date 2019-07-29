@@ -97,7 +97,7 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
         queryManager.AddWhere("created<={0}", input.To);
 
       
-      queryManager.Additional("ORDER BY actionid DESC LIMIT " + input.Limit);
+      queryManager.Additional("ORDER BY created DESC LIMIT " + input.Limit);
 
       List<ActionModelSend> result = new List<ActionModelSend>();
       foreach (var action in 
@@ -105,6 +105,7 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
           @"actionid, trackingid, affid, pubid, 
            prelandertypeid, prelanderid, landerid, landertypeid, providerid, countryid,
           input_redirect, input_email, input_contact, has_subscription, has_chargeback, has_refund, times_charged, times_upsell, has_redirectedToProvider, has_stolen, 
+          prelander_data,
           updated, created").LoadAsync())
         result.Add(action.Pack());
       return result;

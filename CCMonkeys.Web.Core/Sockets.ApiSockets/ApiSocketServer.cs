@@ -2,7 +2,9 @@
 using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
+using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -28,7 +30,15 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     {
       string sguid = httpContext.Request.Query["sguid"];
       if (string.IsNullOrEmpty(sguid) || !Sessions.ContainsKey(sguid))
-        return string.Empty;
+      {
+        string type = httpContext.Request.Query["type"];
+        if (!string.IsNullOrEmpty(type))
+        {
+          SessionSocket newSocket = new SessionSocket(new MainContext(null, httpContext), type.Equals("lp") ? Models.SessionType.Lander : Models.SessionType.Prelander);
+          Sessions.Add(newSocket.Key, newSocket);
+          sguid = newSocket.Key;
+        }
+      }
 
       Get(sguid).OnCreate();
       return sguid;
@@ -57,23 +67,78 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
       string key = data.Substring(0, data.IndexOf('#'));
       string json = data.Substring(data.IndexOf('#') + 1);
+      SessionType sessionType = Get(uid).SessionType;
 
       switch (key)
       {
+
+        //
+        // shared channels
+        //
+
         case "register":
-          Get(uid).OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+
+          if(sessionType == SessionType.Lander)
+            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
+              .OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+          else if(sessionType == SessionType.Prelander)
+            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
+              .OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+
           break;
 
-        // lander
+        //
+        // lander channels
+        //
+
         case "user-create":
-          Get(uid).OnCreateUser(key, JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
+
+          if (sessionType == SessionType.Lander)
+            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
+              .OnCreateUser(key, JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
+
           break;
         case "user-subscribe":
-          Get(uid).OnSubscribeUser(key, JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
+
+          if (sessionType == SessionType.Lander)
+            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
+              .OnSubscribeUser(key, JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
           break;
         case "user-redirected":
-          Get(uid).OnUserRedirected(key, JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
+
+          if (sessionType == SessionType.Lander)
+            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
+              .OnUserRedirected(key, JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
           break;
+
+        //
+        // prelander channels
+        //
+
+        case "pl-init":
+
+          if (sessionType == SessionType.Prelander)
+            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
+              .OnInit(key, JsonConvert.DeserializeObject<PrelanderInitModel>(json));
+
+          break;
+
+        case "pl-tag":
+
+          if (sessionType == SessionType.Prelander)
+            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
+              .OnTag(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
+
+          break;
+
+        case "pl-q":
+
+          if (sessionType == SessionType.Prelander)
+            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
+              .OnQuestion(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
+
+          break;
+
       }
 
       try

@@ -19,7 +19,10 @@ namespace CCMonkeys.Sockets
     {
       CancellationToken ct = context.RequestAborted;
       var socketId = this.OnCreateId(context);
+
+      context.Response.Cookies.Append("test", "aa");
       WebSocket currentSocket = await context.WebSockets.AcceptWebSocketAsync();
+      
 
       // in case that token is not set propperly
       if (string.IsNullOrEmpty(socketId))

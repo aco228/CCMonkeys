@@ -2,31 +2,50 @@
 using CCMonkeys.Web.Code.ApiSockets.Data;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Code.IP2ID;
+using Direct;
 using Direct.ccmonkeys.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CCMonkeys.Consoles.Test
 {
   class Program
   {
-    
+
+    //static string[] data = new string[]
+    //{
+    //  "a1", "a2", "aco je car"
+    //};
 
     static void Main(string[] args)
     {
-      CCSubmitDirect db = new CCSubmitDirect();
-      DateTime c = DateTime.Now;
 
-      var dc = db.LoadContainer(@"SELECT * FROM ccmonkeys.tm_action AS a
-        LEFT OUTER JOIN ccmonkeys.tm_user AS u ON a.userid=u.userid
-        LEFT OUTER JOIN ccmonkeys.tm_lead AS l ON u.leadid=l.leadid
-        WHERE a.actionid='ACTbc8f897328a74ea6bf17b8c43017df22';");
+      Dictionary<string, bool> test = new Dictionary<string, bool>();
+      test.Add("aasd", false);
+      test.Add("aasd1", false);
+      test.Add("aasd2", false);
+      test.Add("aasd3", false);
+      test.Add("aasd4", false);
+      test.Add("aasd5", false);
+      test.Add("aasd6", false);
+      test.Add("aasd7", false);
+      test.Add("aasd8", false);
+      test.Add("aasd9", false);
+      test.Add("aasd0", false);
+      test.Add("aasd45", false);
+      test.Add("aasd234", false);
+      test.Add("aasdsdf", false);
+      var a = DirectBinary.Serialize(test);
 
-      double ms = (DateTime.Now - c).TotalMilliseconds;
+
       return;
 
     }
+
 
     public static async void Test()
     {

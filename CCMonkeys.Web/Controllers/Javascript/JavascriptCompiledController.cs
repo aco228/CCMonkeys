@@ -16,14 +16,14 @@ using System.Threading.Tasks;
 namespace CCMonkeys.Web.Controllers
 {
   [Route("js")]
-  public class JavascriptController : MainController
+  public class JavascriptCompiledController : MainController
   {
     private static string ClientJS = string.Empty;
     private static string PrelanderJS = string.Empty;
     private static string LanderJS = string.Empty;
     private static string DashboardJS = string.Empty;
 
-    public JavascriptController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
+    public JavascriptCompiledController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
 
     public IActionResult Index(string type, string dbg, string recompile = "0")
     {
@@ -41,7 +41,7 @@ namespace CCMonkeys.Web.Controllers
       string js_extension = string.Empty;
       if (string.IsNullOrEmpty(ClientJS) || recompile.Equals("1"))
       {
-        string path = this.HostingEnvironment.WebRootPath + @"/js/client.js";
+        string path = this.HostingEnvironment.WebRootPath + @"/js/compiled/client.js";
         ClientJS = (new JSMinify.Minify(path)).getModifiedData();
       }
 
@@ -49,7 +49,7 @@ namespace CCMonkeys.Web.Controllers
       {
         if (string.IsNullOrEmpty(PrelanderJS) || recompile.Equals("1"))
         {
-          string path = this.HostingEnvironment.WebRootPath + @"/js/prelander.js";
+          string path = this.HostingEnvironment.WebRootPath + @"/js/shared/prelander.js";
           PrelanderJS = (new JSMinify.Minify(path)).getModifiedData();
         }
         js_extension = PrelanderJS;
@@ -58,7 +58,7 @@ namespace CCMonkeys.Web.Controllers
       {
         if (string.IsNullOrEmpty(LanderJS) || recompile.Equals("1"))
         {
-          string path = this.HostingEnvironment.WebRootPath + @"/js/lander.js";
+          string path = this.HostingEnvironment.WebRootPath + @"/js/shared/lander.js";
           LanderJS = (new JSMinify.Minify(path)).getModifiedData();
         }
         js_extension = LanderJS;
@@ -102,7 +102,7 @@ namespace CCMonkeys.Web.Controllers
       if (string.IsNullOrEmpty(DashboardJS) || recompile.Equals("1"))
       {
 
-        string path = this.HostingEnvironment.WebRootPath + @"/js/dashboard.js";
+        string path = this.HostingEnvironment.WebRootPath + @"/js/compiled/dashboard.js";
         var baseUrl = $"{(this.Request.Scheme.Equals("https") ? "wss" : "ws")}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
         DashboardJS = (new JSMinify.Minify(path)).getModifiedData()
           .Replace("[HOST]", baseUrl)

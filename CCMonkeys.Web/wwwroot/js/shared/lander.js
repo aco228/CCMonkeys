@@ -1,4 +1,5 @@
-﻿CC.lander = {
+﻿CC.type = 'lp';
+CC.lander = {
 
   createUserModel: { email: '' },
   createUser: function(callback){ CC.api.send('user-create', this.createUserModel, callback); },
@@ -17,4 +18,4 @@
 
   userRedirectedModel: { url: '' },
   userRedirected: function(callback){ CC.api.send('user-redirected', this.userRedirectedModel, callback); }
-}
+};

@@ -33,6 +33,9 @@ public int? prelandertypeid { get; set; } = default;
 [DColumn(Name = "prelanderid", Nullable = true)]
 public int? prelanderid { get; set; } = default;
 
+[DColumn(Name = "prelander_data", Nullable = true)]
+public string prelander_data { get; set; } = default;
+
 [DColumn(Name = "landerid", Nullable = true)]
 public int? landerid { get; set; } = default;
 
