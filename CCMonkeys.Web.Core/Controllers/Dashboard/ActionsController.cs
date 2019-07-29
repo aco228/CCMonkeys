@@ -9,16 +9,17 @@ using Direct.ccmonkeys.Models;
 using Direct;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 { 
-  [AllowCrossSiteAttribute]
   [Route("api/actions")]
   public class ActionsController : DashboardController
   {
     public ActionsController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
 
     [HttpGet]
+    [EnableCors("get")]
     public async Task<List<ActionModelSend>> GetActions([FromQuery]ActionModelReceive input)
     {
       var queryManager = this.Database.Query<ActionDM>();
@@ -101,8 +102,10 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
       List<ActionModelSend> result = new List<ActionModelSend>();
       foreach (var action in 
         await queryManager.Select(
-          @"actionid, trackingid, affid, pubid, input_redirect, input_email, input_contact, has_subscription, has_chargeback,
-            has_refund, times_charged, times_upsell, has_redirectedToProvider, has_stolen, updated, created").LoadAsync())
+          @"actionid, trackingid, affid, pubid, 
+           prelandertypeid, prelanderid, landerid, landertypeid, providerid, countryid,
+          input_redirect, input_email, input_contact, has_subscription, has_chargeback, has_refund, times_charged, times_upsell, has_redirectedToProvider, has_stolen, 
+          updated, created").LoadAsync())
         result.Add(action.Pack());
       return result;
     }

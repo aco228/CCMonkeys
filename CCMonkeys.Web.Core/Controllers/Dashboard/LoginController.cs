@@ -9,17 +9,16 @@ using Direct.ccmonkeys.Models;
 using Direct;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using CCMonkeys.Web.Core.Code.Filters;
+using Microsoft.AspNetCore.Cors;
 
 namespace CCMonkeys.Web.Core.Controllers.Dashboard
 {
-  [AllowCrossSiteAttribute]
   [Route("api/login")]
-  [AllowCrossSiteAttribute]
   public class LoginController : MainController
   {
     public LoginController(IHostingEnvironment hostingEnvironment) : base(hostingEnvironment) { }
 
+    [EnableCors("get")]
     public ModelBaseResponse Index()
     {
       int? adminID = this.Context.TryGetAdminID();
@@ -29,6 +28,7 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
         return new ModelBaseResponse() { Status = false };
     }
 
+    [EnableCors("get")]
     [HttpGet("{username}/{password}")]
     public async Task<ModelBaseResponse> Index(string username, string password)
     {
@@ -38,6 +38,7 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
 
       if(!admin.password.Equals(password))
         return ModelBaseResponse.GenerateError($"Wrong password");
+
 
       return new LoginModelResponse() { AccessToken = Crypter.Encrypt(this.Context.StoreAdminCookie(admin.ID.Value, admin.username)) };
     }

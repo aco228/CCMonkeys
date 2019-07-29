@@ -275,15 +275,9 @@
       "restore": {
         "projectUniqueName": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj",
         "projectName": "Direct",
-<<<<<<< HEAD
         "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj",
-        "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
-        "outputPath": "D:\\github\\Direct.V3\\Direct.V3\\obj\\",
-=======
-        "projectPath": "D:\\github\\Direct.V2\\Direct\\Direct.csproj",
         "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
-        "outputPath": "D:\\github\\Direct.V2\\Direct\\obj\\",
->>>>>>> ab34c85e7c7ab984e2cc7cad8cf1323d3c5749cf
+        "outputPath": "D:\\github\\Direct.V3\\Direct.V3\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",

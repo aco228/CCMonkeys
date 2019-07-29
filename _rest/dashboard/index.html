@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>dashboard demo</title>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 
@@ -24,6 +25,32 @@
     }
     function onActionUpdate(e){
       console.warn('on action update', e);
+    }
+
+
+    var tk = '';
+    function login(){
+      $.ajax({
+        url:'https://localhost:5001/api/login/ako/akopass0', 
+        method:'GET',
+        success:function(r){
+          tk = r.accessToken;
+          console.log(r);
+        }
+      })
+    }
+
+    function action(){
+      $.ajax({
+        url:'https://localhost:5001/api/actions?Limit=200', 
+        method:'GET',
+        headers: {
+          'authentication':tk
+        },
+        success:function(r){
+          console.log(r);
+        }
+      })
     }
     
   </script>

@@ -27,6 +27,15 @@ namespace CCMonkeys.Web.Code.Sockets
       {
         if (!context.WebSockets.IsWebSocketRequest)
         {
+
+          //if (context.Request.Path.StartsWithSegments("/api"))
+          //{
+          //  context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+          //  context.Response.Headers.Add("Access-Control-Allow-Credentials", "true");
+          //  context.Response.Headers.Add("Access-Control-Allow-Headers", "*");
+          //  context.Response.Headers.Add("Access-Control-Allow-Methods", "POST,GET,PUT,PATCH,DELETE,OPTIONS");
+          //}
+
           await _next.Invoke(context);
           return;
         }

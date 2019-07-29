@@ -34,6 +34,16 @@ namespace CCMonkeys.Web
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddCors(options =>
+      {
+        options.AddPolicy("get",
+            builder => builder
+            .SetIsOriginAllowed( (host) => { Console.WriteLine("HOST: " + host); return true; })
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+      });
+
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
       services.AddApplicationInsightsTelemetry(Configuration);
       services.Configure<CookiePolicyOptions>(options =>
@@ -58,7 +68,7 @@ namespace CCMonkeys.Web
 
       app.UseWebSockets();
       app.UseMiddleware<WebSocketsMiddleware>();
-
+      //app.UseCors("get");
       app.UseHttpsRedirection();
       app.UseMvc(routes =>
       {
