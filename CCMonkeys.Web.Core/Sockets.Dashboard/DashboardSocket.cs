@@ -12,11 +12,24 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
   public enum DashboardEvents
   {
     DEFAULT,
+    INIT,
+
+    ACTION_CONNECT,
+    ACTION_DISCONNECT,
+
     ADMIN_CONNECTED,
     ADMIN_DISCONNECTED,
 
     ACTION_INSERT,
-    ACTION_UPDATE
+    ACTION_UPDATE,
+
+    POSTBACK_TRANSACTION,
+    POSTBACK_REFUND,
+    POSTABACK_CHARGEBACK,
+    POSTBACK_UPSELL,
+
+    FATAL
+
   }
 
   public static class DashboardSocket
@@ -30,6 +43,16 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
         result += (!string.IsNullOrEmpty(result) ? "," : "") + string.Format("{0}:{1}", names[i], (int)values[i]);
       return result;
     }
+
+
+    ///
+    /// ACTION CONNECT / DISCONNECT
+    ///
+
+    public static void ActionConnected(string actionid)
+      => DashboardSocketsServer.SendToAll(new ActionConnectedDisconnectedModel() { IsConnected = true, ID = actionid }.Pack(DashboardEvents.ACTION_CONNECT));
+    public static void ActionDisconnected(string actionid)
+      => DashboardSocketsServer.SendToAll(new ActionConnectedDisconnectedModel() { IsConnected = false, ID = actionid }.Pack(DashboardEvents.ACTION_DISCONNECT));
 
     ///
     /// ADMIN CONNECTIONS
@@ -48,12 +71,29 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
     ///
 
     public static void OnActionInsert(ActionDM action)
-      => DashboardSocketsServer.SendToAll(action.Pack(isOnline: true).Pack(DashboardEvents.ACTION_INSERT));
+      => DashboardSocketsServer.SendToAll(new ActionUpdateModel() { Data = action }.Pack(DashboardEvents.ACTION_INSERT));
     public static void OnActionUpdate(ActionDM action)
-      => DashboardSocketsServer.SendToAll(action.Pack(isOnline: true).Pack(DashboardEvents.ACTION_UPDATE));
+      => DashboardSocketsServer.SendToAll(new ActionUpdateModel() { Data = action }.Pack(DashboardEvents.ACTION_UPDATE));
     public static void OnActionOffline(ActionDM action)
-      => DashboardSocketsServer.SendToAll(action.Pack(isOnline: false).Pack(DashboardEvents.ACTION_UPDATE));
+      => DashboardSocketsServer.SendToAll(new ActionUpdateModel() { Data = action }.Pack(DashboardEvents.ACTION_UPDATE));
 
+    ///
+    /// POSTBACKS
+    ///
 
+    public static void OnNewTransaction(string provider, string actionID)
+      => DashboardSocketsServer.SendToAll(new PostbackTransaction() { ProviderName = provider, ActionID = actionID }.Pack(DashboardEvents.POSTBACK_TRANSACTION));
+    public static void OnNewChargeback(string provider, string actionID)
+      => DashboardSocketsServer.SendToAll(new PostbackTransaction() { ProviderName = provider, ActionID = actionID }.Pack(DashboardEvents.POSTABACK_CHARGEBACK));
+    public static void OnNewRefund(string provider, string actionID)
+      => DashboardSocketsServer.SendToAll(new PostbackTransaction() { ProviderName = provider, ActionID = actionID }.Pack(DashboardEvents.POSTBACK_REFUND));
+    public static void OnNewUpsell(string provider, string actionID)
+      => DashboardSocketsServer.SendToAll(new PostbackTransaction() { ProviderName = provider, ActionID = actionID }.Pack(DashboardEvents.POSTBACK_UPSELL));
+
+    ///
+    /// POSTBACKS
+    ///
+    public static void OnFatal(string sessionID, string exception)
+      => DashboardSocketsServer.SendToAll(new ExceptionModel() { SessionID = sessionID, Exception= exception}.Pack(DashboardEvents.FATAL));
   }
 }

@@ -106,22 +106,12 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
         var tagObj = GetTag(prelanderID, values[0]);
         if (tagObj == null)
           continue;
-
-        string answer = string.Empty;
-        if (tagObj.isQuestion)
-        {
-          var answerObj = GetAnswer(prelanderID, tagObj.name, "ccqa" + values[1]);
-          if (answerObj != null)
-            answer = answerObj.value;
-        }
-
+        
         result.Add(new ActionModelPrelanderData()
         {
-          IsQuestion = tagObj.isQuestion,
-          HasValue = !values[1].Equals("0"),
-          Name = tagObj.name,
-          Question = tagObj.value,
-          Answer = answer
+          q = tagObj.isQuestion,
+          hv = !values[1].Equals("0"),
+          n = tagObj.name
         });
       }
       return result;

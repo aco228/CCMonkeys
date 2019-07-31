@@ -5,6 +5,7 @@ using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -49,11 +50,13 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     protected override Task OnClientConnect(string uid)
     {
+      DashboardSocket.ActionConnected(Get(uid).Action.Key);
       return base.OnClientConnect(uid);
     }
 
     protected override Task OnClientDisconect(string uid)
     {
+      DashboardSocket.ActionDisconnected(Get(uid).Action.Key);
       Get(uid)?.OnClose();
       Sessions.Remove(uid);
       return Task.FromResult(1);
@@ -158,6 +161,17 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     ///
     /// STATICS
     ///
+
+    public static List<string> ActiveActions
+    {
+      get
+      {
+        List<string> result = new List<string>();
+        foreach (var s in Sessions)
+          result.Add(s.Value.Action.Key);
+        return result;
+      }
+    }
 
     public static void AddSession(SessionSocket socket)
     {

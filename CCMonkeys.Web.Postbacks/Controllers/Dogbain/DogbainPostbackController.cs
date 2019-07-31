@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,10 @@ namespace CCMonkeys.Web.Postbacks.Controllers.Dogbain
         }.InsertAsync<ActionAccountDM>();
 
       if (model.zone.ToLower().Contains("upsell"))
+      {
+        DashboardSocket.OnNewChargeback("dogbain", this.Action.actionid);
         this.Action.times_upsell++;
+      }
 
       return this.Action;
     }

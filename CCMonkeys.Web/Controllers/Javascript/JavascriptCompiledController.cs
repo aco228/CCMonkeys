@@ -103,10 +103,12 @@ namespace CCMonkeys.Web.Controllers
       {
 
         string path = this.HostingEnvironment.WebRootPath + @"/js/compiled/dashboard.js";
+        string direct = this.HostingEnvironment.WebRootPath + @"/js/compiled/direct.js";
         var baseUrl = $"{(this.Request.Scheme.Equals("https") ? "wss" : "ws")}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
         DashboardJS = (new JSMinify.Minify(path)).getModifiedData()
           .Replace("[HOST]", baseUrl)
-          .Replace("[EVENTS]", DashboardSocket.PrintEvents());
+          .Replace("[EVENTS]", DashboardSocket.PrintEvents())
+          + (new JSMinify.Minify(direct)).getModifiedData();
       }
 
       DashboardSessionSocket socket = new DashboardSessionSocket(this.Context);

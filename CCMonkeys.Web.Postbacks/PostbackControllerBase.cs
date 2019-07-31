@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using CCMonkeys.Web.Core.Logging;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
+using CCMonkeys.Web.Core.Code.CacheManagers;
 
 namespace CCMonkeys.Web.Postbacks
 {
@@ -23,6 +26,7 @@ namespace CCMonkeys.Web.Postbacks
     protected bool RequireAction { get; set; } = false;
     protected ActionDM Action { get; set; } = null;
     protected string TrackingID { get; set; } = string.Empty;
+    protected LoggingBase Logger { get; set; } = new LoggingBase();
     protected CCSubmitDirect Database
     {
       get
@@ -46,43 +50,62 @@ namespace CCMonkeys.Web.Postbacks
 
     public async Task<IActionResult> Index([FromQuery] T model)
     {
-      model.Prepare(this.Request);
-      this.TrackingID = model.TrackingID;
-      this.Action = await this.Database.Query<ActionDM>().Where("trackingid={0}", this.TrackingID).LoadSingleAsync();
-
-      await this.PreparePostbackObject();
-
-      if(string.IsNullOrEmpty(this.TrackingID))
+      try
       {
-        this.Postback.Log("Could not get trackingGuid.. Flow is interupted");
-        return this.StatusCode(400);
-      }
+        model.Prepare(this.Request);
+        this.TrackingID = model.TrackingID;
+        this.Action = await this.Database.Query<ActionDM>().Where("trackingid={0}", this.TrackingID).LoadSingleAsync();
 
-      if(this.Action == null && this.RequireAction)
+        await this.PreparePostbackObject();
+
+        if (string.IsNullOrEmpty(this.TrackingID))
+        {
+          this.Postback.Log("Could not get trackingGuid.. Flow is interupted");
+          return this.StatusCode(400);
+        }
+
+        if (this.Action == null && this.RequireAction)
+        {
+          this.Postback.Log("Could not load Action for trackingId: " + this.TrackingID);
+          return this.StatusCode(400);
+        }
+
+        this.Action = await this.Call(model);
+        if (this.Action == null) // abstraction class had some error. we assume that that class will make some log
+          return this.StatusCode(400);
+
+        string providerName = (this.Action.providerid.HasValue ? ProvidersCache.Instance.Get(this.Action.providerid.Value).Name : "provider null?");
+        if (model.Type == ActionModelEvent.Charge || model.Type == ActionModelEvent.Subscribe)
+        {
+          DashboardSocket.OnNewTransaction(providerName, this.Action.actionid);
+          this.Action.times_charged++;
+          this.SystemPostback();
+        }
+
+        if (model.Type == ActionModelEvent.Refund)
+        {
+          DashboardSocket.OnNewRefund(providerName, this.Action.actionid);
+          this.Action.has_refund = true;
+        }
+
+        if (model.Type == ActionModelEvent.Chargeback)
+        {
+          DashboardSocket.OnNewChargeback(providerName, this.Action.actionid);
+          this.Action.has_chargeback = true;
+        }
+
+        this.Action.UpdateLater();
+        await this.Database.TransactionalManager.RunAsync();
+        return StatusCode(200);
+      }
+      catch (Exception e)
       {
-        this.Postback.Log("Could not load Action for trackingId: " + this.TrackingID);
-        return this.StatusCode(400);
+        this.Logger.StartLoggin(model.TrackingID)
+          .Add("query", HttpContext.Request.Query.ToString())
+          .Add(model)
+          .OnException(e);
+        return StatusCode(200);
       }
-
-      this.Action = await this.Call(model);
-      if(this.Action == null) // abstraction class had some error. we assume that that class will make some log
-        return this.StatusCode(400);
-
-      if (model.Type == ActionModelEvent.Charge || model.Type == ActionModelEvent.Subscribe)
-      {
-        this.Action.times_charged++;
-        this.SystemPostback();
-      }
-
-      if(model.Type == ActionModelEvent.Refund)
-        this.Action.has_refund = true;
-
-      if (model.Type == ActionModelEvent.Chargeback)
-        this.Action.has_chargeback = true;
-
-      this.Action.UpdateLater();
-      await this.Database.TransactionalManager.RunAsync();
-      return StatusCode(200);
     }
 
     /// 

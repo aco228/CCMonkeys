@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Sockets;
+using CCMonkeys.Sockets.Direct;
 using CCMonkeys.Web.Core.Code;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -49,6 +50,14 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
         case "register":
           Get(uid).OnRegister();
           return;
+
+        /*
+          DIRECT 
+        */
+        case "direct":
+          DirectSocketManager.OnRequestLoad(this, key, uid, json);
+          return;
+
       }
     }
 

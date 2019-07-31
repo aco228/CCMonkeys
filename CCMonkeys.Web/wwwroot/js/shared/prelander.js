@@ -14,8 +14,7 @@ document.addEventListener('DOMContentLoaded', function(){
     return;
   }
   CC.type = 'pl';
-  CC.host = 'localhost:5001';
-  CC.dbg=true;
+  CC.dbg=false;
   CC.steps = 0;
   CC.tags = [];
 
@@ -60,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function(){
       qs.forEach((q) =>{
         CC.steps++;
         let qTxt = q.getElementsByClassName('ccqt')[0].textContent;
-        var tag = new Tag(true, 'q' + index, qTxt, []);
-        var aIndex = 0;
+        var tag = new Tag(true, 'q' + index, qTxt, []); // tag
+        var aIndex = 0; // answerIndex
 
         q.getElementsByClassName('ccqa').forEach((a) => {
           
@@ -72,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function(){
             CC.api.send('pl-q', 
             { 
               tag: 'q'+a.getAttribute('ccq'), 
-              answer:'ccqa'+a.getAttribute('ccqa')  
+              answer:'ccqa'+a.getAttribute('ccqa'),
+              index: a.getAttribute('ccqa')
             });
             
           }, false);

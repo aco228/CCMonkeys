@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CCMonkeys.Sockets.Direct;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
@@ -107,6 +109,17 @@ namespace CCMonkeys.Sockets
     }
 
     // Original
+    internal void SendAsync(string uid, object data)
+    {
+      try
+      {
+        SendStringAsync(_sockets[uid], JsonConvert.SerializeObject(data));
+      }
+      catch (Exception e)
+      {
+        throw e;
+      }
+    }
     protected static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))
     {
       if (socket == null || socket.State != WebSocketState.Open)

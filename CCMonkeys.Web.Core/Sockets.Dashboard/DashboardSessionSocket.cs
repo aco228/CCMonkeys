@@ -1,4 +1,7 @@
 ﻿using CCMonkeys.Sockets;
+using CCMonkeys.Web.Core.Code.CacheManagers;
+using CCMonkeys.Web.Core.Sockets.ApiSockets;
+using CCMonkeys.Web.Core.Sockets.Dashboard.Data;
 using Direct.ccmonkeys.Models;
 using System;
 using System.Collections.Generic;
@@ -34,6 +37,20 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
         adminid = this.Admin.ID.Value,
         guid = this.Key
       }.InsertAsync<AdminSessionDM>();
+
+      // init
+      DashboardSocketsServer.Send(this, new InitDashboardModel()
+      {
+        Actions = ApiSocketServer.ActiveActions,
+        Countries = CountryCache.Instance.GetModel(),
+        Landers = LandersCache.Instance.GetLandersModel(),
+        LanderTypes = LandersCache.Instance.GetLanderTypesModel(),
+        Prelanders = PrelandersCache.Instance.GetPrelandersModel(),
+        PrelanderTypes = PrelandersCache.Instance.GetPrelanderTypesModel(),
+        Providers = ProvidersCache.Instance.GetAll()
+      }
+      .Pack(DashboardEvents.INIT));
+
     }
 
     public void OnClose()

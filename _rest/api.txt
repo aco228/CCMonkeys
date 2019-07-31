@@ -29,6 +29,42 @@
 
 
 ----------------------------------------------------------------------------------------------------------
+-------------------[ TESTS
+
+  /tests/OnNewTransaction
+  /tests/OnNewChargeback
+  /tests/OnNewRefund
+  /tests/OnNewUpsell
+
+
+----------------------------------------------------------------------------------------------------------
+-------------------[ SOCKET Helpers
+  
+  socket.isActionLive(actionID); 
+  // da li je actionID trenutno live
+
+  socket.getCountry(countryid);
+  // contryID u formatu {ID: 1, Code: "af", Name: "afghanistan"}
+
+  socket.getProvider(id)
+  // {ID: 1, Name: "dogbain1"}
+
+  socket.getLander(id)
+  // {ID: 2, Type: {…}, Name: "asda-500-giveaway", Url: "https://reg.alivesports.co/asda-500-giveaway/"}
+
+  socket.getPrelander(id);
+  // {ID: 1, Type: {…}, Tags: Array(8), Answers: Array(21), Name: "l7", …}
+
+  //
+  // Prelander data
+  // primjer action.prelander_data = .ok=0.s10=0.q0=0.q1=0.q2=0.q3=0.q4=0.q5=0.q6=0.
+  //
+
+  socket.getPrelanderTags(prelanderid, prelanderData);
+
+
+
+----------------------------------------------------------------------------------------------------------
 -------------------[ Actions
 
 

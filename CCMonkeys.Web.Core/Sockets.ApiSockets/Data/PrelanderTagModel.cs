@@ -8,5 +8,6 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
   {
     public string tag;
     public string answer;
+    public int index;
   }
 }

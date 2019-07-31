@@ -52,6 +52,24 @@
         }
       })
     }
+
+    function testDirect(){
+      var q = new Query();
+      q.select('actionid, trackingid, created').from('tm_action').limit(1000);
+      window.Direct.load(q, function(data){
+        console.log(data);
+      });
+    }
+
+    function testQueryDirect(val){
+      if(typeof val === 'undefined')
+        val = 'SELECT msisdn, email FROM [].tm_lead WHERE email IS NOT NULL';
+      var q = new Query();
+      q.sql(val);
+      window.Direct.load(q, function(data){
+        console.log(data);
+      });
+    }
     
   </script>
 

@@ -25,8 +25,6 @@ CC.api = {
     var self = this;
     self.created = new Date();
     var registered = false;
-    if(CC.host.indexOf('wss://') == -1)
-      CC.host = 'wss://' + CC.host;
     this.socket = new WebSocket(CC.host + '/ws_api?type=' + CC.type);
     
     this.socket.onopen = e => {

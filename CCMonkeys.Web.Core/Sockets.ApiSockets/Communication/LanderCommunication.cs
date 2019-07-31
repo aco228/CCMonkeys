@@ -80,6 +80,12 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
+        this.Socket.Logging.StartLoggin()
+          .Where("lp-registration")
+          .Add("url", model.url)
+          .Add("providerID?", model.providerID.HasValue ? model.providerID.Value.ToString() : "null")
+          .OnException(e);
+
         this.Socket.Send(new FatalModel() { Action = "OnRegistration", Exception = e.ToString() }.Pack(false, "error500"));
       }
     }
@@ -116,6 +122,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
+        this.Socket.Logging.StartLoggin()
+          .Where("lp-createUser")
+          .Add(model)
+          .OnException(e);
         this.Socket.Send(new FatalModel() { Action = "OnCreateUser", Exception = e.ToString() }.Pack(false, "error500"));
       }
     }
@@ -155,6 +165,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
+        this.Socket.Logging.StartLoggin()
+          .Where("lp-subscribe")
+          .Add(model)
+          .OnException(e);
         this.Socket.Send(new FatalModel() { Action = "OnSubscribeUser", Exception = e.ToString() }.Pack(false, "error500"));
       }
     }
@@ -171,6 +185,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
+        this.Socket.Logging.StartLoggin()
+          .Where("lp-redirect")
+          .Add(model)
+          .OnException(e);
         this.Socket.Send(new FatalModel() { Action = "OnUserRedirected", Exception = e.ToString() }.Pack(false, "error500"));
       }
     }

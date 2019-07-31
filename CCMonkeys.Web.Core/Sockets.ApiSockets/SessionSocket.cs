@@ -29,6 +29,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     public MainContext MainContext = null;
     public WebSocket WebSocket { get; set; } = null;
     public CCSubmitDirect Database { get; protected set; } = null;
+    public ApiSocketsLogging Logging { get; protected set; } = null;
     public Dictionary<SessionSocketChannel, CommunicationBase> Channels = new Dictionary<SessionSocketChannel, CommunicationBase>();
 
     public LeadDM Lead { get; set; } = null; // * we will try to load it on Init methods of User and Action
@@ -44,6 +45,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     public SessionSocket(MainContext context, SessionType sessionType)
     {
       this.Database = new CCSubmitDirect();
+      this.Logging = new ApiSocketsLogging(this);
       MSLogger mslogger = new MSLogger();
 
       this.Created = DateTime.Now;

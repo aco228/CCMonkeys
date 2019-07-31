@@ -101,112 +101,149 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
+        this.Socket.Logging.StartLoggin()
+          .Where("pl-registration")
+          .Add(model)
+          .OnException(e);
+
         this.Socket.Send(new FatalModel() { Action = "OnRegistration", Exception = e.ToString() }.Pack(false, "error500"));
       }
     }
 
     public async void OnInit(string key, PrelanderInitModel model)
     {
-      if(this.Prelander.Answers == null || this.Prelander.Tags == null || this.Prelander.Tags.Count == 0 || this.Prelander.Answers.Count == 0)
+      try
       {
-        foreach(var tag in model.tags)
+        if (this.Prelander.Answers == null || this.Prelander.Tags == null || this.Prelander.Tags.Count == 0 || this.Prelander.Answers.Count == 0)
         {
-          var newTag = new PrelanderTagDM(this.Socket.Database)
+          foreach (var tag in model.tags)
           {
-            prelandertagid = string.Format("{0}.{1}.{2}", this.Prelander.ID, (tag.isQuestion ? "a" : "t"), tag.name),
-            name = tag.name,
-            value = tag.value,
-            prelanderid = this.Prelander.ID,
-            isQuestion = tag.isQuestion
-          };
-          newTag.InsertLater();
-          this.Prelander.Tags.Add(newTag);
-
-          if(tag.answers != null)
-            for (int i = 0; i < tag.answers.Length; i++)
+            var newTag = new PrelanderTagDM(this.Socket.Database)
             {
-              var newAnswer = new PrelanderTagAnswerDM(this.Socket.Database)
+              prelandertagid = string.Format("{0}.{1}.{2}", this.Prelander.ID, (tag.isQuestion ? "a" : "t"), tag.name),
+              name = tag.name,
+              value = tag.value,
+              prelanderid = this.Prelander.ID,
+              isQuestion = tag.isQuestion
+            };
+            newTag.InsertLater();
+            this.Prelander.Tags.Add(newTag);
+
+            if (tag.answers != null)
+              for (int i = 0; i < tag.answers.Length; i++)
               {
-                answerid = string.Format("{0}-{1}", newTag.GetStringID(), i),
-                prelandertagid = newTag.GetStringID(),
-                prelanderid = this.Prelander.ID,
-                tagName = tag.name,
-                name = string.Format("ccqa" + i),
-                value = tag.answers[i]
-              };
-              newAnswer.InsertLater();
-              this.Prelander.Answers.Add(newAnswer);
-            }
+                var newAnswer = new PrelanderTagAnswerDM(this.Socket.Database)
+                {
+                  answerid = string.Format("{0}-{1}", newTag.GetStringID(), i),
+                  prelandertagid = newTag.GetStringID(),
+                  prelanderid = this.Prelander.ID,
+                  tagName = tag.name,
+                  name = string.Format("ccqa" + i),
+                  value = tag.answers[i]
+                };
+                newAnswer.InsertLater();
+                this.Prelander.Answers.Add(newAnswer);
+              }
 
+          }
         }
+
+        foreach (var tag in model.tags)
+          this.TagManager.Add(tag.name, 0);
+
+        this.Socket.Action.UpdatePrelanderData(this.ActionPrelanderCache);
+        this.Socket.Send(key);
+        this.Socket.Database.TransactionalManager.RunAsync();
       }
-
-      foreach (var tag in model.tags)
-        this.TagManager.Add(tag.name, 0);
-
-      this.Socket.Action.UpdatePrelanderData(this.ActionPrelanderCache);
-      this.Socket.Send(key);
-      this.Socket.Database.TransactionalManager.RunAsync();
+      catch(Exception e)
+      {
+        this.Socket.Logging.StartLoggin()
+          .Add("where", "pl-init")
+          .Add("tagCount", model.tags.Count.ToString())
+          .OnException(e);
+      }
     }
     public async void OnTag(string key, PrelanderTagModel model)
     {
-      var tag = PrelandersCache.Instance.GetTag(this.Prelander.ID, model.tag);
-      if (tag == null)
+      try
       {
+        var tag = PrelandersCache.Instance.GetTag(this.Prelander.ID, model.tag);
+        if (tag == null)
+        {
+          this.Socket.Send(key);
+          return;
+        }
+
+        if (this.TagManager.ContainsKey(model.tag))
+        {
+          this.TagManager[model.tag] = 1;
+          this.Socket.Action.UpdatePrelanderData(this.ActionPrelanderCache);
+        }
+
+        var interaction = new PrelanderTagActionInteractionDM(this.Socket.Database)
+        {
+          prelanderid = this.Prelander.ID,
+          actionid = this.Socket.Action.Key,
+          prelandertagid = tag.GetStringID()
+        };
+        interaction.InsertLater();
+
         this.Socket.Send(key);
-        return;
+        this.Socket.Database.TransactionalManager.RunAsync();
       }
-
-      if(this.TagManager.ContainsKey(model.tag))
+      catch(Exception e)
       {
-        this.TagManager[model.tag] = 1;
-        this.Socket.Action.UpdatePrelanderData(this.ActionPrelanderCache);
+        this.Socket.Logging.StartLoggin()
+          .Add("where", "pl-tag")
+          .Add("model.answer", model.answer)
+          .Add("model.tag", model.tag)
+          .OnException(e);
       }
-
-      var interaction = new PrelanderTagActionInteractionDM(this.Socket.Database)
-      {
-        prelanderid = this.Prelander.ID,
-        actionid = this.Socket.Action.Key,
-        prelandertagid = tag.GetStringID()
-      };
-      interaction.InsertLater();
-
-      this.Socket.Send(key);
-      this.Socket.Database.TransactionalManager.RunAsync();
     }
     public async void OnQuestion(string key, PrelanderTagModel model)
     {
-      var tag = PrelandersCache.Instance.GetTag(this.Prelander.ID, model.tag);
-      if (tag == null)
+      try
       {
+        var tag = PrelandersCache.Instance.GetTag(this.Prelander.ID, model.tag);
+        if (tag == null)
+        {
+          this.Socket.Send(key);
+          return;
+        }
+
+        var answer = PrelandersCache.Instance.GetAnswer(this.Prelander.ID, model.tag, model.answer);
+        if (answer == null)
+        {
+          this.Socket.Send(key);
+          return;
+        }
+
+        if (this.TagManager.ContainsKey(model.tag))
+        {
+          this.TagManager[model.tag] = model.index;
+          this.Socket.Action.UpdatePrelanderData(this.ActionPrelanderCache);
+        }
+
+        var interaction = new PrelanderTagActionInteractionDM(this.Socket.Database)
+        {
+          prelanderid = this.Prelander.ID,
+          actionid = this.Socket.Action.Key,
+          prelandertagid = tag.GetStringID(),
+          answerid = answer.GetStringID()
+        };
+        interaction.InsertLater();
+
         this.Socket.Send(key);
-        return;
+        this.Socket.Database.TransactionalManager.RunAsync();
       }
-
-      var answer = PrelandersCache.Instance.GetAnswer(this.Prelander.ID, model.tag, model.answer);
-      if (answer == null)
+      catch(Exception e)
       {
-        this.Socket.Send(key);
-        return;
+        this.Socket.Logging.StartLoggin()
+          .Add("where", "pl-onQuestion")
+          .Add("model.answer", model.answer)
+          .Add("model.tag", model.tag)
+          .OnException(e);
       }
-
-      if (this.TagManager.ContainsKey(model.tag))
-      {
-        this.TagManager[model.tag] = 1;
-        this.Socket.Action.UpdatePrelanderData(this.ActionPrelanderCache);
-      }
-
-      var interaction = new PrelanderTagActionInteractionDM(this.Socket.Database)
-      {
-        prelanderid = this.Prelander.ID,
-        actionid = this.Socket.Action.Key,
-        prelandertagid = tag.GetStringID(),
-        answerid = answer.GetStringID()
-      };
-      interaction.InsertLater();
-
-      this.Socket.Send(key);
-      this.Socket.Database.TransactionalManager.RunAsync();
     }
 
 

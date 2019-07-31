@@ -1,4 +1,5 @@
-﻿using Microsoft.ApplicationInsights;
+﻿using CCMonkeys.Web.Core.Sockets.Dashboard;
+using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using System;
@@ -11,6 +12,7 @@ namespace CCMonkeys.Web.Core.Logging
   public class LoggingBase
   {
     protected TelemetryClient TelemetryClient;
+    public LoggerPropertyBuilder PropertyBuilder { get; } = null;
     protected string SessionID = string.Empty;
 
     public LoggingBase()
@@ -32,19 +34,28 @@ namespace CCMonkeys.Web.Core.Logging
       }
     }
 
+    public LoggerPropertyBuilder StartLoggin(string key)
+    {
+      LoggerPropertyBuilder result = new LoggerPropertyBuilder(this, key);
+      return result;
+    }
 
     public void LogException(Exception ex, string sessionID = "", IDictionary<string, string> properties = null)
     {
-      TelemetryClient.TrackException(ex);
+      if (!string.IsNullOrEmpty(sessionID))
+        TelemetryClient.Context.User.AccountId = sessionID;
+      TelemetryClient.TrackException(ex, properties);
       int a = 1;
+
+      DashboardSocket.OnFatal(sessionID, ex.ToString());
       // ai.Flush();  
     }
 
-    public void Event(LogEventType logEventType, IDictionary<string, string> properties = null)
+    public void Event(string logEventType, IDictionary<string, string> properties = null)
     {
       if (!string.IsNullOrEmpty(this.SessionID))
         TelemetryClient.Context.User.AccountId = this.SessionID;
-      TelemetryClient.TrackEvent(logEventType.ToString(), properties);
+      TelemetryClient.TrackEvent(logEventType, properties);
       //ai.Flush();
     }
 

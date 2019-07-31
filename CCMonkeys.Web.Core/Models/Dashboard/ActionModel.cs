@@ -78,11 +78,9 @@ namespace CCMonkeys.Web.Core.Models.Dashboard
 
   public class ActionModelPrelanderData
   {
-    public bool IsQuestion { get; set; }
-    public bool HasValue { get; set; }
-    public string Name { get; set; }
-    public string Question { get; set; }
-    public string Answer { get; set; }
+    public bool q { get; set; }
+    public bool hv { get; set; }
+    public string n { get; set; }
   }
 
   public static class ActionModelSendHelper
