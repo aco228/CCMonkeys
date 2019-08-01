@@ -29,9 +29,11 @@ namespace Direct.ccmonkeys.Models
       LeadDM result = null;
       if (!string.IsNullOrEmpty(msisdn) && !string.IsNullOrEmpty(email))
         result = (await db.Query<LeadDM>().Select("email, msisdn").Where("msisdn={0} AND email={1}", msisdn, email).LoadAsync()).FirstOrDefault();
-      else if (!string.IsNullOrEmpty(msisdn))
+
+      if (result == null && !string.IsNullOrEmpty(msisdn))
         result = (await db.Query<LeadDM>().Select("email, msisdn").Where("msisdn={0}", msisdn).LoadAsync()).FirstOrDefault();
-      else if (!string.IsNullOrEmpty(email))
+
+      if (result == null && !string.IsNullOrEmpty(email))
         result = (await db.Query<LeadDM>().Select("email, msisdn").Where("email={0}", email).LoadAsync()).FirstOrDefault();
 
       return result;

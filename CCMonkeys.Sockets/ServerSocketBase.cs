@@ -1,4 +1,5 @@
-﻿using CCMonkeys.Sockets.Direct;
+﻿using CCMonkeys.Loggings;
+using CCMonkeys.Sockets.Direct;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -42,9 +43,9 @@ namespace CCMonkeys.Sockets
         if (ct.IsCancellationRequested)
           break;
 
-        ServerSocketResponse package = await ReceiveResponseAsync(currentSocket);
+        ServerSocketResponse package = await ReceiveResponseAsync(socketId, currentSocket);
 
-        if (!package.HasTransimssion)
+        if (package == null || !package.HasTransimssion)
         {
           if (currentSocket.State != WebSocketState.Open)
             break;
@@ -80,7 +81,7 @@ namespace CCMonkeys.Sockets
       IMPLEMENTATIONS
     */
 
-    private static async Task<ServerSocketResponse> ReceiveResponseAsync(WebSocket socket, CancellationToken ct = default(CancellationToken))
+    private async Task<ServerSocketResponse> ReceiveResponseAsync(string uid, WebSocket socket, CancellationToken ct = default(CancellationToken))
     {
       try
       {
@@ -104,6 +105,7 @@ namespace CCMonkeys.Sockets
       }
       catch (Exception e)
       {
+        this.OnException("ReceiveResponseAsync", uid, e);
         return null;
       }
     }
@@ -117,6 +119,7 @@ namespace CCMonkeys.Sockets
       }
       catch (Exception e)
       {
+        this.OnException("SendAsync", uid, e);
         throw e;
       }
     }
@@ -129,7 +132,7 @@ namespace CCMonkeys.Sockets
       var segment = new ArraySegment<byte>(buffer);
       return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
     }
-    protected static async Task<string> ReceiveStringAsync(WebSocket socket, CancellationToken ct = default(CancellationToken))
+    protected async Task<string> ReceiveStringAsync(string uid, WebSocket socket, CancellationToken ct = default(CancellationToken))
     {
       try
       {
@@ -157,6 +160,7 @@ namespace CCMonkeys.Sockets
       }
       catch (Exception e)
       {
+        this.OnException("ReceiveStringAsync", uid, e);
         return string.Empty;
       }
     }
@@ -174,6 +178,11 @@ namespace CCMonkeys.Sockets
     protected virtual Task OnClientConnect(string uid) => Task.FromResult(default(object));
     protected virtual Task OnClientDisconect(string uid) => Task.FromResult(default(object));
     protected virtual bool CloseIfConnectionProblem(string uid) => false;
+    protected virtual void OnException(string location, string uid, Exception e)
+    {
+      Logger.Instance.StartLoggin(uid)
+        .OnException(e);
+    }
 
   }
 }

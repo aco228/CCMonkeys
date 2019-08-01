@@ -1,6 +1,6 @@
-﻿using CCMonkeys.Sockets;
+﻿using CCMonkeys.Loggings;
+using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core.Code.CacheManagers;
-using CCMonkeys.Web.Core.Logging;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Code;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
@@ -79,8 +79,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
         await this.Socket.Database.TransactionalManager.RunAsync();
       }
       catch (Exception e)
-      {
-        this.Socket.Logging.StartLoggin()
+      { 
+        this.Socket.Logging.StartLoggin("")
           .Where("lp-registration")
           .Add("url", model.url)
           .Add("providerID?", model.providerID.HasValue ? model.providerID.Value.ToString() : "null")
@@ -122,7 +122,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
-        this.Socket.Logging.StartLoggin()
+        this.Socket.Logging.StartLoggin("")
           .Where("lp-createUser")
           .Add(model)
           .OnException(e);
@@ -165,7 +165,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
-        this.Socket.Logging.StartLoggin()
+        this.Socket.Logging.StartLoggin("")
           .Where("lp-subscribe")
           .Add(model)
           .OnException(e);
@@ -185,7 +185,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       }
       catch (Exception e)
       {
-        this.Socket.Logging.StartLoggin()
+        this.Socket.Logging.StartLoggin("")
           .Where("lp-redirect")
           .Add(model)
           .OnException(e);

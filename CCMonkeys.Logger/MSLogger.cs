@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CCMonkeys.Web.Core.Logging
+namespace CCMonkeys.Loggings
 {
   public class MSLoggerTrack
   {

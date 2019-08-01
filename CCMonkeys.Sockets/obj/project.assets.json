@@ -56,6 +56,19 @@
           "lib/netstandard1.0/Google.Protobuf.dll": {}
         }
       },
+      "Microsoft.ApplicationInsights/2.10.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Diagnostics.DiagnosticSource": "4.5.0",
+          "System.RunTime.InteropServices": "4.3.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Microsoft.ApplicationInsights.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.ApplicationInsights.dll": {}
+        }
+      },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
         "type": "package",
         "dependencies": {
@@ -2937,6 +2950,19 @@
           }
         }
       },
+      "SharpRaven/2.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.3",
+          "System.Configuration.ConfigurationManager": "4.4.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/SharpRaven.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SharpRaven.dll": {}
+        }
+      },
       "SSH.NET/2016.1.0": {
         "type": "package",
         "dependencies": {
@@ -4596,6 +4622,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "CCMonkeys.Loggings": "1.0.0",
           "Direct": "1.0.0"
         },
         "compile": {
@@ -4603,6 +4630,20 @@
         },
         "runtime": {
           "bin/placeholder/CCMonkeys.Direct.dll": {}
+        }
+      },
+      "CCMonkeys.Loggings/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "2.10.0",
+          "SharpRaven": "2.4.0"
+        },
+        "compile": {
+          "bin/placeholder/CCMonkeys.Loggings.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CCMonkeys.Loggings.dll": {}
         }
       },
       "Direct/1.0.0": {
@@ -4697,6 +4738,25 @@
         "lib/net45/Google.Protobuf.xml",
         "lib/netstandard1.0/Google.Protobuf.dll",
         "lib/netstandard1.0/Google.Protobuf.xml"
+      ]
+    },
+    "Microsoft.ApplicationInsights/2.10.0": {
+      "sha512": "qwWKmevApRZmNUqSTiISgcGXkxnS7pxJGiqPkQT2LbrWKQr/CqjbIgzuXXkyHhvOfY39Cw7ZLmIltKbTmIFzig==",
+      "type": "package",
+      "path": "microsoft.applicationinsights/2.10.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/Microsoft.ApplicationInsights.dll",
+        "lib/net45/Microsoft.ApplicationInsights.xml",
+        "lib/net46/Microsoft.ApplicationInsights.dll",
+        "lib/net46/Microsoft.ApplicationInsights.xml",
+        "lib/netstandard1.3/Microsoft.ApplicationInsights.dll",
+        "lib/netstandard1.3/Microsoft.ApplicationInsights.xml",
+        "lib/netstandard2.0/Microsoft.ApplicationInsights.dll",
+        "lib/netstandard2.0/Microsoft.ApplicationInsights.xml",
+        "microsoft.applicationinsights.2.10.0.nupkg.sha512",
+        "microsoft.applicationinsights.nuspec"
       ]
     },
     "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -7780,6 +7840,22 @@
         "runtimes/win-x86/native/sni.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "SharpRaven/2.4.0": {
+      "sha512": "BkOWKli5aR9gMoKOYdMUaGKuN+lc+JCdoZNx+YG2i4jRbknXDh4K8VCgxpYUipr7A4VFG+HNjEaZ/i+USVtr3g==",
+      "type": "package",
+      "path": "sharpraven/2.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/SharpRaven.dll",
+        "lib/net40/SharpRaven.dll",
+        "lib/net45/SharpRaven.dll",
+        "lib/net471/SharpRaven.dll",
+        "lib/netstandard2.0/SharpRaven.dll",
+        "sharpraven.2.4.0.nupkg.sha512",
+        "sharpraven.nuspec"
       ]
     },
     "SSH.NET/2016.1.0": {
@@ -12553,6 +12629,11 @@
       "path": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj",
       "msbuildProject": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj"
     },
+    "CCMonkeys.Loggings/1.0.0": {
+      "type": "project",
+      "path": "../CCMonkeys.Logger/CCMonkeys.Loggings.csproj",
+      "msbuildProject": "../CCMonkeys.Logger/CCMonkeys.Loggings.csproj"
+    },
     "Direct/1.0.0": {
       "type": "project",
       "path": "../../Direct.V3/Direct.V3/Direct.csproj",
@@ -12562,6 +12643,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
       "CCMonkeys.Direct >= 1.0.0",
+      "CCMonkeys.Loggings >= 1.0.0",
       "Direct >= 1.0.0",
       "Microsoft.AspNetCore.App >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0"
@@ -12599,6 +12681,9 @@
           "projectReferences": {
             "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
               "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj"
+            },
+            "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj": {
+              "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj"
             },
             "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj": {
               "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj"

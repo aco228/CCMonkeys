@@ -23,3 +23,5 @@ D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Web.Postba
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\Direct.dll
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\Direct.pdb
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Web.Postbacks.pdb
+D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Loggings.dll
+D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Loggings.pdb

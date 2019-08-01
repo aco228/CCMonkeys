@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace CCMonkeys.Web.Core.Logging
+namespace CCMonkeys.Loggings
 {
   public class LoggerPropertyBuilder
   {
@@ -15,7 +15,7 @@ namespace CCMonkeys.Web.Core.Logging
     public LoggerPropertyBuilder(LoggingBase logger, string key = "")
     {
       this.LoggingBase = logger;
-      this.Key = key;
+      this.Values.Add("__key", key);
     }
 
     public LoggerPropertyBuilder Where(string value)

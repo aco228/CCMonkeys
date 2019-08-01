@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Direct.V3\Direct.V3\Direct.csproj" />
-    <ProjectReference Include="..\CCMonkeys.Logger\CCMonkeys.Loggings.csproj" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
+    <PackageReference Include="SharpRaven" Version="2.4.0" />
   </ItemGroup>
 
 </Project>

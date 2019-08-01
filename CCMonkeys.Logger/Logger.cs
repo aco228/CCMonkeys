@@ -1,12 +1,5 @@
-﻿using CCMonkeys.Web.Core.Logging;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
-using SharpRaven;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CCMonkeys.Web.Core
+﻿
+namespace CCMonkeys.Loggings
 {
   public class Logger
   {

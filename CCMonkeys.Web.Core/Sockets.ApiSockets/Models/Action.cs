@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CCMonkeys.Web.Core.Logging;
+using CCMonkeys.Loggings;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 {

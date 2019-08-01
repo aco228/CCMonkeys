@@ -66,7 +66,13 @@ namespace CCMonkeys.Web
         app.UseHsts();
       }
 
-      app.UseWebSockets();
+      var webSocketOptions = new WebSocketOptions()
+      {
+        KeepAliveInterval = TimeSpan.FromSeconds(60),
+        ReceiveBufferSize = 4 * 1024
+      };
+      app.UseWebSockets(webSocketOptions);
+
       app.UseMiddleware<WebSocketsMiddleware>();
       //app.UseCors("get");
       app.UseHttpsRedirection();

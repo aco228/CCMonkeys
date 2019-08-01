@@ -1,6 +1,6 @@
 ﻿using CCMonkeys.Web.Code.Sockets;
 using CCMonkeys.Web.Core;
-using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Loggings;
 using CCMonkeys.Web.Core.Controllers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
@@ -50,7 +50,7 @@ namespace CCMonkeys.Web.Controllers
         if (string.IsNullOrEmpty(PrelanderJS) || recompile.Equals("1"))
         {
           string path = this.HostingEnvironment.WebRootPath + @"/js/shared/prelander.js";
-          PrelanderJS = (new JSMinify.Minify(path)).getModifiedData();
+          PrelanderJS = (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(path)));
         }
         js_extension = PrelanderJS;
       }
@@ -59,7 +59,7 @@ namespace CCMonkeys.Web.Controllers
         if (string.IsNullOrEmpty(LanderJS) || recompile.Equals("1"))
         {
           string path = this.HostingEnvironment.WebRootPath + @"/js/shared/lander.js";
-          LanderJS = (new JSMinify.Minify(path)).getModifiedData();
+          LanderJS = (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(path)));
         }
         js_extension = LanderJS;
       }
@@ -105,10 +105,11 @@ namespace CCMonkeys.Web.Controllers
         string path = this.HostingEnvironment.WebRootPath + @"/js/compiled/dashboard.js";
         string direct = this.HostingEnvironment.WebRootPath + @"/js/compiled/direct.js";
         var baseUrl = $"{(this.Request.Scheme.Equals("https") ? "wss" : "ws")}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
-        DashboardJS = (new JSMinify.Minify(path)).getModifiedData()
-          .Replace("[HOST]", baseUrl)
-          .Replace("[EVENTS]", DashboardSocket.PrintEvents())
-          + (new JSMinify.Minify(direct)).getModifiedData();
+        DashboardJS =
+          (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(path)))
+            .Replace("[HOST]", baseUrl)
+            .Replace("[EVENTS]", DashboardSocket.PrintEvents())
+            + (new JSMinify.Minify(direct)).getModifiedData();
       }
 
       DashboardSessionSocket socket = new DashboardSessionSocket(this.Context);

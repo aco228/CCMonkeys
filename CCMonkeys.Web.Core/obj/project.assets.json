@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.1": {
+      "AjaxMin/5.14.5506.26202": {
+        "type": "package",
+        "compile": {
+          "lib/net40/AjaxMin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/AjaxMin.dll": {}
+        }
+      },
       "BouncyCastle.NetCore/1.8.3": {
         "type": "package",
         "dependencies": {
@@ -4987,6 +4996,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "CCMonkeys.Loggings": "1.0.0",
           "Direct": "1.0.0"
         },
         "compile": {
@@ -4996,11 +5006,26 @@
           "bin/placeholder/CCMonkeys.Direct.dll": {}
         }
       },
+      "CCMonkeys.Loggings/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "2.10.0",
+          "SharpRaven": "2.4.0"
+        },
+        "compile": {
+          "bin/placeholder/CCMonkeys.Loggings.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CCMonkeys.Loggings.dll": {}
+        }
+      },
       "CCMonkeys.Sockets/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
           "CCMonkeys.Direct": "1.0.0",
+          "CCMonkeys.Loggings": "1.0.0",
           "Direct": "1.0.0",
           "Microsoft.AspNetCore.App": "2.1.1"
         },
@@ -5029,6 +5054,27 @@
     }
   },
   "libraries": {
+    "AjaxMin/5.14.5506.26202": {
+      "sha512": "ayrhrlFSQEAw+1w7cdUGozbZ8BxakITQcTezeLKByp69zk0tdto8/Jt3U2ieCq3U1dlvwXGvlthMaTJXeHEaFw==",
+      "type": "package",
+      "path": "ajaxmin/5.14.5506.26202",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ajaxmin.5.14.5506.26202.nupkg.sha512",
+        "ajaxmin.nuspec",
+        "lib/net20/AjaxMin.dll",
+        "lib/net35/AjaxMin.dll",
+        "lib/net40/AjaxMin.dll",
+        "tools/net35/AjaxMin.dll",
+        "tools/net35/AjaxMin.targets",
+        "tools/net35/AjaxMinTask.dll",
+        "tools/net40/AjaxMin.dll",
+        "tools/net40/AjaxMin.targets",
+        "tools/net40/AjaxMinTask.dll"
+      ]
+    },
     "BouncyCastle.NetCore/1.8.3": {
       "sha512": "jAy3uHN1U9DpoT/TgLqDTEhlccn/4doOVxhSmmNsnoSsGfHT9Lwr634ac9D0YFujAhNw61nWF4UIpHyzv0aQww==",
       "type": "package",
@@ -13562,6 +13608,11 @@
       "path": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj",
       "msbuildProject": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj"
     },
+    "CCMonkeys.Loggings/1.0.0": {
+      "type": "project",
+      "path": "../CCMonkeys.Logger/CCMonkeys.Loggings.csproj",
+      "msbuildProject": "../CCMonkeys.Logger/CCMonkeys.Loggings.csproj"
+    },
     "CCMonkeys.Sockets/1.0.0": {
       "type": "project",
       "path": "../CCMonkeys.Sockets/CCMonkeys.Sockets.csproj",
@@ -13575,7 +13626,9 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
+      "AjaxMin >= 5.14.5506.26202",
       "CCMonkeys.Direct >= 1.0.0",
+      "CCMonkeys.Loggings >= 1.0.0",
       "CCMonkeys.Sockets >= 1.0.0",
       "Direct >= 1.0.0",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.7.1",
@@ -13618,6 +13671,9 @@
             "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
               "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj"
             },
+            "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj": {
+              "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj"
+            },
             "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj": {
               "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj"
             },
@@ -13636,6 +13692,10 @@
     "frameworks": {
       "netcoreapp2.1": {
         "dependencies": {
+          "AjaxMin": {
+            "target": "Package",
+            "version": "[5.14.5506.26202, )"
+          },
           "Microsoft.ApplicationInsights.AspNetCore": {
             "target": "Package",
             "version": "[2.7.1, )"
@@ -13666,5 +13726,17 @@
         "warn": true
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'AjaxMin 5.14.5506.26202' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "AjaxMin",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.1"
+      ]
+    }
+  ]
 }

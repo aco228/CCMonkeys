@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Direct.V3\Direct.V3\Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Logger\CCMonkeys.Loggings.csproj" />
   </ItemGroup>
 
 </Project>

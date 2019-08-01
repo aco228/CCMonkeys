@@ -2,6 +2,7 @@
 using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.CommunicationChannels;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
@@ -36,6 +37,14 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         if (!string.IsNullOrEmpty(type))
         {
           SessionSocket newSocket = new SessionSocket(new MainContext(null, httpContext), type.Equals("lp") ? Models.SessionType.Lander : Models.SessionType.Prelander);
+          if (string.IsNullOrEmpty(newSocket.Key))
+          {
+            newSocket.Logging.StartLoggin("")
+              .Where("OnCreateId")
+              .OnException(new Exception("SessionSocket returned string.emptry as Key"));
+            return string.Empty;
+          }
+
           Sessions.Add(newSocket.Key, newSocket);
           sguid = newSocket.Key;
         }
@@ -95,23 +104,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         //
 
         case "user-create":
-
-          if (sessionType == SessionType.Lander)
-            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
-              .OnCreateUser(key, JsonConvert.DeserializeObject<ReceivingCreateUserModel>(json));
-
-          break;
         case "user-subscribe":
-
-          if (sessionType == SessionType.Lander)
-            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
-              .OnSubscribeUser(key, JsonConvert.DeserializeObject<ReceivingSubscribeUser>(json));
-          break;
         case "user-redirected":
-
-          if (sessionType == SessionType.Lander)
-            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
-              .OnUserRedirected(key, JsonConvert.DeserializeObject<ReceivingUserRedirected>(json));
+          LanderCommunicationChannel channel = new LanderCommunicationChannel(Get(uid));
+          await channel.Start(key, json);
           break;
 
         //
@@ -119,45 +115,24 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         //
 
         case "pl-init":
-
-          if (sessionType == SessionType.Prelander)
-            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
-              .OnInit(key, JsonConvert.DeserializeObject<PrelanderInitModel>(json));
-
-          break;
-
         case "pl-tag":
-
-          if (sessionType == SessionType.Prelander)
-            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
-              .OnTag(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
-
-          break;
-
         case "pl-q":
-
-          if (sessionType == SessionType.Prelander)
-            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
-              .OnQuestion(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
-
+          PrelanderCommunicationChannel prelanderCommunication = new PrelanderCommunicationChannel(Get(uid));
+          await prelanderCommunication.Call(key, json);
           break;
 
+
       }
 
-      try
-      {
-        
-      }
-      catch(Exception e)
-      {
-        Get(uid).Send(new FatalModel() { Exception = e.ToString() }.Pack(false, "error500"));
-        return;
-      }
-      finally
-      {
-      }
     }
 
+
+    protected override void OnException(string location, string uid, Exception e)
+    {
+      Get(uid).Logging.StartLoggin("")
+        .Add("location", location)
+        .OnException(e);
+    }
     ///
     /// STATICS
     ///

@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.1": {
+      "AjaxMin/5.14.5506.26202": {
+        "type": "package",
+        "compile": {
+          "lib/net40/AjaxMin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/AjaxMin.dll": {}
+        }
+      },
       "AspNetCore.Http.Extensions/1.0.1": {
         "type": "package",
         "dependencies": {
@@ -3124,6 +3133,36 @@
           "lib/netstandard2.0/Sentry.dll": {}
         }
       },
+      "Sentry.AspNetCore/1.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Diagnostics.Abstractions": "2.1.0",
+          "Microsoft.AspNetCore.Hosting": "2.1.0",
+          "Microsoft.Extensions.Configuration.Binder": "2.1.0",
+          "Microsoft.Extensions.DependencyInjection": "2.1.0",
+          "Sentry.Extensions.Logging": "1.2.0",
+          "System.Diagnostics.DiagnosticSource": "4.5.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Sentry.AspNetCore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Sentry.AspNetCore.dll": {}
+        }
+      },
+      "Sentry.Extensions.Logging/1.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Configuration": "2.1.0",
+          "Sentry": "1.2.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Sentry.Extensions.Logging.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Sentry.Extensions.Logging.dll": {}
+        }
+      },
       "Sentry.PlatformAbstractions/1.0.0": {
         "type": "package",
         "compile": {
@@ -5032,6 +5071,7 @@
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
+          "CCMonkeys.Loggings": "1.0.0",
           "Direct": "1.0.0"
         },
         "compile": {
@@ -5041,11 +5081,26 @@
           "bin/placeholder/CCMonkeys.Direct.dll": {}
         }
       },
+      "CCMonkeys.Loggings/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "2.10.0",
+          "SharpRaven": "2.4.0"
+        },
+        "compile": {
+          "bin/placeholder/CCMonkeys.Loggings.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CCMonkeys.Loggings.dll": {}
+        }
+      },
       "CCMonkeys.Sockets/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
           "CCMonkeys.Direct": "1.0.0",
+          "CCMonkeys.Loggings": "1.0.0",
           "Direct": "1.0.0",
           "Microsoft.AspNetCore.App": "2.1.1"
         },
@@ -5060,7 +5115,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
+          "AjaxMin": "5.14.5506.26202",
           "CCMonkeys.Direct": "1.0.0",
+          "CCMonkeys.Loggings": "1.0.0",
           "CCMonkeys.Sockets": "1.0.0",
           "Direct": "1.0.0",
           "Microsoft.ApplicationInsights.AspNetCore": "2.7.1",
@@ -5112,6 +5169,27 @@
     }
   },
   "libraries": {
+    "AjaxMin/5.14.5506.26202": {
+      "sha512": "ayrhrlFSQEAw+1w7cdUGozbZ8BxakITQcTezeLKByp69zk0tdto8/Jt3U2ieCq3U1dlvwXGvlthMaTJXeHEaFw==",
+      "type": "package",
+      "path": "ajaxmin/5.14.5506.26202",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ajaxmin.5.14.5506.26202.nupkg.sha512",
+        "ajaxmin.nuspec",
+        "lib/net20/AjaxMin.dll",
+        "lib/net35/AjaxMin.dll",
+        "lib/net40/AjaxMin.dll",
+        "tools/net35/AjaxMin.dll",
+        "tools/net35/AjaxMin.targets",
+        "tools/net35/AjaxMinTask.dll",
+        "tools/net40/AjaxMin.dll",
+        "tools/net40/AjaxMin.targets",
+        "tools/net40/AjaxMinTask.dll"
+      ]
+    },
     "AspNetCore.Http.Extensions/1.0.1": {
       "sha512": "FZyUSh3r9DpEFu+qognOZYgOtMK/PC5X1oqoShqK9KIaIJ9kbqgyFEs54zWAKHj52s+FignNpTc2K9pFxUADIw==",
       "type": "package",
@@ -8485,6 +8563,34 @@
         "lib/netstandard2.0/Sentry.xml",
         "sentry.1.2.0.nupkg.sha512",
         "sentry.nuspec"
+      ]
+    },
+    "Sentry.AspNetCore/1.2.0": {
+      "sha512": "aAm4psk+1UDDA+4VyfS57Zg8FaY/QGwZZp6QSWPzQgyudb+3LuDWKFlm+/ArSxjmGLEEL2s9jen9lZ+i+0153g==",
+      "type": "package",
+      "path": "sentry.aspnetcore/1.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Sentry.AspNetCore.dll",
+        "lib/netstandard2.0/Sentry.AspNetCore.pdb",
+        "lib/netstandard2.0/Sentry.AspNetCore.xml",
+        "sentry.aspnetcore.1.2.0.nupkg.sha512",
+        "sentry.aspnetcore.nuspec"
+      ]
+    },
+    "Sentry.Extensions.Logging/1.2.0": {
+      "sha512": "G7CUBqcW9mNHxq5p6BTmTPdc4xpf9Amha2Y44z+T61hBp28XHKF7596ZLRQ8gvoJr2YnRnF8bAWzods+zA9FJA==",
+      "type": "package",
+      "path": "sentry.extensions.logging/1.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Sentry.Extensions.Logging.dll",
+        "lib/netstandard2.0/Sentry.Extensions.Logging.pdb",
+        "lib/netstandard2.0/Sentry.Extensions.Logging.xml",
+        "sentry.extensions.logging.1.2.0.nupkg.sha512",
+        "sentry.extensions.logging.nuspec"
       ]
     },
     "Sentry.PlatformAbstractions/1.0.0": {
@@ -13718,6 +13824,11 @@
       "path": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj",
       "msbuildProject": "../CCMonkeys.Direct/CCMonkeys.Direct.csproj"
     },
+    "CCMonkeys.Loggings/1.0.0": {
+      "type": "project",
+      "path": "../CCMonkeys.Logger/CCMonkeys.Loggings.csproj",
+      "msbuildProject": "../CCMonkeys.Logger/CCMonkeys.Loggings.csproj"
+    },
     "CCMonkeys.Sockets/1.0.0": {
       "type": "project",
       "path": "../CCMonkeys.Sockets/CCMonkeys.Sockets.csproj",
@@ -13741,7 +13852,9 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
+      "AjaxMin >= 5.14.5506.26202",
       "CCMonkeys.Direct >= 1.0.0",
+      "CCMonkeys.Loggings >= 1.0.0",
       "CCMonkeys.Sockets >= 1.0.0",
       "CCMonkeys.Web.Core >= 1.0.0",
       "CCMonkeys.Web.Postbacks >= 1.0.0",
@@ -13754,6 +13867,7 @@
       "Microsoft.Extensions.Caching.Memory >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0",
       "Sentry >= 1.2.0",
+      "Sentry.AspNetCore >= 1.2.0",
       "SharpRaven >= 2.4.0"
     ]
   },
@@ -13790,6 +13904,9 @@
             "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj": {
               "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj"
             },
+            "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj": {
+              "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj"
+            },
             "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj": {
               "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj"
             },
@@ -13814,6 +13931,10 @@
     "frameworks": {
       "netcoreapp2.1": {
         "dependencies": {
+          "AjaxMin": {
+            "target": "Package",
+            "version": "[5.14.5506.26202, )"
+          },
           "Microsoft.ApplicationInsights.AspNetCore": {
             "target": "Package",
             "version": "[2.7.1, )"
@@ -13850,6 +13971,10 @@
             "target": "Package",
             "version": "[1.2.0, )"
           },
+          "Sentry.AspNetCore": {
+            "target": "Package",
+            "version": "[1.2.0, )"
+          },
           "SharpRaven": {
             "target": "Package",
             "version": "[2.4.0, )"
@@ -13862,5 +13987,17 @@
         "warn": true
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'AjaxMin 5.14.5506.26202' was restored using '.NETFramework,Version=v4.6.1' instead of the project target framework '.NETCoreApp,Version=v2.1'. This package may not be fully compatible with your project.",
+      "libraryId": "AjaxMin",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.1"
+      ]
+    }
+  ]
 }

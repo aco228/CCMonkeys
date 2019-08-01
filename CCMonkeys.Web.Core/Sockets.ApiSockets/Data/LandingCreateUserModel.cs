@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
 {
-  public class ReceivingCreateUserModel
+  public class ReceivingCreateUserModel : ReceiveModel
   {
     public string email { get; set; } = string.Empty;
     public string password { get; set; } = string.Empty; // do we need it?

@@ -11,9 +11,9 @@ using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
 using System.Collections.Generic;
 using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core.Sockets.Dashboard;
-using CCMonkeys.Web.Core.Logging;
 using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
+using CCMonkeys.Loggings;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
@@ -44,25 +44,33 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     public SessionSocket(MainContext context, SessionType sessionType)
     {
-      this.Database = new CCSubmitDirect();
-      this.Logging = new ApiSocketsLogging(this);
-      MSLogger mslogger = new MSLogger();
+      try
+      {
+        this.Database = new CCSubmitDirect();
+        this.Logging = new ApiSocketsLogging(this);
+        MSLogger mslogger = new MSLogger();
 
-      this.Created = DateTime.Now;
-      this.MainContext = context;
-      this.SessionType = sessionType;
+        this.Created = DateTime.Now;
+        this.MainContext = context;
+        this.SessionType = sessionType;
 
-      this.Session = new Session(this); // first we prepare all parts, and get country
-      this.User = new User(this);
-      this.Action = new Models.Action(this);
+        this.Session = new Session(this); // first we prepare all parts, and get country
+        this.User = new User(this);
+        this.Action = new Models.Action(this);
 
-      Channels.Add(SessionSocketChannel.Default, new SharedCommunication(this));
-      if (sessionType == SessionType.Lander)
-        Channels.Add(SessionSocketChannel.Lander, new LanderCommunication(this));
-      else if (sessionType == SessionType.Prelander)
-        Channels.Add(SessionSocketChannel.Prelander, new PrelanderCommunication(this));
+        Channels.Add(SessionSocketChannel.Default, new SharedCommunication(this));
+        if (sessionType == SessionType.Lander)
+          Channels.Add(SessionSocketChannel.Lander, new LanderCommunication(this));
+        else if (sessionType == SessionType.Prelander)
+          Channels.Add(SessionSocketChannel.Prelander, new PrelanderCommunication(this));
 
-      this.Database.TransactionalManager.RunAsync();
+        this.Database.TransactionalManager.RunAsync();
+      }
+      catch (Exception e)
+      {
+        this.Logging.StartLoggin("")
+          .OnException(e);
+      }
     }
 
 

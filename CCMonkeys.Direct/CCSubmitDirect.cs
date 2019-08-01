@@ -1,4 +1,5 @@
-﻿using Direct;
+﻿using CCMonkeys.Loggings;
+using Direct;
 using Direct.Types.Mysql;
 using System;
 
@@ -28,6 +29,10 @@ namespace CCMonkeys.Direct
 
     public override void OnException(DirectDatabaseExceptionType type, string query, Exception e)
     {
+      Logger.Instance.StartLoggin("direct")
+        .Add("query", query)
+        .Add("type", type.ToString())
+        .OnException(e);
       int a = 0;
     }
   }

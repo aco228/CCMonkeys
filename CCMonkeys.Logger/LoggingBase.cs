@@ -1,23 +1,26 @@
-﻿using CCMonkeys.Web.Core.Sockets.Dashboard;
-using Microsoft.ApplicationInsights;
+﻿using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
+using SharpRaven;
+using SharpRaven.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CCMonkeys.Web.Core.Logging
+namespace CCMonkeys.Loggings
 {
 
   public class LoggingBase
   {
     protected TelemetryClient TelemetryClient;
+    protected RavenClient RavenClient;
     public LoggerPropertyBuilder PropertyBuilder { get; } = null;
     protected string SessionID = string.Empty;
 
     public LoggingBase()
     {
       TelemetryClient = new TelemetryClient();
+      this.RavenClient = new RavenClient("https://e2a9518558524ceeafd180cf83556583@sentry.io/1505328");
       if (string.IsNullOrEmpty(TelemetryClient.InstrumentationKey))
       {
         // attempt to load instrumentation key from app settings
@@ -34,7 +37,7 @@ namespace CCMonkeys.Web.Core.Logging
       }
     }
 
-    public LoggerPropertyBuilder StartLoggin(string key)
+    public virtual LoggerPropertyBuilder StartLoggin(string key)
     {
       LoggerPropertyBuilder result = new LoggerPropertyBuilder(this, key);
       return result;
@@ -45,9 +48,13 @@ namespace CCMonkeys.Web.Core.Logging
       if (!string.IsNullOrEmpty(sessionID))
         TelemetryClient.Context.User.AccountId = sessionID;
       TelemetryClient.TrackException(ex, properties);
-      int a = 1;
 
-      DashboardSocket.OnFatal(sessionID, ex.ToString());
+      if (properties != null)
+        foreach (var p in properties)
+          ex.Data.Add(p.Key, p.Value);
+
+      RavenClient.Capture(new SentryEvent(ex));
+
       // ai.Flush();  
     }
 

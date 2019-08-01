@@ -1,4 +1,5 @@
-﻿using CCMonkeys.Web.Core;
+﻿using CCMonkeys.Loggings;
+using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using Microsoft.AspNetCore.Mvc;
 using SharpRaven;
 using SharpRaven.Data;
@@ -20,25 +21,24 @@ namespace CCMonkeys.Web.Controllers
     public IActionResult Test()
     {
       HomeController a = null;
+      PrelanderTagModel testModel = new PrelanderTagModel()
+      {
+        answer = "answer", index = 8, tag = "tag"
+      };
+
       try
       {
         string aasd = a.ControllerContext.ToString();
       }
       catch(Exception e)
       {
-        Logger.Instance.LogException(e);
-        var raven = new RavenClient("https://e2a9518558524ceeafd180cf83556583@sentry.io/1505328");
-        raven.Capture(new SentryEvent(e));
-
-        Logger.Instance.LogException(e);
+        Logger.Instance.StartLoggin("key_of_this_shit")
+          .Where("HomeController")
+          .Add("val1", "res1")
+          .Add("val2", "res1")
+          .Add(testModel)
+          .OnException(e);
       }
-
-      var properties = new Dictionary<string, string>();
-      properties.Add("test1", "test1va");
-      properties.Add("test2", "test1va");
-      properties.Add("test3", "test1va");
-      properties.Add("test4", "test1va");
-      //Logger.Instance.TrackEvent("evetnName", "username", properties);
 
       return this.Content("OK! ");
     }

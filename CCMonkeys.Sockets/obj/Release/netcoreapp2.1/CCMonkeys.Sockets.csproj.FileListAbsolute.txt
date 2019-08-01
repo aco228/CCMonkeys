@@ -14,3 +14,5 @@ D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\Direct.dll
 D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Direct.pdb
 D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\Direct.pdb
 D:\github\CCMonkeys\CCMonkeys.Sockets\obj\Release\netcoreapp2.1\CCMonkeys.Sockets.csproj.CopyComplete
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Loggings.dll
+D:\github\CCMonkeys\CCMonkeys.Sockets\bin\Release\netcoreapp2.1\CCMonkeys.Loggings.pdb

@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using CCMonkeys.Web.Core.Logging;
 using CCMonkeys.Web.Core.Sockets.Dashboard;
 using CCMonkeys.Web.Core.Code.CacheManagers;
+using CCMonkeys.Loggings;
 
 namespace CCMonkeys.Web.Postbacks
 {
@@ -101,7 +101,8 @@ namespace CCMonkeys.Web.Postbacks
       catch (Exception e)
       {
         this.Logger.StartLoggin(model.TrackingID)
-          .Add("query", HttpContext.Request.Query.ToString())
+          .Add("providername", ProvidersCache.Instance.Get(this.ProviderID).Name)
+          .Add("query", HttpContext.Request.QueryString.Value)
           .Add(model)
           .OnException(e);
         return StatusCode(200);

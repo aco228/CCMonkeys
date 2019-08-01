@@ -1,10 +1,11 @@
 ﻿using CCMonkeys.Web.Core.Controllers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Ajax.Utilities;
 
 namespace CCMonkeys.Web.Controllers.Javascript
 {
@@ -19,7 +20,11 @@ namespace CCMonkeys.Web.Controllers.Javascript
       Response.ContentType = "text/javascript";
       string clientPath = this.HostingEnvironment.WebRootPath + @"/js/static/client.js";
       string landerPath = this.HostingEnvironment.WebRootPath + @"/js/shared/lander.js";
-      string js = "var CC=Object;" + (new JSMinify.Minify(landerPath)).getModifiedData() + (new JSMinify.Minify(clientPath)).getModifiedData();
+      
+      string js = "var CC=Object;"
+        + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(clientPath)))
+        + ";"
+        + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(landerPath)));
       return this.ReturnContent(js);
     }
 
@@ -29,7 +34,10 @@ namespace CCMonkeys.Web.Controllers.Javascript
       Response.ContentType = "text/javascript";
       string clientPath = this.HostingEnvironment.WebRootPath + @"/js/static/client.js";
       string prelanderPath = this.HostingEnvironment.WebRootPath + @"/js/shared/prelander.js";
-      string js = "var CC=Object;" + (new JSMinify.Minify(clientPath)).getModifiedData() + (new JSMinify.Minify(prelanderPath)).getModifiedData();
+      string js = "var CC=Object;" 
+        + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(clientPath)))
+        + ";"
+        + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(prelanderPath)));
       return this.ReturnContent(js);
     }
   }

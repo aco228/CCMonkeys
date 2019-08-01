@@ -1,6 +1,9 @@
 ﻿CC.host = '';
 CC.dbg = false;
 CC.type = 'lp';
+CC.connected = false;
+CC.useBackup = false;
+CC.backup = { hasValue: false };
 CC.api = {
   callbacks: [],
   socket: null,
@@ -34,12 +37,19 @@ CC.api = {
         registered = true;
       }
 
+      CC.connected = true;
       if(typeof self.onopen === 'function') self.onopen(e);
     };
     this.socket.onclose = function (e) {
       if(typeof self.onclose === 'function') self.onclose(e);
       registration_callback.error(e);
       self.console('onclose', e);
+      CC.connected = false;
+      CC.useBackup = true;
+      CC.api.socket = null; // disable socket for further use!!
+
+      for(var i = 0; i < CC.api.callbacks.length; i++)
+        CC.api.ajax(CC.api.callbacks[i].key, CC.api.callbacks[i].data, CC.api.callbacks[i]);
     };
 
     this.socket.onmessage = function (e) {
@@ -63,6 +73,13 @@ CC.api = {
 
       if(response.Key === 'reg-post'){
         milisecondsPassed = ((new Date()).getTime() - self.created.getTime());
+        CC.backup.hasValue = true;
+        if(typeof response.Data.actionID !== 'undefined')
+          CC.backup.actionid = response.Data.actionID;
+        if(typeof response.Data.sessionID !== 'undefined')
+          CC.backup.sessionid = response.Data.sessionID;
+        if(typeof response.Data.userID !== 'undefined')
+          CC.backup.userid = response.Data.userID;
       }
 
       self.console(`We got response in ${milisecondsPassed} miliseconds for #${response.Key}!`, response);
@@ -88,10 +105,39 @@ CC.api = {
 
     callback.created = new Date();
     callback.key = key;
+    callback.data = data;
     this.callbacks.push(callback);
 
     this.console('sendingData', {key:key, data:data });
-    this.socket.send(key + '#' + JSON.stringify(data));
+
+    if(!CC.useBackup)
+      this.socket.send(key + '#' + JSON.stringify(data));
+    else
+      this.ajax(key, data, callback);
+  },
+
+  ajax: function(key, data, callback){
+    var parsed = key + '|' + JSON.stringify(data);
+    var xmlhttp = new XMLHttpRequest();
+    console.log(data);
+    var url = CC.host.replace('wss://', 'https://') + '/sb/' + CC.type + '/' + parsed;
+    console.log(url);
+
+    xmlhttp.withCredentials = true;
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState == XMLHttpRequest.DONE) {   // XMLHttpRequest.DONE == 4
+        if (xmlhttp.status == 200) {
+          var response = JSON.parse(xmlhttp.responseText);
+          console.log(response);
+          callback.success(response);
+        }
+        else
+          callback.error(null);
+      }
+    };
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
   },
 
   checkCallback: function(callback){

@@ -78,6 +78,9 @@ public bool has_redirectedToProvider { get; set; } = false;
 [DColumn(Name = "has_stolen", HasDefaultValue=true)]
 public bool has_stolen { get; set; } = false;
 
+[DColumn(Name = "http_flow", HasDefaultValue=true)]
+public bool http_flow { get; set; } = false;
+
 [DColumn(Name = "updated", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime updated { get; set; } = default;
 

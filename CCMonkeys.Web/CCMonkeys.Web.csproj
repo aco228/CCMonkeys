@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AjaxMin" Version="5.14.5506.26202" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.Internal" Version="2.1.1" />
@@ -23,12 +24,14 @@
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
     <PackageReference Include="Sentry" Version="1.2.0" />
+    <PackageReference Include="Sentry.AspNetCore" Version="1.2.0" />
     <PackageReference Include="SharpRaven" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Direct.V3\Direct.V3\Direct.csproj" />
     <ProjectReference Include="..\CCMonkeys.Direct\CCMonkeys.Direct.csproj" />
+    <ProjectReference Include="..\CCMonkeys.Logger\CCMonkeys.Loggings.csproj" />
     <ProjectReference Include="..\CCMonkeys.Sockets\CCMonkeys.Sockets.csproj" />
     <ProjectReference Include="..\CCMonkeys.Web.Core\CCMonkeys.Web.Core.csproj" />
     <ProjectReference Include="..\CCMonkeys.Web.Postbacks\CCMonkeys.Web.Postbacks.csproj" />

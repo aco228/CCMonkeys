@@ -44,10 +44,13 @@
       return;
     }
 
-    this.console("onMessage", "message received", response.Event, response.Data);
+    //this.console("onMessage", "message received", response.Event, response.Data);
 
     if(this.callbacks.hasOwnProperty('event_' + response.Event) && typeof this.callbacks['event_' + response.Event] === "function")
-      this.callbacks['event_' + response.Event](response.Data);
+    {
+      for(var i = 0; i < this.callbacks['event_' + response.Event].length; i++)
+        this.callbacks['event_' + response.Event][i](response.Data);
+    }
   }
 
   subscribe(event, func){
@@ -60,7 +63,10 @@
       return;
     }
 
-    this.callbacks['event_' + event] = func;
+    if(typeof this.callbacks['event_' + event] === 'undefined')
+      this.callbacks['event_' + event] = [];
+
+    this.callbacks['event_' + event].push(func);
   }
 
   onError(e){
@@ -68,7 +74,7 @@
   }
 
   send(key, data){
-    this.console('sendingData', 'beforesend', {key:key, data:data });
+    //this.console('sendingData', 'beforesend', {key:key, data:data });
     this.socket.send(key + '#' + JSON.stringify(data));
   }
 
@@ -160,7 +166,7 @@
           return null;
 
         var tag = tagResponse.tag;
-        if(tag.isQuestion)
+        if(tag.isQuestion && info[1] != '')
         {
           var num = parseInt(info[1]);
           if(typeof tagResponse.answers !== 'undefined' && tagResponse.answers != null && num <= tagResponse.answers.length)
@@ -225,7 +231,7 @@ class SocketData{
     for(var i = 0; i <= self.actions.length; i++)
       if(self.actions[i]==data.ID)
         return;
-    window.Socket.console('+', 'New action has connected with id: ' + data.ID);
+    //window.Socket.console('+', 'New action has connected with id: ' + data.ID);
     self.actions.push(data.ID);
   }
 
@@ -235,7 +241,7 @@ class SocketData{
       if(self.actions[i]==data.ID)
       {
         self.actions.slice(i, 1);
-        window.Socket.console('-', 'Action has disconnected with id: ' + data.ID);
+        //window.Socket.console('-', 'Action has disconnected with id: ' + data.ID);
         return;
       }
   }

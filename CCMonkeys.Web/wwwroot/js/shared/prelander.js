@@ -8,52 +8,47 @@
   }
 }
 
+
+HTMLCollection.prototype.forEach = Array.prototype.forEach;
+HTMLCollection.prototype.getElementsByClassName = function (name) {
+  var all = [];
+  this.forEach(function (el) {
+    if (el) all.concat(el.getElementsByClassName(name));
+  });
+  return all;
+}
+
 document.addEventListener('DOMContentLoaded', function(){
   if(typeof CC === 'undefined'){
     alert('no CC wtf??');
     return;
   }
   CC.type = 'pl';
-  CC.dbg=false;
   CC.steps = 0;
   CC.tags = [];
+  CC.prelanderID = null;
 
-  pT(); pQ();
-  console.log(CC.tags);
-
-  CC.api.init({
-    success:function(msg, e) { 
-      CC.api.send('pl-init', { tags: CC.tags });
-    },
-    error: function(e) { console.log('init error'); }
-  });
-
-  //
-  // Collect all tags
-  //
-
-  function pT(){
+  CC.pT = function(){
     try
     {
+
+      //
+      // Collect all tags
+      //
+
       var ts = document.querySelectorAll('[cctag]');
       ts.forEach((t) => {
         CC.steps++;
         t.addEventListener('click', (e) => {
-          CC.api.send('pl-tag', { tag:t.getAttribute('cctag') });
+          CC.api.send('pl-tag', { prelanderid: CC.prelanderID,  tag:t.getAttribute('cctag') });
         }, false);
         CC.tags.push(new Tag(false, t.getAttribute('cctag'), '',  null));
       });
-    }
-    catch{}
-  }
 
-  //
-  // Collect all questions
-  //
+      //
+      // Collect all questions
+      //
 
-  function pQ(){
-    try
-    {
       var qs = document.getElementsByClassName('ccq');
       var index = 0;
       qs.forEach((q) =>{
@@ -70,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function(){
           a.addEventListener('click', (e)=>{
             CC.api.send('pl-q', 
             { 
+              prelanderid: CC.prelanderID, 
               tag: 'q'+a.getAttribute('ccq'), 
               answer:'ccqa'+a.getAttribute('ccqa'),
               index: a.getAttribute('ccqa')
@@ -83,17 +79,23 @@ document.addEventListener('DOMContentLoaded', function(){
         CC.tags.push(tag);
         index++;
       });
+
     }
-    catch(e){ console.error(e);}
-  };
+    catch(e){console.error(e);  }
+  }
+
+
+  
+  console.log(CC.tags);
+  CC.pT(); 
+
+  CC.api.init({
+    success:function(msg, e) { 
+      CC.prelanderID = msg.prelanderID;
+      CC.api.send('pl-init', { prelanderid: CC.prelanderID, tags: CC.tags });
+    },
+    error: function(e) { console.log('init error'); }
+  });
+
 
 }, false);
-
-HTMLCollection.prototype.forEach = Array.prototype.forEach;
-HTMLCollection.prototype.getElementsByClassName = function( name ){
-  var all = [];
-  this.forEach( function( el ){
-    if(el) all.concat( el.getElementsByClassName( name ) );
-  });
-  return all;
-}

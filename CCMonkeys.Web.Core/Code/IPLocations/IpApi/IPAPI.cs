@@ -15,7 +15,7 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
     {
       try
       {
-        string URL = "http://ip-api.com/json/" + ipAddress;
+        string URL = "https://pro.ip-api.com/json/" + ipAddress + "?key=EWoxtfHTQaZbWC1";
         var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
         httpWebRequest.ContentType = "application/json";
         httpWebRequest.Method = "GET";
@@ -41,7 +41,7 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
     {
       try
       {
-        string URL = "http://ip-api.com/json/" + ipAddress;
+        string URL = "https://pro.ip-api.com/json/" + ipAddress + "?key=EWoxtfHTQaZbWC1";
         var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
         httpWebRequest.ContentType = "application/json";
         httpWebRequest.Method = "GET";

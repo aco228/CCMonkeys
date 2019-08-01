@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
 {
-  public class ReceivingSubscribeUser
+  public class ReceivingSubscribeUser : ReceiveModel
   {
     public string firstName { get; set; } = string.Empty;
     public string lastName { get; set; } = string.Empty;

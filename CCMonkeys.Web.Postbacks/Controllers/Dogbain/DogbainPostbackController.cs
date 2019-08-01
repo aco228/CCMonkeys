@@ -11,8 +11,7 @@ namespace CCMonkeys.Web.Postbacks.Controllers.Dogbain
   [Route("postback/dogbain")]
   public class DogbainPostbackController : PostbackControllerBase<DogbainModel>
   {
-    public DogbainPostbackController() : base(providerID:2, requireAction:true)
-    { }
+    public DogbainPostbackController() : base(providerID:2, requireAction:true) { }
 
     protected override async Task<ActionDM> Call(DogbainModel model)
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
 {
-  public class ReceivingUserRedirected
+  public class ReceivingUserRedirected : ReceiveModel
   {
     public string url { get; set; } = string.Empty;
   }

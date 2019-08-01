@@ -15,6 +15,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
 
   public class PrelanderInitModel
   {
+    public int prelanderid { get; set; }
     public List<PrelanderInitModelTag> tags { get; set; }
   }
 }
