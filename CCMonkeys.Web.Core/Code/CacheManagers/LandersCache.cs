@@ -24,7 +24,16 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
   public class LandersCache : CacheManagerBase
   {
-    public static LandersCache Instance => (LandersCache)CacheManager.Get(CacheType.Lander);
+    public static LandersCache Instance
+    {
+      get
+      {
+        if (!CacheManager.IsInitiated)
+          CacheManager.Init();
+        return (LandersCache)CacheManager.Get(CacheType.Lander);
+      }
+    }
+
     private static Dictionary<int, LanderTypeCacheModel> Types = new Dictionary<int, LanderTypeCacheModel>();
     private static Dictionary<int, LanderCacheModel> Landers = new Dictionary<int, LanderCacheModel>();
     

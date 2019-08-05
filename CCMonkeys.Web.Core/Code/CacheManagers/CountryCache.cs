@@ -18,7 +18,16 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
   public class CountryCache : CacheManagerBase
   {
-    public static CountryCache Instance => (CountryCache)CacheManager.Get(CacheType.Country);
+    public static CountryCache Instance
+    {
+      get
+      {
+        if (!CacheManager.IsInitiated)
+          CacheManager.Init();
+        return (CountryCache)CacheManager.Get(CacheType.Country);
+      }
+    }
+
 
     private Dictionary<string, CountryCacheModel> _data = null;
 
@@ -40,8 +49,11 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
           Code = row.GetString("code").ToLower()
         };
 
-        _data.Add(country.Code, country);
-        _data.Add(country.Name, country);
+        if(!_data.ContainsKey(country.Code))
+          _data.Add(country.Code, country);
+
+        if (!_data.ContainsKey(country.Name))
+          _data.Add(country.Name, country);
       }
     }
 
@@ -65,8 +77,11 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
         Code = dc.GetString("code").ToLower()
       };
 
-      _data.Add(country.Code, country);
-      _data.Add(country.Name, country);
+      if (!_data.ContainsKey(country.Code))
+        _data.Add(country.Code, country);
+
+      if (!_data.ContainsKey(country.Name))
+        _data.Add(country.Name, country);
 
       db.TransactionalManager.Add("INSERT INTO [].tm_country_used (countryid)", dc.GetInt("countryid").Value);
       return dc.GetInt("countryid").Value;

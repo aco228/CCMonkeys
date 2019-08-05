@@ -103,7 +103,7 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
         else if (this._session != null)
           return this._session.Logging;
         else
-          return null;
+          return CCMonkeys.Loggings.Logger.Instance;
       }
     }
     public async Task<LeadDM> TryToIdentifyLead(string msisdn, string email)

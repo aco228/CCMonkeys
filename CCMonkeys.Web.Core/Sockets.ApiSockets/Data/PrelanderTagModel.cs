@@ -6,7 +6,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
 {
   public class PrelanderTagModel
   {
-    public int prelanderid { get; set; }
+    public int? prelanderid { get; set; } = null;
     public string tag { get; set; }
     public string answer { get; set; }
     public int index { get; set; }

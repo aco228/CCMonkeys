@@ -39,7 +39,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     public Models.Action Action { get; protected set; } = null;
 
     public int? CountryID { get => this.Session.CountryID; }
-    public string Key { get => this.Session.Key; }
+    public string Key { get => (this.Session != null ? this.Session.Key : ""); }
     public DateTime Created { get; set; }
 
     public SessionSocket(MainContext context, SessionType sessionType)
@@ -49,7 +49,6 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         this.Database = new CCSubmitDirect();
         this.Logging = new ApiSocketsLogging(this);
         MSLogger mslogger = new MSLogger();
-
         this.Created = DateTime.Now;
         this.MainContext = context;
         this.SessionType = sessionType;
@@ -68,7 +67,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       }
       catch (Exception e)
       {
-        this.Logging.StartLoggin("")
+        Logger.Instance.StartLoggin("")
+          .Where("SessionSocket.Constructor")
+          .Add("type", sessionType.ToString())
           .OnException(e);
       }
     }

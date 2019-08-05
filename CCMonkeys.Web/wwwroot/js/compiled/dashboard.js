@@ -2,11 +2,12 @@
 
   get host() { return '[HOST]'; }
   get sguid() { return '[SGUID]'; }
-  get events() { return{[EVENTS]} }
+  get events() { return{"[EVENTS]"} }
 
   constructor(){
     this.callbacks = [];
     this.data = null;
+    this.onready = null;
 
     this.registered = false;
     this.wsHost = `${this.host}/ws_dashboard?sguid=${this.sguid}`;
@@ -44,9 +45,7 @@
       return;
     }
 
-    //this.console("onMessage", "message received", response.Event, response.Data);
-
-    if(this.callbacks.hasOwnProperty('event_' + response.Event) && typeof this.callbacks['event_' + response.Event] === "function")
+    if(this.callbacks.hasOwnProperty('event_' + response.Event))
     {
       for(var i = 0; i < this.callbacks['event_' + response.Event].length; i++)
         this.callbacks['event_' + response.Event][i](response.Data);
@@ -89,38 +88,31 @@
   //
 
   isActionLive(actionID){
-    for(var i = 0; i <= this.data.actions.length; i++)
-      if(this.data.actions[i]==actionID)
-        return true;
-    return false;
+    return this.data.actions.hasOwnProperty(actionID);
   }
 
-  getCountry(countryid){
-    for(var i = 0; i <= this.data.countries.length; i++)
-      if(this.data.countries[i].ID==countryid)
-        return this.data.countries[i];
+  getCountry(id){
+    if(typeof this.data.countries[id] !== 'undefined')
+      return this.data.countries[id];
     return null;
   }
 
   getProvider(id){
-    for(var i = 0; i <= this.data.providers.length; i++)
-      if(this.data.providers[i].ID==id)
-        return this.data.providers[i];
-    return null;    
+    if(typeof this.data.providers[id] !== 'undefined')
+      return this.data.providers[id];
+    return null;
   }
 
   getLander(id){    
-    for(var i = 0; i <= this.data.landers.length; i++)
-      if(this.data.landers[i].ID==id)
-        return this.data.landers[i];
-    return null;  
+    if(typeof this.data.landers[id] !== 'undefined')
+      return this.data.landers[id];
+    return null;
   }
 
   getPrelander(id){    
-    for(var i = 0; i <= this.data.prelanders.length; i++)
-      if(this.data.prelanders[i].ID==id)
-        return this.data.prelanders[i];
-    return null;  
+    if(typeof this.data.prelanders[id] !== 'undefined')
+      return this.data.prelanders[id];
+    return null;
   }
 
   ///
@@ -210,16 +202,19 @@ class SocketData{
 
   onInit(data){
     try{
-      window.Socket.data.actions  = data.Actions;
-      window.Socket.data.landers  = data.Landers;
-      window.Socket.data.landerTypes  = data.LanderTypes;
-      window.Socket.data.prelanders  = data.Prelanders;
-      window.Socket.data.prelanderTypes  = data.PrelanderTypes;
-      window.Socket.data.countries  = data.Countries;
-      window.Socket.data.providers  = data.Providers;
+      window.Socket.data.actions = window.Socket.data.mapActions(window.Socket.data.actions, data.Actions);
+      window.Socket.data.landers = socket.data.mapValues(window.Socket.data.landers, data.Landers);
+      window.Socket.data.landerTypes = socket.data.mapValues(window.Socket.data.landerTypes, data.LanderTypes);
+      window.Socket.data.prelanders = socket.data.mapValues(window.Socket.data.prelanders, data.Prelanders);
+      window.Socket.data.prelanderTypes = socket.data.mapValues(window.Socket.data.prelanderTypes, data.PrelanderTypes);
+      window.Socket.data.countries = socket.data.mapValues(window.Socket.data.countries, data.Countries);
+      window.Socket.data.providers = socket.data.mapValues(window.Socket.data.providers, data.Providers);
 
       var ms = ((new Date()).getTime() - window.Socket.data.created.getTime());
       window.Socket.console(`Init complete`, `We got response in ${ms}ms`);
+
+      if(typeof window.Socket.onready === 'function')
+        window.Socket.onready();
     }
     catch(e){
       console.error('SOCKET::Data. We got exception on initialization', e);
@@ -228,23 +223,35 @@ class SocketData{
 
   onActionConnect(data){
     var self = window.Socket.data;
-    for(var i = 0; i <= self.actions.length; i++)
-      if(self.actions[i]==data.ID)
-        return;
-    //window.Socket.console('+', 'New action has connected with id: ' + data.ID);
-    self.actions.push(data.ID);
+    if(!window.Socket.data.actions.hasOwnProperty(data))
+      window.Socket.data.actions[data] = true;
   }
 
   onActionDisconnect(data){
     var self = window.Socket.data;
-    for(var i = 0; i <= self.actions.length; i++)
-      if(self.actions[i]==data.ID)
-      {
-        self.actions.slice(i, 1);
-        //window.Socket.console('-', 'Action has disconnected with id: ' + data.ID);
-        return;
-      }
+    if(self.actions.hasOwnProperty(data)){
+      self.actions[data] = false;
+      delete self.actions[data];
+    }
   }
+
+  mapActions(input, data){
+    if(typeof data === 'object')
+      for(var i = 0; i < data.length; i++)
+        if(!input.hasOwnProperty(data[i]))
+          input[data[i]] = true;
+    return input;
+  }
+
+  mapValues(input, data){
+    for(var i = 0; i < data.length; i++)
+      if(!input.hasOwnProperty(i.ID))
+      {
+        input[data[i].ID] = data[i];
+      }
+    return input;
+  }
+
 }
 
 

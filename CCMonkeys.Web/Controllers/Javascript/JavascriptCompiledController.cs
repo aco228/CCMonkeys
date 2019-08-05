@@ -108,8 +108,9 @@ namespace CCMonkeys.Web.Controllers
         DashboardJS =
           (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(path)))
             .Replace("[HOST]", baseUrl)
-            .Replace("[EVENTS]", DashboardSocket.PrintEvents())
-            + (new JSMinify.Minify(direct)).getModifiedData();
+            .Replace("\"[EVENTS]\"", DashboardSocket.PrintEvents())
+            + ";"
+            + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(direct)));
       }
 
       DashboardSessionSocket socket = new DashboardSessionSocket(this.Context);

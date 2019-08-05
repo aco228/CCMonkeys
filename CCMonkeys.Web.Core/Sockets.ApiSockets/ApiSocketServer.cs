@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Direct;
+using CCMonkeys.Loggings;
 using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code;
@@ -30,16 +31,16 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     protected override string OnCreateId(HttpContext httpContext)
     {
-      string sguid = httpContext.Request.Query["sguid"];
+      string sguid = httpContext.Request.Query.ContainsKey("sguid") ? httpContext.Request.Query["sguid"].ToString() : string.Empty;
       if (string.IsNullOrEmpty(sguid) || !Sessions.ContainsKey(sguid))
       {
-        string type = httpContext.Request.Query["type"];
+        string type = httpContext.Request.Query.ContainsKey("type") ? httpContext.Request.Query["type"].ToString() : string.Empty;
         if (!string.IsNullOrEmpty(type))
         {
           SessionSocket newSocket = new SessionSocket(new MainContext(null, httpContext), type.Equals("lp") ? Models.SessionType.Lander : Models.SessionType.Prelander);
-          if (string.IsNullOrEmpty(newSocket.Key))
+          if (newSocket == null || string.IsNullOrEmpty(newSocket.Key))
           {
-            newSocket.Logging.StartLoggin("")
+            Logger.Instance.StartLoggin("")
               .Where("OnCreateId")
               .OnException(new Exception("SessionSocket returned string.emptry as Key"));
             return string.Empty;
@@ -47,11 +48,24 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
           Sessions.Add(newSocket.Key, newSocket);
           sguid = newSocket.Key;
+          return newSocket.Key;
         }
       }
 
-      Get(sguid).OnCreate();
-      return sguid;
+      if(string.IsNullOrEmpty(sguid))
+      {
+        Logger.Instance.StartLoggin("OnCreateId").Where("ApiSocketServer.OnCreatedID")
+          .OnException(new Exception("sguid is empty!"));
+        return string.Empty;
+      }
+
+      if (!Sessions.ContainsKey(sguid))
+      {
+        Get(sguid).OnCreate();
+        return sguid;
+      }
+
+      return string.Empty;
     }
 
     protected override void PassWebsocket(string uid, WebSocket webSocket)
@@ -73,12 +87,22 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     protected override async Task OnReceiveMessage(string uid, ServerSocketResponse package)
     {
-      string data = await package.GetTextAsync();
-      if (string.IsNullOrEmpty(data) || !data.Contains('#'))
-        return;
+      string key, json;
+      try
+      {
+        string data = await package.GetTextAsync();
+        if (string.IsNullOrEmpty(data) || !data.Contains('#'))
+          return;
 
-      string key = data.Substring(0, data.IndexOf('#'));
-      string json = data.Substring(data.IndexOf('#') + 1);
+        key = data.Substring(0, data.IndexOf('#'));
+        json = data.Substring(data.IndexOf('#') + 1);
+      }
+      catch (Exception e)
+      {
+        OnException("ApiSocket.OnReceiveMessage", uid, e);
+        return;
+      }
+
       SessionType sessionType = Get(uid).SessionType;
 
       switch (key)

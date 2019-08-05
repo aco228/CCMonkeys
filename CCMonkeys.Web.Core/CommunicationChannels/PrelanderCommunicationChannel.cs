@@ -38,23 +38,48 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
 
     public override async Task<DistributionModel> Call(string key, string json)
     {
-      if (key == "pl-init")
-        return await this.OnInit(key, JsonConvert.DeserializeObject<PrelanderInitModel>(json));
-      else if (key == "pl-tag")
-        return await this.OnTag(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
-      else if (key == "pl-q")
-        return await this.OnQuestion(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
+      try
+      {
+        if (key == "pl-init")
+          return await this.OnInit(key, JsonConvert.DeserializeObject<PrelanderInitModel>(json));
+        else if (key == "pl-tag")
+          return await this.OnTag(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
+        else if (key == "pl-q")
+          return await this.OnQuestion(key, JsonConvert.DeserializeObject<PrelanderTagModel>(json));
+      }
+      catch(Exception e)
+      {
+        this.Logger.StartLoggin("prelander")
+          .Add("where", "pl-call")
+          .Add("key", key)
+          .Add("json", json)
+          .OnException(e);
+        return new DistributionModel() { Status = false };
+      }
+
       return null;
     }
 
-    public PreLanderCacheModel GetPrelander(int id)
+    public PreLanderCacheModel GetPrelander(int? id)
     {
-      if (this._session != null && ((PrelanderCommunication)this._session.Channels[SessionSocketChannel.Prelander]).Prelander != null)
-        this.Prelander = ((PrelanderCommunication)this._session.Channels[SessionSocketChannel.Prelander]).Prelander;
-      else
-        this.Prelander = PrelandersCache.Instance.Get(id);
+      try
+      {
+        if (this._session != null && ((PrelanderCommunication)this._session.Channels[SessionSocketChannel.Prelander]).Prelander != null)
+          this.Prelander = ((PrelanderCommunication)this._session.Channels[SessionSocketChannel.Prelander]).Prelander;
+        else if(id.HasValue)
+          this.Prelander = PrelandersCache.Instance.Get(id.Value);
 
-      return this.Prelander;
+        return this.Prelander;
+      }
+      catch (Exception e)
+      {
+        this.Logger.StartLoggin("prelander")
+          .Add("where", "GetPrelander")
+          .Add("id", id.ToString())
+          .OnException(e);
+
+        return null;
+      }
     }
 
     public async Task<DistributionModel> OnInit(string key, PrelanderInitModel model)
@@ -106,17 +131,24 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
           }
         }
 
+        this.Action.Trace("init.before tag manager");
+
         foreach (var tag in model.tags)
           this.TagManager.Add(tag.name, null);
+
+        this.Action.Trace("init.after tag manager");
 
         this.Action.prelanderid = this.Prelander.ID;
         this.Action.prelandertypeid = this.Prelander.Type.ID;
         this.Action.prelander_data = this.ActionPrelanderCache;
         this.Action.UpdateLater();
+        this.Action.Trace("init.after update");
 
         this.UpdateTagManager();
+        this.Action.Trace("init.after update tag manager");
         this.Database.TransactionalManager.RunAsync();
         return new DistributionModel() { Status = true };
+
       }
       catch (Exception e)
       {
@@ -132,15 +164,22 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
     {
       try
       {
+        this.Action.Trace("ontag. start");
         GetPrelander(model.prelanderid);
         if (this.Prelander == null)
           return new DistributionModel() { Status = false };
+
+        this.Action.Trace("ontag. after prelander");
 
         var tag = PrelandersCache.Instance.GetTag(this.Prelander.ID, model.tag);
         if (tag == null)
           return new DistributionModel() { Status = false };
 
+        this.Action.Trace("ontag. after tag load");
+
         this.RecreateTagModel(this.Action.prelander_data);
+
+        this.Action.Trace("ontag. after recreate tag");
 
         if (this.TagManager.ContainsKey(model.tag))
         {
@@ -148,6 +187,8 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
           this.Action.prelander_data = this.ActionPrelanderCache;
           this.Action.UpdateLater();
         }
+
+        this.Action.Trace("ontag. after tagmanager");
 
         var interaction = new PrelanderTagActionInteractionDM(this.Database)
         {
@@ -157,8 +198,11 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
         };
         interaction.InsertLater();
 
+        this.Action.Trace("ontag. after interaction");
+
         this.UpdateTagManager();
         this.Database.TransactionalManager.RunAsync();
+        this.Action.Trace("ontag. after updates");
         return new DistributionModel() { Status = true };
       }
       catch (Exception e)
@@ -175,17 +219,23 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
     {
       try
       {
+        this.Action.Trace("q.start");
         GetPrelander(model.prelanderid);
         if(this.Prelander == null)
           return new DistributionModel() { Status = false };
 
+        this.Action.Trace("q.after prelander");
+
         var tag = PrelandersCache.Instance.GetTag(this.Prelander.ID, model.tag);
         if (tag == null)
           return new DistributionModel() { Status = false };
+        this.Action.Trace("q.after tag");
 
         var answer = PrelandersCache.Instance.GetAnswer(this.Prelander.ID, model.tag, model.answer);
         if (answer == null)
           return new DistributionModel() { Status = false };
+
+        this.Action.Trace("q.after answer");
 
         this.RecreateTagModel(this.Action.prelander_data);
         if (this.TagManager.ContainsKey(model.tag))
@@ -194,6 +244,8 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
           this.Action.prelander_data = this.ActionPrelanderCache;
           this.Action.UpdateLater();
         }
+
+        this.Action.Trace("q.after recreate and update");
 
         var interaction = new PrelanderTagActionInteractionDM(this.Database)
         {
@@ -204,8 +256,11 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
         };
         interaction.InsertLater();
 
+        this.Action.Trace("q.after interaction");
+
         this.UpdateTagManager();
         this.Database.TransactionalManager.RunAsync();
+        this.Action.Trace("q.after update");
         return new DistributionModel() { Status = true };
       }
       catch (Exception e)
@@ -226,6 +281,9 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
         this.TagManager = ((PrelanderCommunication)this._session.Channels[SessionSocketChannel.Prelander]).TagManager;
         return;
       }
+
+      if (input != null || string.IsNullOrEmpty(input))
+        return;
 
       string[] split = input.Split('.');
       foreach(string s in split)

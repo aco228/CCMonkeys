@@ -2,6 +2,7 @@
 using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.CommunicationChannels;
+using CCMonkeys.Web.Core.Sockets.ApiSockets;
 using Direct;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Cors;
@@ -44,7 +45,10 @@ namespace CCMonkeys.Web.Core.Controllers.SocketBackup
         this.Context.CookiesGetInt(Constants.CountryID),
         this.Context.HttpContext.Request.Headers["User-Agent"]);
 
-      ActionDM action = this.Action;
+
+      SessionSocket socket = new SessionSocket(this.Context, (type.Equals("lp") ? Sockets.ApiSockets.Models.SessionType.Lander : Sockets.ApiSockets.Models.SessionType.Prelander));
+
+      ActionDM action = socket.Action.Data;
       if (action == null)
       {
         logger.StartLoggin("")
@@ -64,8 +68,8 @@ namespace CCMonkeys.Web.Core.Controllers.SocketBackup
         return this.ReturnObject(new DistributionModel() { Status = false });
       }
 
-      string userID = this.Context.CookiesGet(Constants.UserGuidCookie);
-      int? country = this.Context.CookiesGetInt(Constants.CountryID);
+      string userID = socket.User.Key;
+      int? country = socket.CountryID;
 
       if(action.http_flow == false)
       {

@@ -100,10 +100,10 @@ namespace CCMonkeys.Web.Postbacks
       }
       catch (Exception e)
       {
-        this.Logger.StartLoggin(model.TrackingID)
+        this.Logger.StartLoggin(model != null ? model.TrackingID : "notracking")
           .Add("providername", ProvidersCache.Instance.Get(this.ProviderID).Name)
           .Add("query", HttpContext.Request.QueryString.Value)
-          .Add(model)
+          .Add(model != null ? model : null)
           .OnException(e);
         return StatusCode(200);
       }

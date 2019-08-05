@@ -29,7 +29,16 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
   public class PrelandersCache : CacheManagerBase
   {
 
-    public static PrelandersCache Instance => (PrelandersCache)CacheManager.Get(CacheType.Prelander);
+    public static PrelandersCache Instance
+    {
+      get
+      {
+        if (!CacheManager.IsInitiated)
+          CacheManager.Init();
+        return (PrelandersCache)CacheManager.Get(CacheType.Prelander);
+      }
+    }
+
     private static Dictionary<int, PreLanderTypeCacheModel> Types = new Dictionary<int, PreLanderTypeCacheModel>();
     private static Dictionary<int, PreLanderCacheModel> Landers = new Dictionary<int, PreLanderCacheModel>();
 

@@ -6,6 +6,17 @@
 </head>
 <body>
 
+  <div id="actionTemplate" style="display:none">
+    <div class="action">
+      <div class="actionid"></div>
+    </div>
+  </div>
+
+  <div id="actions">
+
+  </div>
+
+
   <script type="text/javascript" src="https://localhost:5001/js/dashboard?recompile=1"></script>
   <script type="text/javascript">
     window.Socket.subscribe(window.Socket.events.ADMIN_DISCONNECTED, onClientDisconnected);
@@ -28,48 +39,14 @@
     }
 
 
-    var tk = '';
-    function login(){
-      $.ajax({
-        url:'https://localhost:5001/api/login/ako/akopass0', 
-        method:'GET',
-        success:function(r){
-          tk = r.accessToken;
-          console.log(r);
-        }
-      })
+  window.Socket.onready = function(){
+    for(var i = 0; i < window.Socket.data.actions.length; i++){
+      var template = $($('#actionTemplate'));
+      template.find('.actionid').text(window.Socket.data.actions[i]);
     }
+  };
 
-    function action(){
-      $.ajax({
-        url:'https://localhost:5001/api/actions?Limit=200', 
-        method:'GET',
-        headers: {
-          'authentication':tk
-        },
-        success:function(r){
-          console.log(r);
-        }
-      })
-    }
 
-    function testDirect(){
-      var q = new Query();
-      q.select('actionid, trackingid, created').from('tm_action').limit(1000);
-      window.Direct.load(q, function(data){
-        console.log(data);
-      });
-    }
-
-    function testQueryDirect(val){
-      if(typeof val === 'undefined')
-        val = 'SELECT msisdn, email FROM [].tm_lead WHERE email IS NOT NULL';
-      var q = new Query();
-      q.sql(val);
-      window.Direct.load(q, function(data){
-        console.log(data);
-      });
-    }
     
   </script>
 

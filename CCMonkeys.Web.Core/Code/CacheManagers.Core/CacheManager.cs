@@ -11,6 +11,8 @@ namespace CCMonkeys.Web.Core
 
   public static class CacheManager
   {
+    private static object LockObj = new object();
+    public static bool IsInitiated { get; set; } = false;
     private static CCSubmitDirect Database { get; set; }
     private static Dictionary<CacheType, CacheManagerBase> Managers { get; set; } = new Dictionary<CacheType, CacheManagerBase>();
 
@@ -18,17 +20,31 @@ namespace CCMonkeys.Web.Core
 
     public static void Init()
     {
-      Database = new CCSubmitDirect();
+      lock(LockObj)
+      {
+        if (IsInitiated)
+          return;
 
-      Managers.Add(CacheType.Country, new CountryCache());
-      Managers.Add(CacheType.Lander, new LandersCache());
-      Managers.Add(CacheType.Prelander, new PrelandersCache());
-      Managers.Add(CacheType.Providers, new ProvidersCache());
+        try
+        {
+          Database = new CCSubmitDirect();
+          Managers.Add(CacheType.Country, new CountryCache());
+          Managers.Add(CacheType.Lander, new LandersCache());
+          Managers.Add(CacheType.Prelander, new PrelandersCache());
+          Managers.Add(CacheType.Providers, new ProvidersCache());
 
-      foreach (var c in Managers)
-        c.Value.Construct(Database);
+          foreach (var c in Managers)
+            c.Value.Construct(Database);
 
-      Database.TransactionalManager.RunAsync();
+          Database.TransactionalManager.RunAsync();
+          IsInitiated = true;
+        }
+        catch (Exception e)
+        {
+          Loggings.Logger.Instance.StartLoggin("cachemanager")
+            .OnException(e);
+        }
+      }
     }
 
   }

@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Loggings;
+using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using Microsoft.AspNetCore.Mvc;
 using SharpRaven;
@@ -15,7 +16,8 @@ namespace CCMonkeys.Web.Controllers
 
     public IActionResult Index()
     {
-      return this.Content("OK!");
+      CacheManager.Init();
+      return this.Content("OK (cm initiated)!");
     }
 
     public IActionResult Test()

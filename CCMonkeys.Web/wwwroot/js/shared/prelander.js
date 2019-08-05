@@ -18,6 +18,25 @@ HTMLCollection.prototype.getElementsByClassName = function (name) {
   return all;
 }
 
+CC.isInitiated = false;
+CC.prelanderCache = [];
+CC.psend = function(key, data){
+  if(!CC.isInitiated){
+    console.log('initiate is not ready');
+    CC.prelanderCache.push({key:key, data:data});
+    return;
+  }
+
+  CC.api.send(key, data);
+
+  if(CC.prelanderCache != null && CC.prelanderCache.length != 0){
+    console.log('sending ' + CC.prelanderCache.length + ' caches data');
+    for(var i =0; i < CC.prelanderCache.length; i++)
+      CC.api.send(CC.prelanderCache[i].key, CC.prelanderCache[i].data);
+    CC.prelanderCache = null;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function(){
   if(typeof CC === 'undefined'){
     alert('no CC wtf??');
@@ -40,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function(){
       ts.forEach((t) => {
         CC.steps++;
         t.addEventListener('click', (e) => {
-          CC.api.send('pl-tag', { prelanderid: CC.prelanderID,  tag:t.getAttribute('cctag') });
+          CC.psend('pl-tag', { prelanderid: CC.prelanderID,  tag:t.getAttribute('cctag') });
         }, false);
         CC.tags.push(new Tag(false, t.getAttribute('cctag'), '',  null));
       });
@@ -63,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function(){
           a.setAttribute('ccq', index);
           a.setAttribute('ccqa', aIndex);
           a.addEventListener('click', (e)=>{
-            CC.api.send('pl-q', 
+            CC.psend('pl-q', 
             { 
               prelanderid: CC.prelanderID, 
               tag: 'q'+a.getAttribute('ccq'), 
@@ -90,12 +109,21 @@ document.addEventListener('DOMContentLoaded', function(){
   CC.pT(); 
 
   CC.api.init({
-    success:function(msg, e) { 
-      CC.prelanderID = msg.prelanderID;
-      CC.api.send('pl-init', { prelanderid: CC.prelanderID, tags: CC.tags });
-    },
+    success:function(msg, e) {},
     error: function(e) { console.log('init error'); }
   });
+
+  CC.api.onregister = function(msg){
+    CC.prelanderID = msg.prelanderID;
+    CC.isInitiated = true;
+    CC.psend('pl-init', { prelanderid: CC.prelanderID, tags: CC.tags });
+    console.log('prelander:: ',msg);
+  };
+
+  CC.api.onregpost = function(msg){
+    document.body.append(msg.Data.actionID);
+    console.log('onregpost', msg);
+  }
 
 
 }, false);

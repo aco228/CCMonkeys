@@ -17,13 +17,28 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     public override LoggerPropertyBuilder StartLoggin(string key)
     {
-      LoggerPropertyBuilder result = new LoggerPropertyBuilder(this, (!string.IsNullOrEmpty(this.Socket.Key) ? this.Socket.Key : "no key"));
-      result.Add("sessionType", (this.Socket != null) ? this.Socket.SessionType.ToString() : "socket.sessiontype is null");
-      result.Add("actionid", (this.Socket.Action != null)? this.Socket.Action.Key : "action is null");
-      result.Add("sessionid", (this.Socket.Session.Data != null ? this.Socket.Session.Data.GetStringID() : string.Empty));
-      result.Add("leadid", this.Socket.Lead != null ? this.Socket.Lead.ID.ToString() : "null");
-      result.Add("userid", (this.Socket.User != null)? this.Socket.User.Key : "user is null");
-      result.Add("useragent", (this.Socket.Session.Request != null ? this.Socket.Session.Request.useragent : string.Empty));
+      if (this.Socket == null)
+        return base.StartLoggin(key);
+
+      LoggerPropertyBuilder result = new LoggerPropertyBuilder(this, this.Socket.Key);
+
+      result.Add("sessionType", this.Socket.SessionType.ToString());
+
+      if(this.Socket.Action != null)
+        result.Add("actionid", this.Socket.Action.Key);
+
+      if(this.Socket.Session != null && this.Socket.Session.Data != null)
+        result.Add("sessionid", this.Socket.Session.Data.GetStringID());
+
+      if(this.Socket.Lead != null)
+        result.Add("leadid", this.Socket.Lead.ID.ToString());
+
+      if(this.Socket.User != null)
+        result.Add("userid", this.Socket.User.Key);
+
+      if(this.Socket.Session != null && this.Socket.Session.Request != null)
+      result.Add("useragent", this.Socket.Session.Request.useragent);
+
       return result;
     }
 

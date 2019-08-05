@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using CCMonkeys.Web.Code.Sockets;
+using CCMonkeys.Web.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -80,6 +82,8 @@ namespace CCMonkeys.Web
       {
         routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
       });
+
+      System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
     }
   }
 }

@@ -22,6 +22,14 @@ namespace CCMonkeys.Sockets
     {
       CancellationToken ct = context.RequestAborted;
       var socketId = this.OnCreateId(context);
+      if(string.IsNullOrEmpty(socketId))
+      {
+        Logger.Instance.StartLoggin("ServerSocketBase").Where("ServerSocketBase.CallInvoke")
+          .OnException(new Exception("socketid is empty!"));
+
+        context.Response.StatusCode = 400;
+        return;
+      }
 
       context.Response.Cookies.Append("test", "aa");
       WebSocket currentSocket = await context.WebSockets.AcceptWebSocketAsync();
@@ -95,6 +103,9 @@ namespace CCMonkeys.Sockets
           ct.ThrowIfCancellationRequested();
 
           result = await socket.ReceiveAsync(buffer, ct);
+          if (result == null)
+            continue;
+
           response.Stream.Write(buffer.Array, buffer.Offset, result.Count);
         }
         while (!result.EndOfMessage);
@@ -105,7 +116,7 @@ namespace CCMonkeys.Sockets
       }
       catch (Exception e)
       {
-        this.OnException("ReceiveResponseAsync", uid, e);
+        //this.OnException("ReceiveResponseAsync", uid, e);
         return null;
       }
     }
@@ -125,12 +136,23 @@ namespace CCMonkeys.Sockets
     }
     protected static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))
     {
-      if (socket == null || socket.State != WebSocketState.Open)
-        return Task.FromResult(0);
+      try
+      {
+        if (socket == null || socket.State != WebSocketState.Open)
+          return Task.FromResult(0);
 
-      var buffer = Encoding.UTF8.GetBytes(data);
-      var segment = new ArraySegment<byte>(buffer);
-      return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
+        var buffer = Encoding.UTF8.GetBytes(data);
+        var segment = new ArraySegment<byte>(buffer);
+        return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
+      }
+      catch (Exception e)
+      {
+        Logger.Instance.StartLoggin("")
+          .Where("ServerSocketBase.SendStringAsync")
+          .Add("data", data)
+          .OnException(e);
+        return Task.FromResult(1);
+      }
     }
     protected async Task<string> ReceiveStringAsync(string uid, WebSocket socket, CancellationToken ct = default(CancellationToken))
     {

@@ -1,5 +1,5 @@
-﻿CC.host = '';
-CC.dbg = false;
+﻿CC.host = 'wss://localhost:5001';
+CC.dbg = true;
 CC.type = 'lp';
 CC.connected = false;
 CC.useBackup = false;
@@ -9,6 +9,8 @@ CC.api = {
   socket: null,
   onopen: null,
   onclose: null,
+  onregister: null,
+  onregpost: null,
   onmessage: null,
   onerror: null,
   created: null,
@@ -71,6 +73,9 @@ CC.api = {
           break;
         }
 
+      if(response.Key == 'register' && typeof CC.api.onregister === 'function')
+        CC.api.onregister(response);
+
       if(response.Key === 'reg-post'){
         milisecondsPassed = ((new Date()).getTime() - self.created.getTime());
         CC.backup.hasValue = true;
@@ -80,6 +85,9 @@ CC.api = {
           CC.backup.sessionid = response.Data.sessionID;
         if(typeof response.Data.userID !== 'undefined')
           CC.backup.userid = response.Data.userID;
+
+        if(typeof CC.api.onregpost === 'function')
+          CC.api.onregpost(response);
       }
 
       self.console(`We got response in ${milisecondsPassed} miliseconds for #${response.Key}!`, response);

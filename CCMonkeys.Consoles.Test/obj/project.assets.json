@@ -5058,7 +5058,11 @@
         "dependencies": {
           "Dapper": "1.60.6",
           "Dapper.Contrib": "1.60.1",
-          "MySql.Data": "8.0.17"
+          "MySql.Data": "8.0.17",
+          "System.IO.FileSystem": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Net.NameResolution": "4.3.0",
+          "System.Net.Primitives": "4.3.0"
         },
         "compile": {
           "bin/placeholder/Direct.dll": {}

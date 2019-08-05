@@ -17,7 +17,15 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
   public class ProvidersCache : CacheManagerBase
   {
-    public static ProvidersCache Instance => (ProvidersCache)CacheManager.Get(CacheType.Providers);
+    public static ProvidersCache Instance
+    {
+      get
+      {
+        if (!CacheManager.IsInitiated)
+          CacheManager.Init();
+        return (ProvidersCache)CacheManager.Get(CacheType.Providers);
+      }
+    }
     private static Dictionary<int, ProviderCacheModel> Providers = new Dictionary<int, ProviderCacheModel>();
 
     protected override void Init()

@@ -31,29 +31,27 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     public string CountryCode { get; protected set; }
     public SessionDataDM SessionData { get; protected set; } = null;
 
-    public string Key { get; set; }
+    public string Key { get; set; } = "no_key";
 
     public Session(SessionSocket socket)
     {
-      this.Key = Guid.NewGuid().ToString();
       this.Socket = socket;
+      this.Data = new SessionDM(this.Database);
+      this.Key = this.Data.GetStringID();
       this.PrepareRequest();
       this.PrepareSessionData();
     }
 
     public void Init()
     {
-      this.Data = new SessionDM(this.Database)
-      {
-        userid = Socket.User.Key,
-        actionid = Socket.Action.Data.GetStringID(),
-        is_live = true,
-        sessionrequestid = this.Request.GetStringID(),
-        sessiondataid = this.SessionDataGuid,
-        sessiontype = (int)this.Socket.SessionType
-      };
+      this.Data.userid = Socket.User.Key;
+      this.Data.actionid = Socket.Action.Data.GetStringID();
+      this.Data.is_live = true;
+      this.Data.sessionrequestid = this.Request.GetStringID();
+      this.Data.sessiondataid = this.SessionDataGuid;
+      this.Data.sessiontype = (int)this.Socket.SessionType;
+
       this.Data.InsertLater();
-      
       Socket.User.SetCountry(this.CountryID, this.CountryCode);
     }
 
