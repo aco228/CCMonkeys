@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Direct;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
   {
 
     [HttpPost("set")]
+    [EnableCors("post")]
     public async Task<IActionResult> Set()
     {
       using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -25,6 +27,7 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
     }
 
     [HttpGet("get")]
+    [EnableCors("get")]
     public async Task<dynamic> Get()
       => (await CCSubmitDirect.Instance.LoadAsync("SELECT data FROM [].tm_landerinfo WHERE id=1")).RawData;
 

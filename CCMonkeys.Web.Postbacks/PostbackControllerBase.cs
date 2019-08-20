@@ -74,12 +74,14 @@ namespace CCMonkeys.Web.Postbacks
         if (this.Action == null) // abstraction class had some error. we assume that that class will make some log
           return this.StatusCode(400);
 
+        bool isStolen = false, isCharge = false;
         string providerName = (this.Action.providerid.HasValue ? ProvidersCache.Instance.Get(this.Action.providerid.Value).Name : "provider null?");
         if (model.Type == ActionModelEvent.Charge || model.Type == ActionModelEvent.Subscribe)
         {
+          isCharge = true;
           DashboardSocket.OnNewTransaction(providerName, this.Action.actionid);
           this.Action.times_charged++;
-          this.SystemPostback();
+          isStolen = this.SystemPostback();
         }
 
         if (model.Type == ActionModelEvent.Refund)
@@ -98,7 +100,7 @@ namespace CCMonkeys.Web.Postbacks
         await this.Database.TransactionalManager.RunAsync();
 
         // Redirect to page for facebook pixel
-        if(this.Action != null && !string.IsNullOrEmpty(this.Action.fbid))
+        if(isCharge && !isStolen && this.Action != null && !string.IsNullOrEmpty(this.Action.fbid))
           return this.Redirect("/fbid/" + this.Action.fbid);
 
         return StatusCode(200);
@@ -139,13 +141,14 @@ namespace CCMonkeys.Web.Postbacks
 
     // SUMMARY: Send postback informations to every other instance (legacy, bananaclicks, undercover)
     // Return if conversion is stolen
-    protected void SystemPostback()
+    protected bool SystemPostback()
     {
       UndercoverResult undercover = CCUndercoverAgent.Init(this.Action, this.Postback);
       if (!undercover.DontSendConversionToBananaclicks)
       {
         this.Postback.Log("This transaction will not be stolen and will be sent to banana ::clickid=" + this.TrackingID);
         this.SendPostbackToBananaclicks();
+        return false;
       }
       else
       {
@@ -153,6 +156,7 @@ namespace CCMonkeys.Web.Postbacks
         this.Action.UpdateLater();
 
         this.Postback.Log("THIS TRANSACTION WILL BE STOLEN ::clickid=" + this.TrackingID);
+        return true;
       }
     }
 
