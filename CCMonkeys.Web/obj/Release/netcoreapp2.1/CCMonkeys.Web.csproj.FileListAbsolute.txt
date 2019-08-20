@@ -25,3 +25,11 @@ D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\Direct.pdb
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Web.Postbacks.pdb
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Loggings.dll
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Loggings.pdb
+D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Web.Views.dll
+D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Web.Views.pdb
+D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.TagHelpers.input.cache
+D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.TagHelpers.output.cache
+D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.RazorCoreGenerate.cache
+D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\Razor\Views\facebook_pixel.g.cshtml.cs
+D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.RazorTargetAssemblyInfo.cs
+D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.Views.pdb

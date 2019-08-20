@@ -348,5 +348,131 @@ public string description { get; set; } = default;
 [DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 
+public partial class ProviderDM : DirectModel
+{
+
+public ProviderDM() : base("tm_provider", "providerid", null){}
+public ProviderDM(DirectDatabaseBase db) : base("tm_provider", "providerid", db){}
+
+[DColumn(Name = "providerid", IsPrimary=true)]
+public int providerid { get; set; } = default;
+
+[DColumn(Name = "name")]
+public string name { get; set; } = default;
+
+[DColumn(Name = "price", Nullable = true, HasDefaultValue=true)]
+public double? price { get; set; } = default;
+
+public partial class SessionDM : DirectModel
+{
+
+public SessionDM() : base("tm_session", "sessionid", null){}
+public SessionDM(DirectDatabaseBase db) : base("tm_session", "sessionid", db){}
+
+[DColumn(Name = "sessionid", IsPrimary=true)]
+public string sessionid { get; set; } = default;
+
+[DColumn(Name = "sessiontype")]
+public int sessiontype { get; set; } = default;
+
+[DColumn(Name = "userid")]
+public string userid { get; set; } = default;
+
+[DColumn(Name = "actionid")]
+public string actionid { get; set; } = default;
+
+[DColumn(Name = "sessiondataid", Nullable = true)]
+public string sessiondataid { get; set; } = default;
+
+[DColumn(Name = "sessionrequestid", Nullable = true)]
+public string sessionrequestid { get; set; } = default;
+
+[DColumn(Name = "duration", HasDefaultValue=true)]
+public double duration { get; set; } = default;
+
+[DColumn(Name = "is_live", HasDefaultValue=true)]
+public bool is_live { get; set; } = false;
+
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
+public DateTime created { get; set; } = default;
+
+public partial class SessionDataDM : DirectModel
+{
+
+public SessionDataDM() : base("tm_session_data", "sessiondataid", null){}
+public SessionDataDM(DirectDatabaseBase db) : base("tm_session_data", "sessiondataid", db){}
+
+[DColumn(Name = "sessiondataid", IsPrimary=true)]
+public string sessiondataid { get; set; } = default;
+
+[DColumn(Name = "guid")]
+public string guid { get; set; } = default;
+
+[DColumn(Name = "countryCode", Nullable = true)]
+public string countryCode { get; set; } = default;
+
+[DColumn(Name = "countryName", Nullable = true)]
+public string countryName { get; set; } = default;
+
+[DColumn(Name = "region", Nullable = true)]
+public string region { get; set; } = default;
+
+[DColumn(Name = "city", Nullable = true)]
+public string city { get; set; } = default;
+
+[DColumn(Name = "zipCode", Nullable = true)]
+public string zipCode { get; set; } = default;
+
+[DColumn(Name = "ISP", Nullable = true)]
+public string ISP { get; set; } = default;
+
+[DColumn(Name = "latitude", Nullable = true)]
+public string latitude { get; set; } = default;
+
+[DColumn(Name = "longitude", Nullable = true)]
+public string longitude { get; set; } = default;
+
+[DColumn(Name = "timezone", Nullable = true)]
+public string timezone { get; set; } = default;
+
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
+public DateTime created { get; set; } = default;
+
+public partial class SessionRequestDM : DirectModel
+{
+
+public SessionRequestDM() : base("tm_session_request", "sessionrequestid", null){}
+public SessionRequestDM(DirectDatabaseBase db) : base("tm_session_request", "sessionrequestid", db){}
+
+[DColumn(Name = "sessionrequestid", IsPrimary=true)]
+public string sessionrequestid { get; set; } = default;
+
+[DColumn(Name = "rawurl")]
+public string rawurl { get; set; } = default;
+
+[DColumn(Name = "ip")]
+public string ip { get; set; } = default;
+
+[DColumn(Name = "useragent")]
+public string useragent { get; set; } = default;
+
+[DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
+public DateTime created { get; set; } = default;
+
+public partial class SessionTypeDM : DirectModel
+{
+
+public SessionTypeDM() : base("tm_session_type", "sessiontypeid", null){}
+public SessionTypeDM(DirectDatabaseBase db) : base("tm_session_type", "sessiontypeid", db){}
+
+[DColumn(Name = "sessiontypeid", IsPrimary=true)]
+public int sessiontypeid { get; set; } = default;
+
+[DColumn(Name = "name")]
+public string name { get; set; } = default;
+
+public partial class TestDM : DirectModel
+{
+
 }
 }

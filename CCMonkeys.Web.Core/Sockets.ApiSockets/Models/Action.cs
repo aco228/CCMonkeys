@@ -24,6 +24,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     private string TrackingID { get; set; } = string.Empty;
     private string AffID { get; set; } = string.Empty;
     private string PubID { get; set; } = string.Empty;
+    private string FbID { get; set; } = string.Empty;
     public int? LanderID { get; set; } = null;
     public int? LanderTypeID { get; set; } = null;
     public int? PreLanderID { get; set; } = null;
@@ -87,6 +88,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       this.Data.affid = this.AffID;
       this.Data.trackingid = this.TrackingID;
       this.Data.pubid = this.PubID;
+      this.Data.fbid = this.FbID;
 
       logger.Track("after create");
       if (Socket.Lead != null)
@@ -139,6 +141,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         this.AffID = queryValues["affiliate_id"];
       if (queryValues.ContainsKey("utm_campaign"))
         this.PubID = queryValues["utm_campaign"];
+      if (queryValues.ContainsKey("fbid"))
+        this.FbID = queryValues["fbid"];
     }
 
     public void UpdateLead(LeadDM lead)

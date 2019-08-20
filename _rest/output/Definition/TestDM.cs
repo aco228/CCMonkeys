@@ -33,5 +33,32 @@ public partial class LanderTypeDM : DirectModel
 public partial class LeadDM : DirectModel
 {
 
+public partial class LeadHistoryDM : DirectModel
+{
+
+public partial class PrelanderDM : DirectModel
+{
+
+public partial class PrelanderTypeDM : DirectModel
+{
+
+public partial class ProviderDM : DirectModel
+{
+
+public partial class SessionDM : DirectModel
+{
+
+public partial class SessionDataDM : DirectModel
+{
+
+public partial class SessionRequestDM : DirectModel
+{
+
+public partial class SessionTypeDM : DirectModel
+{
+
+public partial class TestDM : DirectModel
+{
+
 }
 }

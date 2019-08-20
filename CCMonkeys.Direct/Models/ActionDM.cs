@@ -27,6 +27,9 @@ public string affid { get; set; } = default;
 [DColumn(Name = "pubid", Nullable = true)]
 public string pubid { get; set; } = default;
 
+[DColumn(Name = "fbid", Nullable = true)]
+public string fbid { get; set; } = default;
+
 [DColumn(Name = "prelandertypeid", Nullable = true)]
 public int? prelandertypeid { get; set; } = default;
 

@@ -96,6 +96,11 @@ namespace CCMonkeys.Web.Postbacks
 
         this.Action.UpdateLater();
         await this.Database.TransactionalManager.RunAsync();
+
+        // Redirect to page for facebook pixel
+        if(this.Action != null && !string.IsNullOrEmpty(this.Action.fbid))
+          return this.Redirect("/fbid/" + this.Action.fbid);
+
         return StatusCode(200);
       }
       catch (Exception e)
