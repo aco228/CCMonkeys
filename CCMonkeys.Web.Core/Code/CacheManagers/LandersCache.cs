@@ -14,10 +14,18 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
     public string Name;
   }
 
+  public class LanderSubtype
+  {
+    public int ID;
+    public string Name;
+  }
+
+
   public class LanderCacheModel
   {
     public int ID;
     public LanderTypeCacheModel Type;
+    public LanderSubtype Subtype;
     public string Name;
     public string Url;
   }
@@ -35,11 +43,19 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
     }
 
     private static Dictionary<int, LanderTypeCacheModel> Types = new Dictionary<int, LanderTypeCacheModel>();
+    private static Dictionary<int, LanderSubtype> Subtypes = new Dictionary<int, LanderSubtype>();
     private static Dictionary<int, LanderCacheModel> Landers = new Dictionary<int, LanderCacheModel>();
     
 
     protected override void Init()
     {
+      foreach (var t in this.Database.Query<LanderSubtypeDM>().Where("[id]>0").LoadEnumerable())
+        Subtypes.Add(t.ID.Value, new LanderSubtype()
+        {
+          ID = t.ID.Value,
+          Name = t.name
+        });
+
       foreach (var t in this.Database.Query<LanderTypeDM>().Where("[id]>0").LoadEnumerable())
         Types.Add(t.ID.Value, new LanderTypeCacheModel()
         {
@@ -53,6 +69,7 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
           ID = l.ID.Value,
           Name = l.name,
           Type = Types[l.landertypeid],
+          Subtype = Subtypes[l.landersubtype],
           Url = l.url
         });
     }

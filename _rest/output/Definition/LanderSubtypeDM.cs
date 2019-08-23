@@ -3,7 +3,7 @@ using System;
 
 namespace Direct.ccmonkeys.Models
 {
-public partial class LanderDM : DirectModel
+public partial class LanderSubtypeDM : DirectModel
 {
 
 }

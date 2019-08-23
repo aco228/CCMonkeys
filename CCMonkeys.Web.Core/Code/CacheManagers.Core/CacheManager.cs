@@ -28,6 +28,7 @@ namespace CCMonkeys.Web.Core
         try
         {
           Database = new CCSubmitDirect();
+          Managers.Clear();
           Managers.Add(CacheType.Country, new CountryCache());
           Managers.Add(CacheType.Lander, new LandersCache());
           Managers.Add(CacheType.Prelander, new PrelandersCache());

@@ -1,5 +1,6 @@
 ﻿using CCMonkeys.Loggings;
 using CCMonkeys.Sockets;
+using CCMonkeys.Web.Core.Code.CacheManagers;
 using Direct.ccmonkeys.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
   public class SendingRegistrationModel : SendingObj
   {
     public LeadDM lead { get; set; } = null;
+    public LanderCacheModel lander { get; set; } = null;
     public string country { get; set; } = string.Empty;
     public int? prelanderID { get; set; } = null;
     public int? landerID { get; set; } = null;

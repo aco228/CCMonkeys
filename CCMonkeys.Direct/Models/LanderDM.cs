@@ -15,6 +15,9 @@ public int landerid { get; set; } = default;
 [DColumn(Name = "landertypeid")]
 public int landertypeid { get; set; } = default;
 
+[DColumn(Name = "landersubtype", HasDefaultValue=true)]
+public int landersubtype { get; set; } = 1;
+
 [DColumn(Name = "name")]
 public string name { get; set; } = default;
 

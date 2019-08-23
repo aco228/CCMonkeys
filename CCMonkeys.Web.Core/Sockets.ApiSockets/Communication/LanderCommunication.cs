@@ -52,7 +52,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
         var sendingModel = new SendingRegistrationModel()
         {
           lead = this.Socket.Lead,
-          country = this.Socket.Session.CountryCode
+          country = this.Socket.Session.CountryCode,
+          lander = lander
         };
         if (this.Socket.Lead != null)
           sendingModel.leadHasSubscription = await this.Socket.Lead.HasLeadSubscriptions(model.providerID.Value);
