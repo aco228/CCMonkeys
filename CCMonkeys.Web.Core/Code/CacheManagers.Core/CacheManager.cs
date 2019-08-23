@@ -18,11 +18,11 @@ namespace CCMonkeys.Web.Core
 
     public static CacheManagerBase Get(CacheType type) => Managers.ContainsKey(type) ? Managers[type] : null;
 
-    public static void Init()
+    public static void Init(bool ignoreInitiate = false)
     {
       lock(LockObj)
       {
-        if (IsInitiated)
+        if (!ignoreInitiate && IsInitiated)
           return;
 
         try
