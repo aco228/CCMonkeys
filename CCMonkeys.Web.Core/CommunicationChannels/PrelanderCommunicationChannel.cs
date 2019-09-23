@@ -9,6 +9,7 @@ using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Direct.ccmonkeys.Models;
 using Newtonsoft.Json;
 
@@ -142,6 +143,7 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
         this.Action.prelandertypeid = this.Prelander.Type.ID;
         this.Action.prelander_data = this.ActionPrelanderCache;
         this.Action.UpdateLater();
+        DashboardSocket.OnActionUpdate(this.Action);
         this.Action.Trace("init.after update");
 
         this.UpdateTagManager();
@@ -201,6 +203,7 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
         this.Action.Trace("ontag. after interaction");
 
         this.UpdateTagManager();
+        DashboardSocket.OnActionUpdate(this.Action);
         this.Database.TransactionalManager.RunAsync();
         this.Action.Trace("ontag. after updates");
         return new DistributionModel() { Status = true };
@@ -261,6 +264,7 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
         this.UpdateTagManager();
         this.Database.TransactionalManager.RunAsync();
         this.Action.Trace("q.after update");
+        DashboardSocket.OnActionUpdate(this.Action);
         return new DistributionModel() { Status = true };
       }
       catch (Exception e)

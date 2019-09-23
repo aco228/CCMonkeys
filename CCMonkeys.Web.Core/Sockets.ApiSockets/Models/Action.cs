@@ -44,6 +44,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
         this.Key = this.Data.GetStringID();
         this.Socket.MainContext.SetCookie(Constants.ActionID, this.Key);
       }
+
+      if (socket.SessionType == SessionType.Lander)
+        this.Socket.MainContext.RemoveCookie(Constants.ActionID);
+
     }
 
     public async void Init(int? providerID)

@@ -123,9 +123,11 @@
     try{
       var result = {};
       if(prelander == null || typeof prelander.Tags === 'undefined' || prelander.Tags == null) return null;
-      for(var i = 0; i < prelander.Tags.length; i++)
-        if(prelander.Tags[i].name == tagName){
-          result.tag = prelander.Tags[i];
+      var tags = prelander.Tags;
+
+      for(var i = 0; i < tags.length; i++)
+        if(tags[i].name == tagName){
+          result.tag = tags[i];
           break;
         }
       if(typeof result.tag !== 'undefined' && result.tag != null && result.tag.isQuestion && typeof prelander.Answers !== 'undefined' && prelander.Answers.length > 0){
@@ -136,7 +138,7 @@
       }
       else  
         result.answers = null;
-      return result;
+      return JSON.parse( JSON.stringify( result ) );
     }
     catch(exception){
       console.error("socket.getPrelanderTag PRELANDER MUST BE prelander object");
@@ -147,25 +149,45 @@
     try{
       var split = prelanderData.split('.');
       var prelander = this.getPrelander(prelanderid);
-      var result = [];
+      //console.log(prelander);
+
+      var result = {
+        count:0,
+        withValues:0,
+        data:[]
+      };
+
       split.forEach((s)=>{
         if(s == '') return;
         var info = s.split('=');
+        //console.log('info', info);
         if(info.length != 2) return;
 
         var tagResponse = this.___getPrelanderTag(prelander, info[0]);
+        result.count++;
+        if(info[1] != '')
+          result.withValues++;
+
+        //console.log('tagResponse', tagResponse);
         if(tagResponse == null || typeof tagResponse.tag === 'undefined' || tagResponse.tag == null)
           return null;
 
         var tag = tagResponse.tag;
-        if(tag.isQuestion && info[1] != '')
+        tag.hasValue = false;
+
+        if(info[1] != '')
         {
-          var num = parseInt(info[1]);
-          if(typeof tagResponse.answers !== 'undefined' && tagResponse.answers != null && num <= tagResponse.answers.length)
-            tag.answer = tagResponse.answers[num];
+          tag.hasValue = true;
+          if(tag.isQuestion)
+          {
+            var num = parseInt(info[1]);
+            if(typeof tagResponse.answers !== 'undefined' && tagResponse.answers != null && num <= tagResponse.answers.length)
+              tag.answer = tagResponse.answers[num];
+          }
+
         }
 
-        result.push(tag);
+        result.data.push(tag);
       });
       return result;
     }

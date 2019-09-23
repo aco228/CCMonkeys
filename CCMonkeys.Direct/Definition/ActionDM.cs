@@ -9,7 +9,7 @@ namespace Direct.ccmonkeys.Models
 
     public async void Trace(string where)
     {
-      await this.GetDatabase().ExecuteAsync("INSERT INTO [].tm_action_trace (actionid, wheree)", this.GetStringID(), where);
+      //await this.GetDatabase().ExecuteAsync("INSERT INTO [].tm_action_trace (actionid, wheree)", this.GetStringID(), where);
     }
 
   }

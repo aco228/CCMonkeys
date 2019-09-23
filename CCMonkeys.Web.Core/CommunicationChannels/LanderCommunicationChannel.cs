@@ -7,6 +7,7 @@ using CCMonkeys.Loggings;
 using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
+using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Direct.ccmonkeys.Models;
 using Newtonsoft.Json;
 
@@ -58,6 +59,7 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
 
         this.Action.input_email = true;
         this.Action.UpdateLater();
+        DashboardSocket.OnActionUpdate(this.Action);
 
         await this.Database.TransactionalManager.RunAsync();
 
@@ -84,6 +86,7 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
 
         this.Action.input_contact = true;
         this.Action.UpdateLater();
+        DashboardSocket.OnActionUpdate(this.Action);
 
         this.Lead.TryUpdateFirstName(this.Database, model.firstName);
         this.Lead.TryUpdateLastName(this.Database, model.lastName);
@@ -121,6 +124,7 @@ namespace CCMonkeys.Web.Core.CommunicationChannels
 
         this.Action.has_redirectedToProvider = true;
         this.Action.UpdateLater();
+        DashboardSocket.OnActionUpdate(this.Action);
 
         await this.Database.TransactionalManager.RunAsync();
         return new DistributionModel() { Status = true };
