@@ -90,6 +90,7 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
     public CountryCacheModel Get(int id) => (from c in _data where c.Value.ID == id select c.Value).FirstOrDefault();
 
+    public List<CountryCacheModel> GetAll() => GetModel();
     public List<CountryCacheModel> GetModel()
     {
       List<CountryCacheModel> result = new List<CountryCacheModel>();

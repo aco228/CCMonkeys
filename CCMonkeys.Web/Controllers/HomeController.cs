@@ -15,10 +15,7 @@ namespace CCMonkeys.Web.Controllers
   {
 
     public IActionResult Index()
-    {
-      CacheManager.Init();
-      return this.Content("OK (cm initiated)!");
-    }
+      => this.Content("(cm:):: " + CacheManager.Init());
 
     public IActionResult Test()
     {

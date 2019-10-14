@@ -49,6 +49,10 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
     protected override void Init()
     {
+      Types.Clear();
+      Subtypes.Clear();
+      Landers.Clear();
+
       foreach (var t in this.Database.Query<LanderSubtypeDM>().Where("[id]>0").LoadEnumerable())
         Subtypes.Add(t.ID.Value, new LanderSubtype()
         {
@@ -76,6 +80,8 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
     public LanderCacheModel Get(int id) => Landers.ContainsKey(id) ? Landers[id] : null;
     public LanderTypeCacheModel GetType(int id) => Types.ContainsKey(id) ? Types[id] : null;
+
+    public List<LanderCacheModel> GetAll() => GetLandersModel();
     public List<LanderCacheModel> GetLandersModel() => (from l in Landers select l.Value).ToList();
     public List<LanderTypeCacheModel> GetLanderTypesModel() => (from l in Types select l.Value).ToList();
     public LanderCacheModel GetByUrl(string url) => (from l in Landers where l.Value.Url.Equals(url) select l.Value).FirstOrDefault();

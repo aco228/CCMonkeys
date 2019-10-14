@@ -44,6 +44,9 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
     protected override async void Init()
     {
+      Types.Clear();
+      Landers.Clear();
+
       foreach (var t in this.Database.Query<PrelanderTypeDM>().Where("[id]>0").LoadEnumerable())
         Types.Add(t.ID.Value, new PreLanderTypeCacheModel()
         {
@@ -64,10 +67,12 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
         
     }
 
-    public PreLanderCacheModel Get(int id) => Landers.ContainsKey(id) ? Landers[id] : null;
-    public PreLanderTypeCacheModel GetType(int id) => Types.ContainsKey(id) ? Types[id] : null;
+    public List<PreLanderCacheModel> GetAll() => GetPrelandersModel();
     public List<PreLanderCacheModel> GetPrelandersModel() => (from l in Landers select l.Value).ToList();
     public List<PreLanderTypeCacheModel> GetPrelanderTypesModel() => (from l in Types select l.Value).ToList();
+
+    public PreLanderCacheModel Get(int id) => Landers.ContainsKey(id) ? Landers[id] : null;
+    public PreLanderTypeCacheModel GetType(int id) => Types.ContainsKey(id) ? Types[id] : null;
     public PreLanderCacheModel GetByUrl(string url) => (from l in Landers where l.Value.Url.Equals(url) select l.Value).FirstOrDefault();
 
     public PrelanderTagDM GetTag(int prelanderID, string tagName)

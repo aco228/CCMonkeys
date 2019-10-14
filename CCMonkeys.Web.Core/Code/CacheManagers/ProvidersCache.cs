@@ -30,6 +30,8 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
     protected override void Init()
     {
+      Providers.Clear();
+
       foreach (var t in this.Database.Query<ProviderDM>().Where("[id]>0").LoadEnumerable())
         Providers.Add(t.ID.Value, new ProviderCacheModel()
         {

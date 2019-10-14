@@ -18,17 +18,18 @@ namespace CCMonkeys.Web.Core
 
     public static CacheManagerBase Get(CacheType type) => Managers.ContainsKey(type) ? Managers[type] : null;
 
-    public static void Init(bool ignoreInitiate = false)
+    public static string Init(bool ignoreInitiate = false)
     {
       lock(LockObj)
       {
-        if (!ignoreInitiate && IsInitiated)
-          return;
+        if(IsInitiated == true && ignoreInitiate == false)
+            return "not init";
 
         try
         {
           Database = new CCSubmitDirect();
           Managers.Clear();
+
           Managers.Add(CacheType.Country, new CountryCache());
           Managers.Add(CacheType.Lander, new LandersCache());
           Managers.Add(CacheType.Prelander, new PrelandersCache());
@@ -39,11 +40,15 @@ namespace CCMonkeys.Web.Core
 
           Database.TransactionalManager.RunAsync();
           IsInitiated = true;
+
+          return "init";
         }
         catch (Exception e)
         {
           Loggings.Logger.Instance.StartLoggin("cachemanager")
             .OnException(e);
+
+          return "Exception: " + e.ToString();
         }
       }
     }
