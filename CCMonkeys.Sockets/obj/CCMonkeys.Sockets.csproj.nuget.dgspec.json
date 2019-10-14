@@ -10,17 +10,15 @@
         "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj",
         "projectName": "CCMonkeys.Direct",
         "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\CCMonkeys.Direct.csproj",
-        "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
         "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Direct\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\aco228_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -66,17 +64,15 @@
         "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj",
         "projectName": "CCMonkeys.Loggings",
         "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\CCMonkeys.Loggings.csproj",
-        "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
         "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Logger\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\aco228_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -128,17 +124,15 @@
         "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj",
         "projectName": "CCMonkeys.Sockets",
         "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\CCMonkeys.Sockets.csproj",
-        "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
         "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Sockets\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\aco228_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.1"
@@ -196,17 +190,15 @@
         "projectUniqueName": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj",
         "projectName": "Direct",
         "projectPath": "D:\\github\\Direct.V3\\Direct.V3\\Direct.csproj",
-        "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
         "outputPath": "D:\\github\\Direct.V3\\Direct.V3\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\aco228_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"

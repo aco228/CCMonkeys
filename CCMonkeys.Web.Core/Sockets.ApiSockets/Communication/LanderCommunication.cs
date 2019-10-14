@@ -35,7 +35,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
 #endif
         DomainManager domainManager = new DomainManager(model.url);
 
-        var lander = LandersCache.Instance.GetByUrl(domainManager.Domain);
+        var lander = LandersCache.Instance.GetByUrl(domainManager.Url);
         if (lander == null)
         {
           this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "Lander not found"));

@@ -31,6 +31,10 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
 
     private Dictionary<string, CountryCacheModel> _data = null;
 
+    protected override void ClearData()
+    {
+    }
+
     protected override async void Init()
     {
       CCSubmitDirect db = this.Database;
@@ -99,5 +103,6 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
           result.Add(c.Value);
       return result;
     }
+
   }
 }

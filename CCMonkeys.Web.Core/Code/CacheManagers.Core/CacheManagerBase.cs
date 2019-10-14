@@ -24,6 +24,14 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers.Core
       LastInit = DateTime.Now;
     }
 
+    public virtual void Reload()
+    {
+      this.ClearData();
+      this.Init();
+      this.LastInit = DateTime.Now;
+    }
+
+    protected abstract void ClearData();
     protected abstract void Init();
 
 

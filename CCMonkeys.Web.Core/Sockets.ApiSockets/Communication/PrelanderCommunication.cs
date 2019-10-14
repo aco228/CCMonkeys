@@ -1,5 +1,6 @@
 ﻿using CCMonkeys.Loggings;
 using CCMonkeys.Sockets;
+using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Code;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
@@ -40,24 +41,45 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
 #if DEBUG
 
         if (model.url.StartsWith("file:"))
-          model.url = "https://lander.giveaways-online.com/l7/?lp=l7&msisdn=000015251255&s=24385385";
+        {
+          string parameters = "";
+          if (model.url.Contains("?"))
+            parameters = "?" + model.url.Split('?')[1];
+
+          model.url = "https://lander.giveaways-online.com/l7/" + parameters;
+        }
 
 #endif
 
         DomainManager domainManager = new DomainManager(model.url);
 
-        this.Prelander = PrelandersCache.Instance.GetByUrl(domainManager.Domain);
-        if (this.Prelander == null)
+        if(domainManager.HasError)
         {
           this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "Prelander not found"));
-          throw new Exception(string.Format("Prelander is not found for domain '{0}'", domainManager.Domain));
+          throw new Exception(string.Format("Prelander is not found for domain '{0}'", domainManager.Url));
           return;
         }
+        this.Prelander = domainManager.Prelander;
+
+        // 
+        // Check for all neceseary parameters in url
+        //
+
+        if(!domainManager.Queries.ContainsKey("dbg"))
+        {
+          if(!domainManager.Queries.ContainsKey("msisdn"))
+          {
+            this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "Missing msidn params"));
+            throw new Exception(string.Format("Msisdn parameter is not present in url '{0}'", domainManager.Url));
+          }
+        }
+
+
 
         this.Socket.Action.PreLanderID = this.Prelander.ID;
         this.Socket.Action.PreLanderTypeID = this.Prelander.Type.ID;
 
-        await this.Socket.Session.PrelanderRegistrationLogic(domainManager.Domain, domainManager.Queries, model);
+        await this.Socket.Session.PrelanderRegistrationLogic(domainManager.Url, domainManager.Queries, model);
 
         this.Socket.Action.PrepareActionBasedOnQueries(domainManager.Queries);
 

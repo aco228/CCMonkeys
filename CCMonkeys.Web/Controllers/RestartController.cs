@@ -12,7 +12,7 @@ namespace CCMonkeys.Web.Controllers
   {
 
     public IActionResult Index()
-      => this.Content("(cm:):: " + CacheManager.Init(true));
+      => this.Content("(cm:):: " + CacheManager.Restart());
 
     public IActionResult Status()
       => this.Ok(new

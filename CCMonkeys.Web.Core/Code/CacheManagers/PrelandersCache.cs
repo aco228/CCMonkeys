@@ -39,13 +39,22 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
       }
     }
 
-    private static Dictionary<int, PreLanderTypeCacheModel> Types = new Dictionary<int, PreLanderTypeCacheModel>();
-    private static Dictionary<int, PreLanderCacheModel> Landers = new Dictionary<int, PreLanderCacheModel>();
+    public static Dictionary<string, PrelanderDomainDM> Domains = new Dictionary<string, PrelanderDomainDM>();
+    public static Dictionary<int, PreLanderTypeCacheModel> Types = new Dictionary<int, PreLanderTypeCacheModel>();
+    public static Dictionary<int, PreLanderCacheModel> Landers = new Dictionary<int, PreLanderCacheModel>();
+
+
+    protected override void ClearData()
+    {
+      Domains.Clear();
+      Types.Clear();
+      Landers.Clear();
+    }
 
     protected override async void Init()
     {
-      Types.Clear();
-      Landers.Clear();
+      foreach (var d in this.Database.Query<PrelanderDomainDM>().Where("[id]>0").LoadEnumerable())
+        Domains.Add(d.url, d);
 
       foreach (var t in this.Database.Query<PrelanderTypeDM>().Where("[id]>0").LoadEnumerable())
         Types.Add(t.ID.Value, new PreLanderTypeCacheModel()

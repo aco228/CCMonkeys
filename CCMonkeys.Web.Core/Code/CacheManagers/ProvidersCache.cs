@@ -28,10 +28,13 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
     }
     private static Dictionary<int, ProviderCacheModel> Providers = new Dictionary<int, ProviderCacheModel>();
 
-    protected override void Init()
+    protected override void ClearData()
     {
       Providers.Clear();
+    }
 
+    protected override void Init()
+    {
       foreach (var t in this.Database.Query<ProviderDM>().Where("[id]>0").LoadEnumerable())
         Providers.Add(t.ID.Value, new ProviderCacheModel()
         {
