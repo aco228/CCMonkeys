@@ -27,6 +27,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     private string FbID { get; set; } = string.Empty;
     public int? LanderID { get; set; } = null;
     public int? LanderTypeID { get; set; } = null;
+    public int? ProviderID { get; set; } = null;
     public int? PreLanderID { get; set; } = null;
     public int? PreLanderTypeID { get; set; } = null;
 
@@ -50,7 +51,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
 
     }
 
-    public async void Init(int? providerID)
+    //public async void Init(int? providerID)
+    public async void Init()
     {
       var logger = new MSLogger();
       // if we had this ID stored in cookies or this user is now on lander
@@ -86,7 +88,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       this.Data.prelandertypeid = this.PreLanderTypeID;
       this.Data.landerid = this.LanderID;
       this.Data.landertypeid = this.LanderTypeID;
-      this.Data.providerid = providerID;
+      this.Data.providerid = this.ProviderID;
       this.Data.input_redirect = (Socket.SessionType == SessionType.Lander);
       this.Data.countryid = this.Socket.CountryID;
       this.Data.affid = this.AffID;

@@ -65,6 +65,18 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
     /// STATICS
     ///
 
+
+    public static List<string> ActiveSessions
+    {
+      get
+      {
+        List<string> result = new List<string>();
+        foreach (var s in Sessions)
+          result.Add(s.Value.Admin.username);
+        return result;
+      }
+    }
+
     public static void AddSession(DashboardSessionSocket socket)
     {
       if (Sessions.ContainsKey(socket.Key))

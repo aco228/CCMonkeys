@@ -59,9 +59,14 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
     {
       string ip = this.Socket.MainContext.HttpContext.Connection.RemoteIpAddress.ToString();
       if (ip.Equals("::1")) ip = "79.140.149.187";
+      
+      string url = string.Empty;
+      if (this.Socket.MainContext.HttpContext.Request.Query.ContainsKey("url"))
+        url = System.Web.HttpUtility.UrlDecode(this.Socket.MainContext.HttpContext.Request.Query["url"].ToString());
+
       this.Request = new SessionRequestDM(this.Database)
       {
-        rawurl = string.Empty,
+        rawurl = url,
         ip = ip,
         useragent = this.Socket.MainContext.HttpContext.Request.Headers["User-Agent"]
       };

@@ -13,6 +13,7 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
   {
     public int ID;
     public string Name;
+    public string Key;
   }
 
   public class ProvidersCache : CacheManagerBase
@@ -39,12 +40,14 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
         Providers.Add(t.ID.Value, new ProviderCacheModel()
         {
           ID = t.ID.Value,
-          Name = t.name
+          Name = t.name,
+          Key = t.key
         });
     }
 
 
     public ProviderCacheModel Get(int id) => Providers.ContainsKey(id) ? Providers[id] : null;
+    public ProviderCacheModel GetByKey(string key) => (from p in Providers where p.Value.Key.Equals(key) select p.Value).FirstOrDefault();
     public List<ProviderCacheModel> GetAll() => (from l in Providers select l.Value).ToList();
 
   }

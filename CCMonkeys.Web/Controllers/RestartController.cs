@@ -1,5 +1,6 @@
 ﻿using CCMonkeys.Web.Core;
 using CCMonkeys.Web.Core.Code.CacheManagers;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,15 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Controllers
 {
-  public class RestartController : Controller
+  public class RestartController : ControllerBase
   {
 
+    [EnableCors("get")]
     public IActionResult Index()
-      => this.Content("(cm:):: " + CacheManager.Restart());
+    {
+      string result = CacheManager.Restart();
+      return this.Ok(new { result = result });
+    }
 
     public IActionResult Status()
       => this.Ok(new
@@ -23,6 +28,7 @@ namespace CCMonkeys.Web.Controllers
         landers = (from p in (CacheManager.Get(CacheType.Lander) as LandersCache).GetAll() select p.Name).ToArray(),
         country = (from p in (CacheManager.Get(CacheType.Country) as CountryCache).GetAll() select p.Name).ToArray()
       });
+
 
 
   }

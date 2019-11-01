@@ -20,8 +20,10 @@ namespace CCMonkeys.Web.Controllers.Javascript
       Response.ContentType = "text/javascript";
       string clientPath = this.HostingEnvironment.WebRootPath + @"/js/static/client.js";
       string landerPath = this.HostingEnvironment.WebRootPath + @"/js/shared/lander.js";
-      
+
+      var baseUrl = $"{(this.Request.Scheme.Equals("https") ? "wss" : "ws")}://{this.Request.Host.Value.ToString()}{this.Request.PathBase.Value.ToString()}";
       string js = "var CC=Object;"
+        + string.Format("CC.host='{0}';", baseUrl)
         + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(clientPath)))
         + ";"
         + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(landerPath)));

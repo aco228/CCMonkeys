@@ -42,6 +42,7 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
       DashboardSocketsServer.Send(this, new InitDashboardModel()
       {
         Actions = ApiSocketServer.ActiveActions,
+        DashboardSessions = DashboardSocketsServer.ActiveSessions,
         Countries = CountryCache.Instance.GetModel(),
         Landers = LandersCache.Instance.GetLandersModel(),
         LanderTypes = LandersCache.Instance.GetLanderTypesModel(),

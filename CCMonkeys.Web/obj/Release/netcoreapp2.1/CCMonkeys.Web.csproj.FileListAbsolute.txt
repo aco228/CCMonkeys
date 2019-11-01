@@ -10,7 +10,6 @@ D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Direct.pdb
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Sockets.pdb
 D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Web.Core.pdb
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.csprojAssemblyReference.cache
-D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.csproj.CoreCompileInputs.cache
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.RazorAssemblyInfo.cache
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.RazorAssemblyInfo.cs
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.AssemblyInfoInputs.cache
@@ -30,6 +29,9 @@ D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\CCMonkeys.Web.Views.
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.TagHelpers.input.cache
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.TagHelpers.output.cache
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.RazorCoreGenerate.cache
-D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\Razor\Views\facebook_pixel.g.cshtml.cs
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.RazorTargetAssemblyInfo.cs
 D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\CCMonkeys.Web.Views.pdb
+D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\appsettings.Development.json
+D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\appsettings.json
+D:\github\CCMonkeys\CCMonkeys.Web\bin\Release\netcoreapp2.1\Properties\launchSettings.json
+D:\github\CCMonkeys\CCMonkeys.Web\obj\Release\netcoreapp2.1\Razor\Views\facebook_pixel.cshtml.g.cs

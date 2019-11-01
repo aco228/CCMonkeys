@@ -51,11 +51,11 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
 
 #endif
 
-        DomainManager domainManager = new DomainManager(model.url);
+        DomainManager domainManager = DomainManager.InitiatePrelander(model.url);
 
         if(domainManager.HasError)
         {
-          this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "Prelander not found"));
+          this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, domainManager.ErrorMessage));
           throw new Exception(string.Format("Prelander is not found for domain '{0}'", domainManager.Url));
           return;
         }
@@ -106,7 +106,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
         /// Inserting action and session
         /// 
 
-        this.Socket.Action.Init(model.providerID);
+        //this.Socket.Action.Init(model.providerID);
+        this.Socket.Action.Init();
         this.Socket.Session.Init();
 
         this.Socket.Session.Request.rawurl = model.url;

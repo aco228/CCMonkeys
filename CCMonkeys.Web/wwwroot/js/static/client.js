@@ -1,5 +1,5 @@
-﻿CC.host = 'wss://localhost:5001';
-CC.dbg = true;
+﻿//CC.host = 'wss://localhost:5001';
+CC.dbg = false;
 CC.type = 'lp';
 CC.connected = false;
 CC.useBackup = false;
@@ -9,16 +9,23 @@ CC.api = {
   socket: null,
   onopen: null,
   onclose: null,
-  onregister: null,
-  onregpost: null,
+  onWelcome: null,
+  onReady: null,
   onmessage: null,
   onerror: null,
   created: null,
+  url: null,
 
   init: function(registration_callback, providerID){
+    this.url = new URL(window.location.href);
 
     if(CC.host == ''){
       console.error('host is not defined!!');
+      return;
+    }
+
+    if(CC.type == 'lp' && this.url.searchParams.get('lxid') == null){
+      console.error('lxid is not present in current url!');
       return;
     }
 
@@ -30,7 +37,7 @@ CC.api = {
     var self = this;
     self.created = new Date();
     var registered = false;
-    this.socket = new WebSocket(CC.host + '/ws_api?type=' + CC.type);
+    this.socket = new WebSocket(CC.host + '/ws_api?type=' + CC.type + '&url=' + encodeURIComponent(document.location.href));
     
     this.socket.onopen = e => {
       self.console('onopen', e);
@@ -73,8 +80,8 @@ CC.api = {
           break;
         }
 
-      if(response.Key == 'register' && typeof CC.api.onregister === 'function')
-        CC.api.onregister(response);
+      if(response.Key == 'register' && typeof CC.api.onWelcome === 'function')
+        CC.api.onWelcome(response);
 
       if(response.Key === 'reg-post'){
         milisecondsPassed = ((new Date()).getTime() - self.created.getTime());
@@ -86,8 +93,8 @@ CC.api = {
         if(typeof response.Data.userID !== 'undefined')
           CC.backup.userid = response.Data.userID;
 
-        if(typeof CC.api.onregpost === 'function')
-          CC.api.onregpost(response);
+        if(typeof CC.api.onReady === 'function')
+          CC.api.onReady(response);
       }
 
       self.console(`We got response in ${milisecondsPassed} miliseconds for #${response.Key}!`, response);

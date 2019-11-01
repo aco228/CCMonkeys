@@ -6,8 +6,15 @@
   onmessage: null,
   onerror: null,
   created: null,
+  url: null,
 
   init: function(registration_callback, providerID){
+    /*
+    this.url = new URL(window.location.href);
+    if(this.url.searchParams.get('lxid') == null){
+      console.error('lxid is not present in current url!');
+      return;
+    }*/
 
     if(this.checkCallback(registration_callback)){
       console.error('registration_callback missing or misformed!! concentrate!');
@@ -17,7 +24,10 @@
     var self = this;
     self.created = new Date();
     var registered = false;
-    this.socket = new WebSocket(CC.host + '/ws_api?sguid=' + CC.sguid);
+
+
+
+    this.socket = new WebSocket(CC.host + '/ws_api?sguid=' + CC.sguid + '&url=' + encodeURIComponent(document.location.href));
     
     this.socket.onopen = e => {
       self.console('onopen', e);
@@ -58,6 +68,7 @@
       }
 
       self.console(`We got response in ${milisecondsPassed} miliseconds for #${response.Key}!`, response);
+
     };
 
     this.socket.onerror = function (e) {

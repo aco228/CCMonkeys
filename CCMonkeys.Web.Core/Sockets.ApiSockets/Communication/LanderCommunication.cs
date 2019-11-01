@@ -21,29 +21,37 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
       try
       {
         MSLogger logger = new MSLogger();
-        if (!model.providerID.HasValue)
+
+        // provider id will be present in model.url
+        //if (!model.providerID.HasValue)
+        //{
+        //  this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "providerID missing"));
+        //  return;
+        //}
+
+        if(string.IsNullOrEmpty(model.url))
         {
-          this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "providerID missing"));
+          this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "url is missing"));
           return;
         }
-        
+
 #if DEBUG
 
         if (model.url.StartsWith("file:"))
-          model.url = "https://reg.alivesports.co/smartphone-giveaway/?offer_id=2339&affiliate_id=183&country=montenegro&lxid=eWzK2z7bF2qQCGvx3OuWatePMSsWYjfPMYbtBQfsk0&utm_source=banana&utm_medium=183&utm_campaign=&utm_content=&utm_term=&ptype=cc2";
+          model.url = "https://giveaway.alivesports.co/s10-giveaway/index.html?offer_id=2470&affiliate_id=522&country=spain&lxid=Ugm81c7gHJ37w8rHndfViUl2eljZ2lxC&utm_source=banana&utm_medium=522&utm_campaign=40&utm_content=&utm_term=&ptype=cc2";
 
 #endif
-        DomainManager domainManager = new DomainManager(model.url);
-
-        var lander = LandersCache.Instance.GetByUrl(domainManager.Url);
-        if (lander == null)
+        DomainManager domainManager = DomainManager.InitiateLander(model.url);
+        if(domainManager.HasError)
         {
-          this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, "Lander not found"));
+          this.Socket.Send(key, new SendingRegistrationModel() { }.Pack(false, domainManager.ErrorMessage));
           return;
         }
 
+        var lander = domainManager.Lander;
         this.Socket.Action.LanderID = lander.ID;
         this.Socket.Action.LanderTypeID = lander.Type.ID;
+        this.Socket.Action.ProviderID = domainManager.Provider.ID;
         this.Socket.Action.PrepareActionBasedOnQueries(domainManager.Queries);
 
         /// SENDING
@@ -63,17 +71,23 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
         /// Inserting action and session
         /// 
 
-        this.Socket.Action.Init(model.providerID);
+        //this.Socket.Action.Init(model.providerID);
+        this.Socket.Action.Init();
         this.Socket.Session.Init();
 
-        this.Socket.Session.Request.rawurl = model.url;
+        if(string.IsNullOrEmpty(this.Socket.Session.Request.rawurl))
+          this.Socket.Session.Request.rawurl = model.url;
         this.Socket.Session.Request.UpdateLater();
 
         this.Socket.Send("reg-post", new SendingRegistrationPost()
         {
+          lead = this.Socket.Lead,
+          country = this.Socket.Session.CountryCode,
           actionID = this.Socket.Action.Data.GetStringID(),
           sessionID = this.Socket.Session.Data.GetStringID(),
           userID = this.Socket.User.Key,
+          provider = domainManager.Provider,
+          lander = domainManager.Lander,
           Loggers = logger.Tracks
         }.Pack());
 

@@ -84,8 +84,11 @@
   }
 
   //
-  // HELPERS
+  // HELPERS dada
   //
+
+  actionsCount() { return this.data.actionsCount; }
+  adminsLive(){ return this.data.dashboardSessionsCount; }
 
   isActionLive(actionID){
     return this.data.actions.hasOwnProperty(actionID);
@@ -208,7 +211,11 @@ class SocketData{
   get activeActions(){ return this.actions.length; }
 
   constructor(socket){
+    this.dbg = false;
     this.actions = [];
+    this.actionsCount = 0;
+    this.dashboardSessions = [];
+    this.dashboardSessionsCount = 0;
     this.landers = [];
     this.landerTypes = [];
     this.prelanders = [];
@@ -220,11 +227,17 @@ class SocketData{
     socket.subscribe(1, this.onInit);
     socket.subscribe(2, this.onActionConnect);
     socket.subscribe(3, this.onActionDisconnect);
+
+    socket.subscribe(4, this.onAdminConnect);
+    socket.subscribe(5, this.onAdminDisconnect);
   }
 
   onInit(data){
     try{
       window.Socket.data.actions = window.Socket.data.mapActions(window.Socket.data.actions, data.Actions);
+      window.Socket.data.actionsCount = data.Actions.length;
+      window.Socket.data.dashboardSessions = data.DashboardSessions;
+      window.Socket.data.dashboardSessionsCount = data.DashboardSessions.length;
       window.Socket.data.landers = socket.data.mapValues(window.Socket.data.landers, data.Landers);
       window.Socket.data.landerTypes = socket.data.mapValues(window.Socket.data.landerTypes, data.LanderTypes);
       window.Socket.data.prelanders = socket.data.mapValues(window.Socket.data.prelanders, data.Prelanders);
@@ -243,19 +256,73 @@ class SocketData{
     }
   }
 
+  /*
+    ACTION 
+  */
+
   onActionConnect(data){
     var self = window.Socket.data;
-    if(!window.Socket.data.actions.hasOwnProperty(data))
-      window.Socket.data.actions[data] = true;
+    if(!window.Socket.data.actions.hasOwnProperty(data)){
+      window.Socket.data.actions[data.ID] = true;
+      if(self.dbg)
+        console.log('onActionConnect', data);
+      window.Socket.data.actionsCount++;
+    }
+    else
+    {
+      if(self.dbg)
+        console.log('onActionConnect (there were some)', data);
+    }
+
   }
 
   onActionDisconnect(data){
     var self = window.Socket.data;
     if(self.actions.hasOwnProperty(data)){
-      self.actions[data] = false;
+      self.actions[data.ID] = false;
+      if(self.dbg)
+        console.log('onActionDisconnect', data)
       delete self.actions[data];
+      window.Socket.data.actionsCount--;
+    }
+    else
+    {
+      if(self.dbg)
+        console.log('onActionDisconnect (there were none)', data);
     }
   }
+
+  /*
+    ADMINS
+  */
+
+  onAdminConnect(data){
+    var self = window.Socket.data;
+    for(var i = 0; i < self.dashboardSessions.length; i++)
+      if(self.dashboardSessions[i] == data.Username)
+        return;
+
+    self.dashboardSessionsCount++;
+    self.dashboardSessions.push(data.Username);
+    if(self.dbg)
+      console.log('onAdminConnect', data);
+  }
+
+  onAdminDisconnect(data){
+    var self = window.Socket.data;
+    for(var i = 0; i < self.dashboardSessions.length; i++)
+      if(self.dashboardSessions[i] == data.Username){
+        self.dashboardSessionsCount--;
+        self.dashboardSessions.splice(i);
+      }
+    if(self.dbg)
+      console.log('onAdminDisconnect', data);
+  }
+
+
+  /*
+    MAPPING
+  */
 
   mapActions(input, data){
     if(typeof data === 'object')

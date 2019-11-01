@@ -9,6 +9,7 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard.Data
   public class InitDashboardModel : SendingObj
   {
     public List<string> Actions;
+    public List<string> DashboardSessions;
     public List<CountryCacheModel> Countries;
     public List<LanderTypeCacheModel> LanderTypes;
     public List<LanderCacheModel> Landers;

@@ -30,9 +30,13 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
 
   public class SendingRegistrationPost : SendingObj
   {
+    public LeadDM lead { get; set; } = null;
+    public string country { get; set; } = string.Empty;
     public string sessionID = null;
     public string actionID = null;
     public string userID = null;
+    public ProviderCacheModel provider = null;
+    public LanderCacheModel lander = null;
     public List<MSLoggerTrack> Loggers = null;
   }
 
