@@ -38,7 +38,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
 #if DEBUG
 
         if (model.url.StartsWith("file:"))
-          model.url = "https://giveaway.alivesports.co/s10-giveaway/index.html?offer_id=2470&affiliate_id=522&country=spain&lxid=Ugm81c7gHJ37w8rHndfViUl2eljZ2lxC&utm_source=banana&utm_medium=522&utm_campaign=40&utm_content=&utm_term=&ptype=cc2";
+          model.url = "http://dusan.landing/sports-nf/iphone-11-giveaway/?ptype=cc2&country=united%20kingdom&offer_id=2782&dbg=true&lxid=12321551";
 
 #endif
         DomainManager domainManager = DomainManager.InitiateLander(model.url);
