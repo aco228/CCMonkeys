@@ -15,7 +15,7 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
     {
       try
       {
-        string URL = "https://pro.ip-api.com/json/" + ipAddress + "?key=EWoxtfHTQaZbWC1";
+        string URL = "https://pro.ip-api.com/json/" + ipAddress + "?key=MIymRzty7UP2tWs";
         var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
         httpWebRequest.ContentType = "application/json";
         httpWebRequest.Method = "GET";
