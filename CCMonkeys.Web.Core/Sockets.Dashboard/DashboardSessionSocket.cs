@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading;
 
 namespace CCMonkeys.Web.Core.Sockets.Dashboard
 {
@@ -14,10 +15,14 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
   {
     private MainContext context = null;
     public WebSocket WebSocket { get; set; } = null;
+    public CancellationToken CancellationToken { get; set; }
     public string Key { get; protected set; } = string.Empty;
     public AdminDM Admin { get; protected set; } = null;
     public AdminSessionDM Session { get; protected set; } = null;
     public DateTime Created { get; set; } = DateTime.Now;
+    public DateTime LastInteraction { get; set; } = DateTime.Now;
+    public double LastCommunicationMiliseconds { get => (DateTime.Now - LastInteraction).TotalMilliseconds; }
+    public bool IsLive { get; private set; } = true;
 
     public DashboardSessionSocket(MainContext context)
     {
@@ -52,6 +57,12 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
       }
       .Pack(DashboardEvents.INIT));
 
+    }
+
+    public async void CloseSocket()
+    {
+      this.IsLive = false;
+      await this.WebSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
     }
 
     public void OnClose()

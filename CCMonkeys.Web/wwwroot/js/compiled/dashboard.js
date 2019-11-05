@@ -332,7 +332,8 @@ class SocketData{
     return input;
   }
 
-  mapValues(input, data){
+  mapValues(input, data) {
+    //input = Object;
     for(var i = 0; i < data.length; i++)
       if(!input.hasOwnProperty(i.ID))
       {

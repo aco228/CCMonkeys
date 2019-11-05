@@ -21,7 +21,7 @@ namespace CCMonkeys.Sockets
     public async Task CallInvoke(HttpContext context)
     {
       CancellationToken ct = context.RequestAborted;
-      var socketId = this.OnCreateId(context);
+      var socketId = this.OnCreateId(context, ct);
       if(string.IsNullOrEmpty(socketId))
       {
         Logger.Instance.StartLoggin("ServerSocketBase").Where("ServerSocketBase.CallInvoke")
@@ -195,7 +195,7 @@ namespace CCMonkeys.Sockets
     */
 
     protected virtual void PassWebsocket(string uid, WebSocket webSocket) { }
-    protected virtual string OnCreateId(HttpContext context) { return Guid.NewGuid().ToString(); }
+    protected virtual string OnCreateId(HttpContext context, CancellationToken cancellationToken) { return Guid.NewGuid().ToString(); }
     protected virtual Task OnReceiveMessage(string uid, ServerSocketResponse package) => Task.FromResult(default(object));
     protected virtual Task OnClientConnect(string uid) => Task.FromResult(default(object));
     protected virtual Task OnClientDisconect(string uid) => Task.FromResult(default(object));

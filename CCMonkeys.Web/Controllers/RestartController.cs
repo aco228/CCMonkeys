@@ -9,14 +9,25 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Controllers
 {
+  [Route("restart")]
   public class RestartController : ControllerBase
   {
 
     [EnableCors("get")]
+    [HttpGet("cache")]
     public IActionResult Index()
     {
       string result = CacheManager.Restart();
       return this.Ok(new { result = result });
+    }
+
+
+    [EnableCors("get")]
+    [HttpGet("app")]
+    public IActionResult RestartApplication()
+    {
+      Program.Restart();
+      return this.Ok(new { result = true });
     }
 
     public IActionResult Status()

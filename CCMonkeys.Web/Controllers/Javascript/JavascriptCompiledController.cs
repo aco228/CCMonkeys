@@ -27,6 +27,8 @@ namespace CCMonkeys.Web.Controllers
 
     public IActionResult Index(string type, string dbg, string recompile = "0")
     {
+      return this.Ok("notActive");
+
       Response.ContentType = "text/javascript";
       if (string.IsNullOrEmpty(type))
         return this.Content("console.error('ccsocket:: type missing');");
@@ -69,7 +71,7 @@ namespace CCMonkeys.Web.Controllers
       SessionSocket socket = null;
       try
       {
-        socket = new SessionSocket(this.Context, sessionType);
+        //socket = new SessionSocket(this.Context, sessionType);
       }
       catch(Exception e)
       {
@@ -112,6 +114,12 @@ namespace CCMonkeys.Web.Controllers
             + ";"
             + (new Microsoft.Ajax.Utilities.Minifier().MinifyJavaScript(System.IO.File.ReadAllText(direct)));
       }
+
+      // close all previous sessions for this admin!!
+
+      var sessions = (from d in DashboardSocketsServer.Sessions where d.Value.Admin.username.Equals(this.Context.Admin.username) select d.Value.Key).ToList();
+      foreach (var session in sessions)
+        DashboardSocketsServer.CloseSession(session);
 
       DashboardSessionSocket socket = new DashboardSessionSocket(this.Context);
       DashboardSocketsServer.AddSession(socket);

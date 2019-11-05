@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
@@ -29,7 +30,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     /// Overrides
     ///
 
-    protected override string OnCreateId(HttpContext httpContext)
+    protected override string OnCreateId(HttpContext httpContext, CancellationToken cancellationToken)
     {
       string sguid = httpContext.Request.Query.ContainsKey("sguid") ? httpContext.Request.Query["sguid"].ToString() : string.Empty;
       if (string.IsNullOrEmpty(sguid) || !Sessions.ContainsKey(sguid))
@@ -37,7 +38,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         string type = httpContext.Request.Query.ContainsKey("type") ? httpContext.Request.Query["type"].ToString() : string.Empty;
         if (!string.IsNullOrEmpty(type))
         {
-          SessionSocket newSocket = new SessionSocket(new MainContext(null, httpContext), type.Equals("lp") ? Models.SessionType.Lander : Models.SessionType.Prelander);
+          SessionType sessionType = type.Equals("lp") ? Models.SessionType.Lander : Models.SessionType.Prelander;
+          SessionSocket newSocket = new SessionSocket(new MainContext(null, httpContext), sessionType, cancellationToken);
           if (newSocket == null || string.IsNullOrEmpty(newSocket.Key))
           {
             Logger.Instance.StartLoggin("")
@@ -96,6 +98,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
         key = data.Substring(0, data.IndexOf('#'));
         json = data.Substring(data.IndexOf('#') + 1);
+        Get(uid).LastInteraction = DateTime.Now;
       }
       catch (Exception e)
       {

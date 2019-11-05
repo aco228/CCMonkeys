@@ -14,6 +14,7 @@ using CCMonkeys.Web.Core.Sockets.Dashboard;
 using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
 using CCMonkeys.Loggings;
+using System.Threading;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
@@ -28,6 +29,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
   {
     public MainContext MainContext = null;
     public WebSocket WebSocket { get; set; } = null;
+    public CancellationToken CancellationToken { get; protected set; }
     public CCSubmitDirect Database { get; protected set; } = null;
     public ApiSocketsLogging Logging { get; protected set; } = null;
     public Dictionary<SessionSocketChannel, CommunicationBase> Channels = new Dictionary<SessionSocketChannel, CommunicationBase>();
@@ -41,13 +43,17 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     public int? CountryID { get => this.Session.CountryID; }
     public string Key { get => (this.Session != null ? this.Session.Key : ""); }
     public DateTime Created { get; set; }
+    public DateTime LastInteraction { get; set; } = DateTime.Now;
+    public double LastCommunicationMiliseconds { get => (DateTime.Now - LastInteraction).TotalMilliseconds; }
 
-    public SessionSocket(MainContext context, SessionType sessionType)
+    public SessionSocket(MainContext context, SessionType sessionType, CancellationToken? token)
     {
       try
       {
         this.Database = new CCSubmitDirect();
         this.Logging = new ApiSocketsLogging(this);
+        if(token.HasValue)
+          this.CancellationToken = token.Value;
         MSLogger mslogger = new MSLogger();
         this.Created = DateTime.Now;
         this.MainContext = context;
@@ -74,7 +80,6 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       }
     }
 
-
     public async Task<LeadDM> TryToIdentifyLead(string msisdn, string email)
     {
       this.Lead = await LeadDM.LoadByMsisdnOrEmailAsync(this.Database, msisdn, email);
@@ -98,13 +103,13 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
       this.Created = DateTime.Now;
       this.Session.OnCreate();
     }
-
     public void OnClose()
     {
       if(this.Action.Data != null)
         DashboardSocket.OnActionOffline(this.Action.Data);
       this.Session.OnClose(this.Created);
     }
+    public async void CloseSocket() => await this.WebSocket.CloseAsync(WebSocketCloseStatus.Empty, "ManualyClosed", this.CancellationToken);
 
     public void Send(string key)
       => ApiSocketServer.Send(this, new DistributionModel() { Key = key, Status = true });

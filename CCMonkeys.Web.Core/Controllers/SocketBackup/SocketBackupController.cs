@@ -3,6 +3,7 @@ using CCMonkeys.Sockets;
 using CCMonkeys.Web.Core.Code;
 using CCMonkeys.Web.Core.CommunicationChannels;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
+using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
 using Direct;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Cors;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Controllers.SocketBackup
@@ -45,8 +47,8 @@ namespace CCMonkeys.Web.Core.Controllers.SocketBackup
         this.Context.CookiesGetInt(Constants.CountryID),
         this.Context.HttpContext.Request.Headers["User-Agent"]);
 
-
-      SessionSocket socket = new SessionSocket(this.Context, (type.Equals("lp") ? Sockets.ApiSockets.Models.SessionType.Lander : Sockets.ApiSockets.Models.SessionType.Prelander));
+      SessionType sessionType = (type.Equals("lp") ? Sockets.ApiSockets.Models.SessionType.Lander : Sockets.ApiSockets.Models.SessionType.Prelander);
+      SessionSocket socket = new SessionSocket(this.Context, sessionType, null);
 
       ActionDM action = socket.Action.Data;
       if (action == null)
