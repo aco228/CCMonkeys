@@ -208,7 +208,7 @@
 
 class SocketData{
 
-  get activeActions(){ return this.actions.length; }
+  get activeActions(){ return this.actionsCount; }
 
   constructor(socket){
     this.dbg = false;
@@ -234,6 +234,12 @@ class SocketData{
 
   onInit(data){
     try{
+
+      // check if we are in debug enviorement
+      let url = new URL(window.location.href);
+      if(url.searchParams.get('dbg'))
+        socket.data.dbg = true;
+
       window.Socket.data.actions = window.Socket.data.mapActions(window.Socket.data.actions, data.Actions);
       window.Socket.data.actionsCount = data.Actions.length;
       window.Socket.data.dashboardSessions = data.DashboardSessions;
@@ -262,33 +268,28 @@ class SocketData{
 
   onActionConnect(data){
     var self = window.Socket.data;
-    if(!window.Socket.data.actions.hasOwnProperty(data)){
+    if(!window.Socket.data.actions.hasOwnProperty(data.ID)){
       window.Socket.data.actions[data.ID] = true;
-      if(self.dbg)
-        console.log('onActionConnect', data);
+      if(self.dbg) console.log('onActionConnect', data);
       window.Socket.data.actionsCount++;
     }
-    else
-    {
-      if(self.dbg)
-        console.log('onActionConnect (there were some)', data);
+    else {
+      if(self.dbg) console.log('onActionConnect (there were some)', data);
     }
 
   }
 
   onActionDisconnect(data){
     var self = window.Socket.data;
-    if(self.actions.hasOwnProperty(data)){
+    if(self.actions.hasOwnProperty(data.ID)){
       self.actions[data.ID] = false;
-      if(self.dbg)
-        console.log('onActionDisconnect', data)
+      if(self.dbg) console.log('onActionDisconnect', data)
       delete self.actions[data];
       window.Socket.data.actionsCount--;
     }
     else
     {
-      if(self.dbg)
-        console.log('onActionDisconnect (there were none)', data);
+      if(self.dbg) console.log('onActionDisconnect (there were none)', data);
     }
   }
 
@@ -327,8 +328,11 @@ class SocketData{
   mapActions(input, data){
     if(typeof data === 'object')
       for(var i = 0; i < data.length; i++)
-        if(!input.hasOwnProperty(data[i]))
-          input[data[i]] = true;
+        if(!input.hasOwnProperty(data[i].aid))
+        {
+          input[data[i].aid] = data[i];
+          socket.data.actionsCount++;
+        }
     return input;
   }
 

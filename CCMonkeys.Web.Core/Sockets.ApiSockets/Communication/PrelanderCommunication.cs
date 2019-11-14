@@ -46,7 +46,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
           if (model.url.Contains("?"))
             parameters = "?" + model.url.Split('?')[1];
 
-          model.url = "https://lander.giveaways-online.com/l7/" + parameters;
+          model.url = "https://claim.giveaways-online.com/l15/" + parameters;
         }
 
 #endif
@@ -94,11 +94,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
           country = this.Socket.Session.CountryCode,
           prelanderID = Prelander.ID
         };
-        if (this.Socket.SessionType == SessionType.Lander)
-        {
-          if (this.Socket.Lead != null)
-            sendingModel.leadHasSubscription = await this.Socket.Lead.HasLeadSubscriptions(model.providerID.Value);
-        }
+
         this.Socket.Send(sendingModel.Pack(key, true, "Welcome!!"));
 
         logger.Track("sending model");
@@ -132,6 +128,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
           .OnException(e);
 
         this.Socket.Send(new FatalModel() { Action = "OnRegistration", Exception = e.ToString() }.Pack(false, "error500"));
+        ApiSocketServer.CloseSession(this.Socket);
       }
     }
 

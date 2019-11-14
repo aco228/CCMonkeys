@@ -1,4 +1,4 @@
-﻿using CCMonkeys.Loggings;
+using CCMonkeys.Loggings;
 using CCMonkeys.Sockets.Direct;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;

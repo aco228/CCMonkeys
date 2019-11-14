@@ -3,7 +3,7 @@ using System;
 
 namespace Direct.ccmonkeys.Models
 {
-public partial class AdminDM : DirectModel
+public partial class LanderParamInfoDM : DirectModel
 {
 
 }

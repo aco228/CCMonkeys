@@ -12,7 +12,6 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Data
   public class ReceivingRegistrationModel
   {
     public string url { get; set; } = string.Empty;
-    public int? providerID { get; set; } = null;
   }
 
   public class SendingRegistrationModel : SendingObj

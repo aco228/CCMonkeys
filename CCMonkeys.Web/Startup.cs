@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using CCMonkeys.Web.Code;
 using CCMonkeys.Web.Code.Sockets;
 using CCMonkeys.Web.Core;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +21,9 @@ namespace CCMonkeys.Web
 {
   public class Startup
   {
+
+    readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
     public Startup(IConfiguration configuration)
     {
       //JsonConvert.DefaultSettings = () => new JsonSerializerSettings
@@ -38,9 +42,17 @@ namespace CCMonkeys.Web
     {
       services.AddCors(options =>
       {
-        options.AddPolicy("get",
+        options.AddPolicy(MyAllowSpecificOrigins,
             builder => builder
-            .SetIsOriginAllowed( (host) => { Console.WriteLine("HOST: " + host); return true; })
+            .SetIsOriginAllowed( 
+              (host) => { 
+
+                // HOSTS
+                Console.WriteLine("HOST: " + host); 
+                return true;  
+
+              })
+            .AllowAnyOrigin()
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());
@@ -54,6 +66,9 @@ namespace CCMonkeys.Web
         //options.CheckConsentNeeded = context => true;
         options.MinimumSameSitePolicy = SameSiteMode.None;
       });
+
+      services.AddHostedService<ApiSocketCloserHostedService>();
+
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +83,14 @@ namespace CCMonkeys.Web
         app.UseHsts();
       }
 
+
+      app.UseStaticFiles();
+      ////app.UseRouting();
+      //app.UseEndpoints(endpoints =>
+      //{
+      //  endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+      //});
+
       var webSocketOptions = new WebSocketOptions()
       {
         KeepAliveInterval = TimeSpan.FromSeconds(60),
@@ -76,12 +99,13 @@ namespace CCMonkeys.Web
       app.UseWebSockets(webSocketOptions);
 
       app.UseMiddleware<WebSocketsMiddleware>();
-      //app.UseCors("get");
+      app.UseCors(MyAllowSpecificOrigins);
       app.UseHttpsRedirection();
       app.UseMvc(routes =>
       {
         routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
       });
+
 
       System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
     }

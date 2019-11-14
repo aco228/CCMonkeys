@@ -87,6 +87,9 @@ namespace CCMonkeys.Web.Core.Code.IPLocations.IpApi
     public static SessionDataDM GetSessionData(CCSubmitDirect database, string ip, string useragent)
     {
       var result = Get(ip, useragent);
+      if (result == null)
+        return null;
+
       return new SessionDataDM(database)
       {
         guid = Guid.NewGuid().ToString(),

@@ -3,11 +3,11 @@ using System;
 
 namespace Direct.ccmonkeys.Models
 {
-public partial class ProviderDM : DirectModel
+public partial class LanderParamInfoDM : DirectModel
 {
 
-public ProviderDM() : base("tm_provider", "providerid", null){}
-public ProviderDM(DirectDatabaseBase db) : base("tm_provider", "providerid", db){}
+public LanderParamInfoDM() : base("tm_provider", "providerid", null){}
+public LanderParamInfoDM(DirectDatabaseBase db) : base("tm_provider", "providerid", db){}
 
 [DColumn(Name = "providerid", IsPrimary=true)]
 public int providerid { get; set; } = default;

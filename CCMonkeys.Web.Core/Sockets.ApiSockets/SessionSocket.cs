@@ -15,6 +15,7 @@ using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
 using CCMonkeys.Loggings;
 using System.Threading;
+using CCMonkeys.Web.Core.Sockets.Base;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
@@ -25,11 +26,9 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     Prelander
   }
 
-  public class SessionSocket
+  public class SessionSocket : CCSocketBase
   {
     public MainContext MainContext = null;
-    public WebSocket WebSocket { get; set; } = null;
-    public CancellationToken CancellationToken { get; protected set; }
     public CCSubmitDirect Database { get; protected set; } = null;
     public ApiSocketsLogging Logging { get; protected set; } = null;
     public Dictionary<SessionSocketChannel, CommunicationBase> Channels = new Dictionary<SessionSocketChannel, CommunicationBase>();
@@ -39,23 +38,19 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     public Session Session { get; protected set; } = null;
     public SessionType SessionType { get; set; } = SessionType.Default;
     public Models.Action Action { get; protected set; } = null;
+    public override string Key { get => (this.Session != null ? this.Session.Key : ""); }
 
     public int? CountryID { get => this.Session.CountryID; }
-    public string Key { get => (this.Session != null ? this.Session.Key : ""); }
-    public DateTime Created { get; set; }
-    public DateTime LastInteraction { get; set; } = DateTime.Now;
-    public double LastCommunicationMiliseconds { get => (DateTime.Now - LastInteraction).TotalMilliseconds; }
 
-    public SessionSocket(MainContext context, SessionType sessionType, CancellationToken? token)
+
+    public SessionSocket(MainContext context, SessionType sessionType)
+      : base(context)
     {
       try
       {
         this.Database = new CCSubmitDirect();
         this.Logging = new ApiSocketsLogging(this);
-        if(token.HasValue)
-          this.CancellationToken = token.Value;
         MSLogger mslogger = new MSLogger();
-        this.Created = DateTime.Now;
         this.MainContext = context;
         this.SessionType = sessionType;
 
@@ -77,6 +72,8 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
           .Where("SessionSocket.Constructor")
           .Add("type", sessionType.ToString())
           .OnException(e);
+
+        ApiSocketServer.CloseSession(this);
       }
     }
 
@@ -100,7 +97,6 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     public void OnCreate()
     {
-      this.Created = DateTime.Now;
       this.Session.OnCreate();
     }
     public void OnClose()
@@ -109,7 +105,6 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         DashboardSocket.OnActionOffline(this.Action.Data);
       this.Session.OnClose(this.Created);
     }
-    public async void CloseSocket() => await this.WebSocket.CloseAsync(WebSocketCloseStatus.Empty, "ManualyClosed", this.CancellationToken);
 
     public void Send(string key)
       => ApiSocketServer.Send(this, new DistributionModel() { Key = key, Status = true });

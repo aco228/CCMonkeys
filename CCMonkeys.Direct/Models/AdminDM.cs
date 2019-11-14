@@ -18,6 +18,9 @@ public string username { get; set; } = default;
 [DColumn(Name = "password")]
 public string password { get; set; } = default;
 
+[DColumn(Name = "privileges", HasDefaultValue=true)]
+public int privileges { get; set; } = 0;
+
 [DColumn(Name = "created", NotUpdatable = true, HasDefaultValue=true)]
 public DateTime created { get; set; } = default;
 

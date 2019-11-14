@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Direct.ccmonkeys.Models;
 
 namespace CCMonkeys.Web.Controllers
 {
@@ -97,7 +98,7 @@ namespace CCMonkeys.Web.Controllers
     {
       Response.ContentType = "text/javascript";
 
-      if (this.Context.TryGetAdminID().HasValue == false)
+      if(this.Context.Admin == null || this.Context.Admin.GetStatus() == AdminStatusDM.NotActive)
         return this.Content("console.error('ccsocket:: auth error');");
 
       string js_extension = string.Empty;

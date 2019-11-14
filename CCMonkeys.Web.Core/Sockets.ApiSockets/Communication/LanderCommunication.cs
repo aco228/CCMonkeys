@@ -64,7 +64,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
           lander = lander
         };
         if (this.Socket.Lead != null)
-          sendingModel.leadHasSubscription = await this.Socket.Lead.HasLeadSubscriptions(model.providerID.Value);
+          sendingModel.leadHasSubscription = await this.Socket.Lead.HasLeadSubscriptions(domainManager.Provider.ID);
 
         this.Socket.Send(sendingModel.Pack(key, true, "Welcome!!"));
 
@@ -98,10 +98,11 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
         this.Socket.Logging.StartLoggin("")
           .Where("lp-registration")
           .Add("url", model.url)
-          .Add("providerID?", model.providerID.HasValue ? model.providerID.Value.ToString() : "null")
+          //.Add("providerID?", model.providerID.HasValue ? model.providerID.Value.ToString() : "null")
           .OnException(e);
 
         this.Socket.Send(new FatalModel() { Action = "OnRegistration", Exception = e.ToString() }.Pack(false, "error500"));
+        ApiSocketServer.CloseSession(this.Socket);
       }
     }
     public async void OnCreateUser(string key, ReceivingCreateUserModel model)
@@ -195,6 +196,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Communication
 
         this.Socket.Action.Data.has_redirectedToProvider = true;
         this.Socket.Action.Data.UpdateLater();
+        ApiSocketServer.CloseSession(this.Socket);
 
         await this.Socket.Database.TransactionalManager.RunAsync();
       }

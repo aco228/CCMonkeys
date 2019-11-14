@@ -1,4 +1,5 @@
 ﻿using CCMonkeys.Web.Core.Models.Dashboard;
+using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.Dashboard.Data;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -49,10 +50,10 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
     /// ACTION CONNECT / DISCONNECT
     ///
 
-    public static void ActionConnected(string actionid)
-      => DashboardSocketsServer.SendToAll(new ActionConnectedDisconnectedModel() { IsConnected = true, ID = actionid }.Pack(DashboardEvents.ACTION_CONNECT));
+    public static void ActionConnected(ActionLiveModel model)
+      => DashboardSocketsServer.SendToAll(model.Pack(DashboardEvents.ACTION_CONNECT));
     public static void ActionDisconnected(string actionid)
-      => DashboardSocketsServer.SendToAll(new ActionConnectedDisconnectedModel() { IsConnected = false, ID = actionid }.Pack(DashboardEvents.ACTION_DISCONNECT));
+      => DashboardSocketsServer.SendToAll(new ActionConnectedDisconnectedModel() { ID = actionid }.Pack(DashboardEvents.ACTION_DISCONNECT));
 
     ///
     /// ADMIN CONNECTIONS
@@ -91,8 +92,9 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
       => DashboardSocketsServer.SendToAll(new PostbackTransaction() { ProviderName = provider, ActionID = actionID }.Pack(DashboardEvents.POSTBACK_UPSELL));
 
     ///
-    /// POSTBACKS
+    /// ERRORS
     ///
+
     public static void OnFatal(string sessionID, string exception)
       => DashboardSocketsServer.SendToAll(new ExceptionModel() { SessionID = sessionID, Exception= exception}.Pack(DashboardEvents.FATAL));
   }

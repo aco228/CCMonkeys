@@ -1,6 +1,8 @@
 ﻿using CCMonkeys.Sockets;
 using CCMonkeys.Sockets.Direct;
 using CCMonkeys.Web.Core.Code;
+using CCMonkeys.Web.Core.Sockets.Base;
+using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -13,46 +15,46 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Sockets.Dashboard
 {
-  public class DashboardSocketsServer : ServerSocketBase
+  public class DashboardSocketsServer : CCSocketServerBase<DashboardSessionSocket>
   {
-    public static Dictionary<string, DashboardSessionSocket> Sessions = new Dictionary<string, DashboardSessionSocket>();
-    public static DashboardSessionSocket Get(string uid) => Sessions.ContainsKey(uid) && Sessions[uid].IsLive ? Sessions[uid] : null;
 
-    protected override string OnCreateId(HttpContext httpContext, CancellationToken token)
+    protected override string OnCreateId(HttpContext httpContext)
     {
       string sguid = httpContext.Request.Query["sguid"];
       if (string.IsNullOrEmpty(sguid) || !Sessions.ContainsKey(sguid))
         return string.Empty;
 
-      Get(sguid).CancellationToken = token;
-      Get(sguid).Created = DateTime.Now;
       return sguid;
     }
-
-    protected override void PassWebsocket(string uid, WebSocket webSocket)
-      => Get(uid).WebSocket = webSocket;
 
     protected override async Task OnClientConnect(string uid)
       => DashboardSocket.AdminConnected(Get(uid)?.Admin);
 
     protected override async Task OnClientDisconect(string uid)
-      => DashboardSocket.AdminDisconnected(Get(uid)?.Admin);
+    {
+      DashboardSocket.AdminDisconnected(Get(uid)?.Admin);
+      CloseSession(uid);
+    }
 
     protected override async Task OnReceiveMessage(string uid, ServerSocketResponse package)
     {
+      DashboardSessionSocket socket = Get(uid);
+      if (socket == null)
+        return;
+
       string data = await package.GetTextAsync();
       if (string.IsNullOrEmpty(data) || !data.Contains('#'))
         return;
 
       string key = data.Substring(0, data.IndexOf('#'));
       string json = data.Substring(data.IndexOf('#') + 1);
-      Get(uid).LastInteraction = DateTime.Now;
+      socket.OnInteraction();
 
       switch (key)
       {
 
         case "register":
-          Get(uid).OnRegister();
+          socket.OnRegister();
           return;
 
         /*
@@ -70,6 +72,7 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
     ///
 
 
+    // Get all admins that are currently live on dashboard
     public static List<string> ActiveSessions
     {
       get
@@ -80,19 +83,6 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
         return result;
       }
     }
-    public static void AddSession(DashboardSessionSocket socket)
-    {
-      if (Sessions.ContainsKey(socket.Key))
-        Sessions[socket.Key] = socket;
-      else
-        Sessions.Add(socket.Key, socket);
-    }
-    public static void CloseSession(string uid)
-    {
-      Get(uid).CloseSocket();
-      Sessions.Remove(uid);
-    }
-
 
     public static async void Send(DashboardSessionSocket socket, DashboardSocketDistributionModel data)
       => await SendStringAsync(socket.WebSocket, JsonConvert.SerializeObject(data));
@@ -100,6 +90,14 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
       => await SendStringAsync(Get(uid).WebSocket, JsonConvert.SerializeObject(data));
     public static async void SendToAll (DashboardSocketDistributionModel data)
       => (from s in Sessions where s.Value.IsLive select s).ToList().ForEach(s => Send(s.Value, data));
+
+    public static AdminDM TryToGetAdminFromSessions(int id)
+    {
+      foreach (var s in Sessions)
+        if (s.Value.Admin.ID == id)
+          return s.Value.Admin;
+      return null;
+    }
 
   }
 }

@@ -103,7 +103,7 @@
           "dependencies": {
             "Microsoft.ApplicationInsights": {
               "target": "Package",
-              "version": "[2.10.0, )"
+              "version": "[2.11.0, )"
             },
             "NETStandard.Library": {
               "suppressParent": "All",
@@ -258,7 +258,7 @@
             },
             "Microsoft.ApplicationInsights.AspNetCore": {
               "target": "Package",
-              "version": "[2.7.1, )"
+              "version": "[2.8.2, )"
             },
             "Microsoft.AspNetCore.App": {
               "target": "Package",
@@ -433,7 +433,7 @@
             },
             "Microsoft.ApplicationInsights.AspNetCore": {
               "target": "Package",
-              "version": "[2.7.1, )"
+              "version": "[2.8.2, )"
             },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",
@@ -445,10 +445,9 @@
               "target": "Package",
               "version": "[2.1.1, )"
             },
-            "Microsoft.AspNetCore.Razor.Design": {
-              "suppressParent": "All",
+            "Microsoft.AspNetCore.DataProtection": {
               "target": "Package",
-              "version": "[2.1.2, )"
+              "version": "[2.1.1, )"
             },
             "Microsoft.AspNetCore.Session": {
               "target": "Package",
@@ -466,7 +465,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[2.1.9, )"
+              "version": "[3.0.0, )"
             },
             "Sentry": {
               "target": "Package",
@@ -538,21 +537,29 @@
           "dependencies": {
             "Dapper": {
               "target": "Package",
-              "version": "[1.60.6, )"
+              "version": "[2.0.30, )"
             },
             "Dapper.Contrib": {
               "target": "Package",
-              "version": "[1.60.1, )"
+              "version": "[2.0.30, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.1.11, )"
             },
             "MySql.Data": {
               "target": "Package",
-              "version": "[8.0.17, )"
+              "version": "[8.0.18, )"
             },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
               "version": "[2.0.3, )",
               "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
             },
             "System.IO.FileSystem": {
               "target": "Package",
@@ -568,7 +575,7 @@
             },
             "System.Net.Primitives": {
               "target": "Package",
-              "version": "[4.3.0, )"
+              "version": "[4.3.1, )"
             }
           },
           "imports": [

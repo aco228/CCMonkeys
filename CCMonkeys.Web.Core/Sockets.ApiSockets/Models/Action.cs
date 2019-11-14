@@ -47,7 +47,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets.Models
       }
 
       if (socket.SessionType == SessionType.Lander)
+      {
+
         this.Socket.MainContext.RemoveCookie(Constants.ActionID);
+      }
 
     }
 

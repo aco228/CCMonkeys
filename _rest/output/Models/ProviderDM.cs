@@ -12,8 +12,8 @@ public ProviderDM(DirectDatabaseBase db) : base("tm_provider", "providerid", db)
 [DColumn(Name = "providerid", IsPrimary=true)]
 public int providerid { get; set; } = default;
 
-[DColumn(Name = "key")]
-public string key { get; set; } = default;
+[DColumn(Name = "identifier")]
+public string identifier { get; set; } = default;
 
 [DColumn(Name = "name")]
 public string name { get; set; } = default;

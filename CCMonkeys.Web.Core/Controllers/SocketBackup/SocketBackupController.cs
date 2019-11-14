@@ -48,7 +48,7 @@ namespace CCMonkeys.Web.Core.Controllers.SocketBackup
         this.Context.HttpContext.Request.Headers["User-Agent"]);
 
       SessionType sessionType = (type.Equals("lp") ? Sockets.ApiSockets.Models.SessionType.Lander : Sockets.ApiSockets.Models.SessionType.Prelander);
-      SessionSocket socket = new SessionSocket(this.Context, sessionType, null);
+      SessionSocket socket = new SessionSocket(this.Context, sessionType);
 
       ActionDM action = socket.Action.Data;
       if (action == null)

@@ -11,7 +11,7 @@ namespace CCMonkeys.Consoles.GenerateModels
       var db = new CCSubmitDirect();
       var creator = new MysqlModelsGenerator(db);
 
-      creator.GenerateFile("tm_provider", "Provider", @"D:\github\CCMonkeys\_rest\output");
+      creator.GenerateFile("tm_admin", "Admin", @"D:\github\CCMonkeys\_rest\output");
       //creator.GenerateFile("tm_action_account", "ActionAccount", @"D:\github\CCMonkeys\_rest\output");
       //creator.GenerateFile("tm_admin", "Admin", @"D:\github\CCMonkeys\_rest\output");
       //creator.GenerateFile("tm_admin_session", "AdminSession", @"D:\github\CCMonkeys\_rest\output");

@@ -13,7 +13,6 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard.Data
 
   public class ActionConnectedDisconnectedModel : SendingObj
   {
-    public bool IsConnected { get; set; } = false;
     public string ID { get; set; } = string.Empty;
   }
 }

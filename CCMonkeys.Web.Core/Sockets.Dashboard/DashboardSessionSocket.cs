@@ -1,6 +1,8 @@
 ﻿using CCMonkeys.Sockets;
+using CCMonkeys.Sockets.Direct;
 using CCMonkeys.Web.Core.Code.CacheManagers;
 using CCMonkeys.Web.Core.Sockets.ApiSockets;
+using CCMonkeys.Web.Core.Sockets.Base;
 using CCMonkeys.Web.Core.Sockets.Dashboard.Data;
 using Direct.ccmonkeys.Models;
 using System;
@@ -11,24 +13,19 @@ using System.Threading;
 
 namespace CCMonkeys.Web.Core.Sockets.Dashboard
 {
-  public class DashboardSessionSocket
+  public class DashboardSessionSocket : CCSocketBase
   {
-    private MainContext context = null;
-    public WebSocket WebSocket { get; set; } = null;
-    public CancellationToken CancellationToken { get; set; }
-    public string Key { get; protected set; } = string.Empty;
+    private string _key = string.Empty;
     public AdminDM Admin { get; protected set; } = null;
     public AdminSessionDM Session { get; protected set; } = null;
-    public DateTime Created { get; set; } = DateTime.Now;
-    public DateTime LastInteraction { get; set; } = DateTime.Now;
-    public double LastCommunicationMiliseconds { get => (DateTime.Now - LastInteraction).TotalMilliseconds; }
-    public bool IsLive { get; private set; } = true;
+
+    public override string Key => this._key;
 
     public DashboardSessionSocket(MainContext context)
+      :base(context)
     {
-      this.context = context;
-      this.Admin = this.context.Admin;
-      this.Key = Guid.NewGuid().ToString();
+      this.Admin = this.Context.Admin;
+      this._key = Guid.NewGuid().ToString();
     }
 
     /// 
@@ -36,8 +33,8 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
     /// 
 
     public async void OnRegister()
-    {
-      this.Session = await new AdminSessionDM(this.context.Database)
+    { 
+      this.Session = await new AdminSessionDM(this.Context.Database)
       {
         adminid = this.Admin.ID.Value,
         guid = this.Key
@@ -46,6 +43,8 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
       // init
       DashboardSocketsServer.Send(this, new InitDashboardModel()
       {
+        Privileges = this.Admin.privileges,
+        AdminStatus = this.Admin.GetStatus().ToString(),
         Actions = ApiSocketServer.ActiveActions,
         DashboardSessions = DashboardSocketsServer.ActiveSessions,
         Countries = CountryCache.Instance.GetModel(),
@@ -56,14 +55,8 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
         Providers = ProvidersCache.Instance.GetAll()
       }
       .Pack(DashboardEvents.INIT));
-
     }
 
-    public async void CloseSocket()
-    {
-      this.IsLive = false;
-      await this.WebSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-    }
 
     public void OnClose()
     {
@@ -74,6 +67,5 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
     public void Send(DashboardSocketDistributionModel data)
       => DashboardSocketsServer.Send(this, data);
 
-    
   }
 }

@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Controllers
@@ -55,6 +57,7 @@ namespace CCMonkeys.Web.Core.Controllers
 
     ///
     /// RETURNS
+    /// (standard ones)
     ///
 
     protected IActionResult ReturnContent(string content)
@@ -62,7 +65,6 @@ namespace CCMonkeys.Web.Core.Controllers
       this.OnDispose();
       return this.Content(content);
     }
-
     protected IActionResult ReturnStatus(bool status, string message, object data = null)
     {
       this.OnDispose();
@@ -73,13 +75,11 @@ namespace CCMonkeys.Web.Core.Controllers
         data = data
       });
     }
-
     protected IActionResult ReturnObject(object data)
     {
       this.OnDispose();
       return this.Ok(data);
     }
-
     protected IActionResult ReturnRedirection(string url)
     {
       this.OnDispose();

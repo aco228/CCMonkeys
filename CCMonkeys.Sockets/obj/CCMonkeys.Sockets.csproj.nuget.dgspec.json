@@ -103,7 +103,7 @@
           "dependencies": {
             "Microsoft.ApplicationInsights": {
               "target": "Package",
-              "version": "[2.10.0, )"
+              "version": "[2.11.0, )"
             },
             "NETStandard.Library": {
               "suppressParent": "All",
@@ -241,21 +241,29 @@
           "dependencies": {
             "Dapper": {
               "target": "Package",
-              "version": "[1.60.6, )"
+              "version": "[2.0.30, )"
             },
             "Dapper.Contrib": {
               "target": "Package",
-              "version": "[1.60.1, )"
+              "version": "[2.0.30, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Core": {
+              "target": "Package",
+              "version": "[2.1.11, )"
             },
             "MySql.Data": {
               "target": "Package",
-              "version": "[8.0.17, )"
+              "version": "[8.0.18, )"
             },
             "NETStandard.Library": {
               "suppressParent": "All",
               "target": "Package",
               "version": "[2.0.3, )",
               "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
             },
             "System.IO.FileSystem": {
               "target": "Package",
@@ -271,7 +279,7 @@
             },
             "System.Net.Primitives": {
               "target": "Package",
-              "version": "[4.3.0, )"
+              "version": "[4.3.1, )"
             }
           },
           "imports": [

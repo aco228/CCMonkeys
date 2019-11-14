@@ -20,7 +20,7 @@ namespace CCMonkeys.Loggings
     public LoggingBase()
     {
       TelemetryClient = new TelemetryClient();
-      this.RavenClient = new RavenClient("https://e2a9518558524ceeafd180cf83556583@sentry.io/1505328");
+      //this.RavenClient = new RavenClient("https://e2a9518558524ceeafd180cf83556583@sentry.io/1505328");
       if (string.IsNullOrEmpty(TelemetryClient.InstrumentationKey))
       {
         // attempt to load instrumentation key from app settings
@@ -53,7 +53,7 @@ namespace CCMonkeys.Loggings
         foreach (var p in properties)
           ex.Data.Add(p.Key, p.Value);
 
-      RavenClient.Capture(new SentryEvent(ex));
+      //RavenClient.Capture(new SentryEvent(ex));
 
       // ai.Flush();  
     }

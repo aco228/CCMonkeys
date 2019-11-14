@@ -1,0 +1,49 @@
+// Admin promjene
+  
+  - dodata kolona u bazi 'privileges' sa statusima admina
+
+    0 = NotActive
+    1 = Default1
+    2 = Default2
+    3 = Default3
+    4 = Marketing
+    5 = Admin
+
+
+
+  - dodat endpoint za mijenjanje passowrd-a
+
+    [PATCH] https://localhost:5001/api/login/password/[id]
+    (u body se nalazi nova sifra, kao tekst poslata)
+
+    // returns 404 if error
+    // returns 'len' if password is more than 10 chars long
+    // returns 'no' if there is no admin with id
+
+
+
+  - dodat endpoint za mijenjanje statusa
+
+    [PATCH] https://localhost:5001/api/login/status/1
+    ( u body se nalazi novi status (br od 1 do 5 ))
+
+    // returns 404 if error
+    // returns 'err1' if status cannot be converted to INT
+    // returns 'err2' if status cannot be converted to AdminStatusDM
+    // returns 'no' if there is no admin with id
+
+
+
+  // TODO: endpoint za unos novog usera
+
+
+  - dodat u dashboard socketu, pri connectu polje
+    AdminStatus  (enum vrijednost iz c#)
+    Privileges   (int iz baze)
+
+
+
+
+// Direct API
+  
+  https://www.getpostman.com/collections/31d3cc643e02d026cc92

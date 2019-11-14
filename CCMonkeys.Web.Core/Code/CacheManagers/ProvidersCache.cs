@@ -41,7 +41,7 @@ namespace CCMonkeys.Web.Core.Code.CacheManagers
         {
           ID = t.ID.Value,
           Name = t.name,
-          Key = t.key
+          Key = t.identifier
         });
     }
 

@@ -7,6 +7,7 @@ using CCMonkeys.Web.Core.CommunicationChannels;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Communication;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Data;
 using CCMonkeys.Web.Core.Sockets.ApiSockets.Models;
+using CCMonkeys.Web.Core.Sockets.Base;
 using CCMonkeys.Web.Core.Sockets.Dashboard;
 using Direct.ccmonkeys.Models;
 using Microsoft.AspNetCore.Http;
@@ -21,16 +22,13 @@ using System.Threading.Tasks;
 
 namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 {
-  public class ApiSocketServer : ServerSocketBase
+  public class ApiSocketServer : CCSocketServerBase<SessionSocket>
   {
-    public static Dictionary<string, SessionSocket> Sessions = new Dictionary<string, SessionSocket>();
-    public static SessionSocket Get(string uid) => Sessions.ContainsKey(uid) ? Sessions[uid] : null;
-
     ///
     /// Overrides
     ///
 
-    protected override string OnCreateId(HttpContext httpContext, CancellationToken cancellationToken)
+    protected override string OnCreateId(HttpContext httpContext)
     {
       string sguid = httpContext.Request.Query.ContainsKey("sguid") ? httpContext.Request.Query["sguid"].ToString() : string.Empty;
       if (string.IsNullOrEmpty(sguid) || !Sessions.ContainsKey(sguid))
@@ -39,7 +37,7 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
         if (!string.IsNullOrEmpty(type))
         {
           SessionType sessionType = type.Equals("lp") ? Models.SessionType.Lander : Models.SessionType.Prelander;
-          SessionSocket newSocket = new SessionSocket(new MainContext(null, httpContext), sessionType, cancellationToken);
+          SessionSocket newSocket = new SessionSocket(new MainContext(null, httpContext), sessionType);
           if (newSocket == null || string.IsNullOrEmpty(newSocket.Key))
           {
             Logger.Instance.StartLoggin("")
@@ -69,13 +67,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
       return string.Empty;
     }
-
-    protected override void PassWebsocket(string uid, WebSocket webSocket)
-      => Get(uid).WebSocket = webSocket;
-
+    
     protected override Task OnClientConnect(string uid)
     {
-      DashboardSocket.ActionConnected(Get(uid).Action.Key);
+      DashboardSocket.ActionConnected(ActionLiveModel.Convert(Get(uid)));
       return base.OnClientConnect(uid);
     }
 
@@ -83,76 +78,82 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     {
       DashboardSocket.ActionDisconnected(Get(uid).Action.Key);
       Get(uid)?.OnClose();
-      Sessions.Remove(uid);
+      CloseSession(uid);
       return Task.FromResult(1);
     }
 
     protected override async Task OnReceiveMessage(string uid, ServerSocketResponse package)
     {
       string key, json;
+      SessionSocket socket = Get(uid);
+      if (socket == null)
+        return;
+
       try
       {
+
         string data = await package.GetTextAsync();
         if (string.IsNullOrEmpty(data) || !data.Contains('#'))
           return;
 
         key = data.Substring(0, data.IndexOf('#'));
         json = data.Substring(data.IndexOf('#') + 1);
-        Get(uid).LastInteraction = DateTime.Now;
+        socket.OnInteraction();
+      
+
+        SessionType sessionType = Get(uid).SessionType;
+
+        switch (key)
+        {
+
+          //
+          // shared channels
+          //
+
+          case "register":
+
+            if (sessionType == SessionType.Lander)
+              ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
+                .OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+            else if (sessionType == SessionType.Prelander)
+              ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
+                .OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
+
+            break;
+
+          //
+          // lander channels
+          //
+
+          case "user-create":
+          case "user-subscribe":
+          case "user-redirected":
+            LanderCommunicationChannel channel = new LanderCommunicationChannel(Get(uid));
+            await channel.Start(key, json);
+            break;
+
+          //
+          // prelander channels
+          //
+
+          case "pl-init":
+          case "pl-tag":
+          case "pl-q":
+            PrelanderCommunicationChannel prelanderCommunication = new PrelanderCommunicationChannel(Get(uid));
+            await prelanderCommunication.Call(key, json);
+            break;
+
+
+        }
       }
-      catch (Exception e)
+      catch(Exception e)
       {
+        CloseSession(socket);
         OnException("ApiSocket.OnReceiveMessage", uid, e);
         return;
       }
 
-      SessionType sessionType = Get(uid).SessionType;
-
-      switch (key)
-      {
-
-        //
-        // shared channels
-        //
-
-        case "register":
-
-          if(sessionType == SessionType.Lander)
-            ((LanderCommunication)Get(uid).Channels[SessionSocketChannel.Lander])
-              .OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
-          else if(sessionType == SessionType.Prelander)
-            ((PrelanderCommunication)Get(uid).Channels[SessionSocketChannel.Prelander])
-              .OnRegistration(key, JsonConvert.DeserializeObject<ReceivingRegistrationModel>(json));
-
-          break;
-
-        //
-        // lander channels
-        //
-
-        case "user-create":
-        case "user-subscribe":
-        case "user-redirected":
-          LanderCommunicationChannel channel = new LanderCommunicationChannel(Get(uid));
-          await channel.Start(key, json);
-          break;
-
-        //
-        // prelander channels
-        //
-
-        case "pl-init":
-        case "pl-tag":
-        case "pl-q":
-          PrelanderCommunicationChannel prelanderCommunication = new PrelanderCommunicationChannel(Get(uid));
-          await prelanderCommunication.Call(key, json);
-          break;
-
-
-      }
-
     }
-
 
     protected override void OnException(string location, string uid, Exception e)
     {
@@ -164,30 +165,18 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
     /// STATICS
     ///
 
-    public static List<string> ActiveActions
+    // Get all currentrly active actions
+    public static List<ActionLiveModel> ActiveActions
     {
       get
       {
-        List<string> result = new List<string>();
+        List<ActionLiveModel> result = new List<ActionLiveModel>();
         foreach (var s in Sessions)
-          result.Add(s.Value.Action.Key);
+          result.Add(ActionLiveModel.Convert(s.Value));
         return result;
       }
     }
-
-    public static void AddSession(SessionSocket socket)
-    {
-      if (Sessions.ContainsKey(socket.Key))
-        Sessions[socket.Key] = socket;
-      else
-        Sessions.Add(socket.Key, socket);
-    }
-
-    public static async void Send(SessionSocket socket, DistributionModel data)
-      => await SendStringAsync(socket.WebSocket, JsonConvert.SerializeObject(data));
-    public static async void Send(string uid, DistributionModel data)
-      => await SendStringAsync(ApiSocketServer.Get(uid).WebSocket, JsonConvert.SerializeObject(data));
-
+    
     public static bool IsActionOnline(ActionDM action)
       => (from s in Sessions where s.Value.Action.Data != null && s.Value.Action.Data.ID.HasValue && s.Value.Action.Data.ID == action.ID select s.Value).FirstOrDefault() != null;
 
