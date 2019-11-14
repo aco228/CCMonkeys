@@ -13,6 +13,7 @@ namespace CCMonkeys.Web.Core.Controllers.Core
     public IActionResult Index()
     {
       string response = "";
+      response += "Created: " + Program.Created.ToString();
       response += ApiSocketCloserHostedService.LastInteraction.ToString() + Environment.NewLine;
 
       foreach (var session in ApiSocketServer.Sessions)

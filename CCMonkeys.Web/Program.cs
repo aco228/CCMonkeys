@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Sentry;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace CCMonkeys.Web
   public class Program
   {
     private static CancellationTokenSource cancelTokenSource = new System.Threading.CancellationTokenSource();
+    public static DateTime Created;
 
     public static void Main(string[] args)
     {
@@ -19,6 +21,7 @@ namespace CCMonkeys.Web
                              //.UseSentry()
         .Build();
 
+      Created = DateTime.Now;
       host.RunAsync(cancelTokenSource.Token).GetAwaiter().GetResult();
     }
 
