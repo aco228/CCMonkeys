@@ -44,7 +44,11 @@ namespace CCMonkeys.Web.Core.Controllers.Dashboard
       if(admin.GetStatus() == AdminStatusDM.NotActive)
         return ModelBaseResponse.GenerateError($"Activity error");
 
-      return new LoginModelResponse() { AccessToken = Crypter.Encrypt(this.Context.StoreAdminCookie(admin.ID.Value, admin.username)) };
+      return new LoginModelResponse() 
+      { 
+        Privilegies = admin.privileges,
+        AccessToken = Crypter.Encrypt(this.Context.StoreAdminCookie(admin.ID.Value, admin.username)) 
+      };
     }
 
     // SUMMARY: Changes password of the user

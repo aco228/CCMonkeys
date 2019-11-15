@@ -22,7 +22,6 @@ namespace CCMonkeys.Web
   public class Startup
   {
 
-    readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
     public Startup(IConfiguration configuration)
     {
@@ -42,7 +41,7 @@ namespace CCMonkeys.Web
     {
       services.AddCors(options =>
       {
-        options.AddPolicy(MyAllowSpecificOrigins,
+        options.AddPolicy("get",
             builder => builder
             .SetIsOriginAllowed( 
               (host) => { 
@@ -58,6 +57,7 @@ namespace CCMonkeys.Web
             .AllowCredentials());
       });
 
+      //services.AddAntiforgery(o => o.HeaderName = "CCAPI-TOKEN");
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
       services.AddApplicationInsightsTelemetry(Configuration);
       services.Configure<CookiePolicyOptions>(options =>
@@ -99,7 +99,9 @@ namespace CCMonkeys.Web
       app.UseWebSockets(webSocketOptions);
 
       app.UseMiddleware<WebSocketsMiddleware>();
-      app.UseCors(MyAllowSpecificOrigins);
+
+      app.UseCors("get");
+
       app.UseHttpsRedirection();
       app.UseMvc(routes =>
       {

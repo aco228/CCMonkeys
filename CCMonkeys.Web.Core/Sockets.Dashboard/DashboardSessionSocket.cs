@@ -58,10 +58,10 @@ namespace CCMonkeys.Web.Core.Sockets.Dashboard
     }
 
 
-    public void OnClose()
+    public async void OnClose()
     {
       this.Session.duration = (DateTime.Now - this.Created).TotalSeconds;
-      this.Session.UpdateLater();
+      await this.Session.UpdateAsync();
     }
 
     public void Send(DashboardSocketDistributionModel data)

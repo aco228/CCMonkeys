@@ -22,6 +22,17 @@
     <script type="text/javascript" src="https://localhost:5001/js/dashboard"></script>
 
   <script type="text/javascript">
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(this.responseText);
+      }
+    };
+    xhttp.open("GET", "https://localhost:5001/api/login/ako/akopass0", true);
+    xhttp.setRequestHeader("CCAPI-TOKEN", 'aco');
+    xhttp.send();
+
     window.Socket.subscribe(window.Socket.events.ADMIN_DISCONNECTED, onClientDisconnected);
     window.Socket.subscribe(window.Socket.events.ADMIN_CONNECTED, onClientConnected);
     window.Socket.subscribe(window.Socket.events.ACTION_INSERT, onActionInsert);

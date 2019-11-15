@@ -76,6 +76,10 @@ namespace CCMonkeys.Web.Core.Sockets.ApiSockets
 
     protected override Task OnClientDisconect(string uid)
     {
+      var session = Get(uid);
+      if (session == null)
+        return Task.FromResult(1);
+
       DashboardSocket.ActionDisconnected(Get(uid).Action.Key);
       Get(uid)?.OnClose();
       CloseSession(uid);
