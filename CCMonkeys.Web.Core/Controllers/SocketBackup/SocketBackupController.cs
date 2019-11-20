@@ -79,22 +79,34 @@ namespace CCMonkeys.Web.Core.Controllers.SocketBackup
         action.UpdateLater();
       }
 
-      if(type.Equals("pl"))
+      try
       {
-        PrelanderCommunicationChannel channel = new PrelanderCommunicationChannel(logger, action, userID, country, this.Database);
-        return this.ReturnObject(await channel.Call(split[0], split[1]));
+
+        if (type.Equals("pl"))
+        {
+          PrelanderCommunicationChannel channel = new PrelanderCommunicationChannel(logger, action, userID, country, this.Database);
+          return this.ReturnObject(await channel.Call(split[0], split[1]));
+        }
+        else if (type.Equals("lp"))
+        {
+          LanderCommunicationChannel channel = new LanderCommunicationChannel(logger, action, userID, country, this.Database);
+          return this.ReturnObject(await channel.Call(split[0], split[1]));
+        }
+        else
+        {
+          logger.StartLoggin("")
+            .Add("type", type)
+            .Add("data", data)
+            .OnException(new Exception("Type was not present "));
+          return this.ReturnObject(new DistributionModel() { Status = false });
+        }
       }
-      else if(type.Equals("lp"))
-      {
-        LanderCommunicationChannel channel = new LanderCommunicationChannel(logger, action, userID, country, this.Database);
-        return this.ReturnObject(await channel.Call(split[0], split[1]));
-      }
-      else
+      catch(Exception e)
       {
         logger.StartLoggin("")
           .Add("type", type)
           .Add("data", data)
-          .OnException(new Exception("Type was not present "));
+          .OnException(e);
         return this.ReturnObject(new DistributionModel() { Status = false });
       }
     }
