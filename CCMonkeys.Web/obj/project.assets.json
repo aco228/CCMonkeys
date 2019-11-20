@@ -13588,8 +13588,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ako\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Users\\aco228_\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
@@ -13598,17 +13597,15 @@
       "projectUniqueName": "D:\\github\\CCMonkeys\\CCMonkeys.Web\\CCMonkeys.Web.csproj",
       "projectName": "CCMonkeys.Web",
       "projectPath": "D:\\github\\CCMonkeys\\CCMonkeys.Web\\CCMonkeys.Web.csproj",
-      "packagesPath": "C:\\Users\\ako\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\aco228_\\.nuget\\packages\\",
       "outputPath": "D:\\github\\CCMonkeys\\CCMonkeys.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\ako\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\aco228_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
@@ -13726,6 +13723,12 @@
     }
   },
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file D:\\github\\CCMonkeys\\CCMonkeys.Web\\obj\\CCMonkeys.Web.csproj.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    },
     {
       "code": "NU1701",
       "level": "Warning",
