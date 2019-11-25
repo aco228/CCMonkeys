@@ -17,7 +17,7 @@ namespace CCMonkeys.Web.Core
     public HttpContext HttpContext { get; private set; } = null;
     public HttpRequest Request { get => HttpContext.Request; }
     public HttpResponse Response { get => HttpContext.Response; }
-    public CCSubmitDirect Database { get => this.MainController.Database; }
+    public CCSubmitDirect Database { get => CCSubmitDirect.Instance; }
 
     /// <summary>
     /// Try to get admin from cookies, request, and if exists try to find him in sockets or load from database

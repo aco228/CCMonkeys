@@ -22,7 +22,7 @@ namespace CCMonkeys.Web.Controllers.Direct
     public override DirectDatabaseBase Database => CCSubmitDirect.Instance;
     protected MainContext MainContext => new MainContext(this.HttpContext);
 
-    public override bool HasPrivilegesForSelect()
+    protected override bool HasPrivilegesForSelect()
     {
       if (this.MainContext.Admin == null)
         return false;
@@ -30,7 +30,7 @@ namespace CCMonkeys.Web.Controllers.Direct
       return true;
     }
 
-    public override bool HasPrivilegesForUpdate()
+    protected override bool HasPrivilegesForUpdate()
     {
       if (this.MainContext.Admin == null)
         return false;
@@ -42,7 +42,7 @@ namespace CCMonkeys.Web.Controllers.Direct
       return true;
     }
 
-    public override bool HasPrivilegesForInsert()
+    protected override bool HasPrivilegesForInsert()
     {
       if (this.MainContext.Admin == null)
         return false;
